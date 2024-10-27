@@ -48,6 +48,13 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_CheckableValueType))]
         public override string v_ValueType { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        [PropertyDescription("Use Fast Method To Cell")]
+        [PropertyIsOptional(true, "Yes")]
+        [PropertyParameterOrder(9000)]
+        public string v_UseFastMethodToCell { get; set; }
+
         public ExcelGetLastRowCommand()
         {
             //this.CommandName = "ExcelGetLastRowCommand";
@@ -71,7 +78,8 @@ namespace taskt.Core.Automation.Commands
 
             var columnIndex = this.ExpandValueOrVariableAsExcelColumnIndex(engine);
             var valueType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ValueType), "Value Type", engine);
-            var lastRow = excelSheet.LastRowIndex(columnIndex, 1, valueType);
+            var useFastMethod = this.ExpandValueOrUserVariableAsYesNo(nameof(v_UseFastMethodToCell), engine);
+            var lastRow = excelSheet.LastRowIndex(columnIndex, 1, valueType, useFastMethod);
 
             //lastRow.ToString().StoreInUserVariable(engine, v_Result);
             lastRow.StoreInUserVariable(engine, v_Result);
