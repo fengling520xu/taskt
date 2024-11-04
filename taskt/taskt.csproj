@@ -55,8 +55,7 @@
 	</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>taskt_logo_alt.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -99,20 +98,20 @@
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>..\packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.65.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.65\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.70.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.70\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="ImapX, Version=2.0.0.18, Culture=neutral, PublicKeyToken=5992873d65130d1f, processorArchitecture=MSIL">
       <HintPath>..\packages\ImapX.2.0.0.18\lib\net452\ImapX.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.2024.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\packages\JetBrains.Annotations.2024.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="MailKit, Version=4.7.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
-      <HintPath>..\packages\MailKit.4.7.1.1\lib\net48\MailKit.dll</HintPath>
+    <Reference Include="MailKit, Version=4.8.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.4.8.0\lib\net48\MailKit.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.37.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Markdig.0.37.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.38.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Markdig.0.38.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -130,20 +129,20 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.2739.15, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2739.15\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.2849.39, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2849.39\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.2739.15, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2739.15\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.2849.39, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2849.39\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2739.15, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2739.15\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2849.39, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2849.39\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.11.0.0, Culture=neutral, PublicKeyToken=e25603a88b3aa7da, processorArchitecture=MSIL">
       <HintPath>..\packages\TaskScheduler.2.11.0\lib\net48\Microsoft.Win32.TaskScheduler.dll</HintPath>
     </Reference>
-    <Reference Include="MimeKit, Version=4.7.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
-      <HintPath>..\packages\MimeKit.4.7.1\lib\net48\MimeKit.dll</HintPath>
+    <Reference Include="MimeKit, Version=4.8.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.4.8.0\lib\net48\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -151,11 +150,11 @@
     <Reference Include="OneNoteOCRDll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OneNoteOCR.1.0.0.0\lib\OneNoteOCRDll.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=112.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.112.0.0\lib\net48\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=112.1.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.112.1.0\lib\net48\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.4.0.1\lib\net471\Serilog.dll</HintPath>
+    <Reference Include="Serilog, Version=4.1.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.4.1.0\lib\net471\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Formatting.Compact, Version=3.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Formatting.Compact.3.0.0\lib\net471\Serilog.Formatting.Compact.dll</HintPath>
@@ -163,8 +162,8 @@
     <Reference Include="Serilog.Sinks.File, Version=6.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.File.6.0.0\lib\net471\Serilog.Sinks.File.dll</HintPath>
     </Reference>
-    <Reference Include="SharpCompress, Version=0.37.2.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpCompress.0.37.2\lib\net462\SharpCompress.dll</HintPath>
+    <Reference Include="SharpCompress, Version=0.38.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.38.0\lib\net462\SharpCompress.dll</HintPath>
     </Reference>
     <Reference Include="SharpSimpleNLG, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpSimpleNLG.1.4.0\lib\net472\SharpSimpleNLG.dll</HintPath>
@@ -269,8 +268,8 @@
     <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Json, Version=8.0.0.4, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.8.0.4\lib\net462\System.Text.Json.dll</HintPath>
+    <Reference Include="System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.8.0.5\lib\net462\System.Text.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
@@ -302,15 +301,18 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Tesseract, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tesseract.5.2.0\lib\net48\Tesseract.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationClient" />
     <Reference Include="UIAutomationClientsideProviders" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.4.24.0\lib\netstandard2.0\WebDriver.dll</HintPath>
+      <HintPath>..\packages\Selenium.WebDriver.4.26.1\lib\netstandard2.0\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver.Support, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.Support.4.24.0\lib\netstandard2.0\WebDriver.Support.dll</HintPath>
+      <HintPath>..\packages\Selenium.Support.4.26.1\lib\netstandard2.0\WebDriver.Support.dll</HintPath>
     </Reference>
     <Reference Include="WebSocket4Net, Version=0.15.2.11, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSocket4Net.0.15.2\lib\net45\WebSocket4Net.dll</HintPath>
@@ -321,24 +323,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
     <Compile Include="Core\ApplicationSettings\ClientSettings.cs" />
     <Compile Include="Core\ApplicationSettings\EngineSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\IApplicationSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\IClientSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\IEngineSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\ILocalListenerSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\IServerSettings.cs" />
     <Compile Include="Core\ApplicationSettings\LocalListenerSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\SafeApplicationSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\SafeClientSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\SafeEngineSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\SafeServerSettings.cs" />
-    <Compile Include="Core\ApplicationSettings\SefeLocalListenerSettings.cs" />
     <Compile Include="Core\ApplicationSettings\ServerSettings.cs" />
     <Compile Include="Core\ApplicationSettings\WhiteListIP.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunJavaScriptFileCommand.cs" />
     <Compile Include="Core\Automation\Commands\Color\AColorCreateCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Color\CreateColorFormARGBNumberCommand.cs" />
     <Compile Include="Core\Automation\Commands\Color\EM_CanHandleColorExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\Color\ICanHandleColor.cs" />
     <Compile Include="Core\Automation\Commands\Color\IColorCreateProperties.cs" />
@@ -472,6 +464,9 @@
     <Compile Include="Core\Automation\Commands\Excel\IExcelWorksheetCopyRenameProperties.cs" />
     <Compile Include="Core\Automation\Commands\Excel\IExcelWorksheetProperties.cs" />
     <Compile Include="Core\Automation\Commands\If\IHaveIfAdditionalCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Image\ExecuteTesseractOCRCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Image\FindPixelColourCommand].cs" />
+    <Compile Include="Core\Automation\Commands\Image\GetPixelColourCommand.cs" />
     <Compile Include="Core\Automation\Commands\JSON\AJSONAddInsertSetJContainerCommands.cs" />
     <Compile Include="Core\Automation\Commands\JSON\AJSONGetFromJContainerCommands.cs" />
     <Compile Include="Core\Automation\Commands\JSON\AJSONGetFromJSONCommands.cs" />
@@ -627,7 +622,6 @@
     <Compile Include="Core\Automation\Engine\IScriptVariableListProperties.cs" />
     <Compile Include="Core\Automation\Engine\SystemVariables.cs" />
     <Compile Include="Core\Automation\Commands\FormUIControls.cs" />
-    <Compile Include="Core\IO\Files.cs" />
     <Compile Include="Core\Script\InnerScriptVariable.cs" />
     <Compile Include="Core\Update\ApplicationUpdate.cs" />
     <Compile Include="Core\ApplicationSettings\ApplicationSettings.cs" />
@@ -766,8 +760,8 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetRowValuesFormDictionaryCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetRowValuesFormListCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetRowValuesAsListCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetInfoCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetExcelInfoCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetInformationCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetExcelInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetCurrentWorksheetCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteWorksheetCommand.cs" />
@@ -805,8 +799,8 @@
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunPowerShellScriptFileCommand.cs" />
     <Compile Include="Core\Automation\Commands\Text\CreateTextVariableCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationWaitForUIElementToExistsCommand.cs" />
-    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistCommand.cs" />
-    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistByXPathCommand.cs" />
+    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistsCommand.cs" />
+    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistsByXPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationClickUIElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationGetChildrenUIElementsInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationWaitForUIElementToExistsByXPathCommand.cs" />
@@ -942,7 +936,7 @@
     <Compile Include="Core\Automation\Commands\IE\IEBrowserCloseCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserCloseWebBrowserInstanceCommand.cs" />
     <Compile Include="Core\Automation\Commands\IE\IEBrowserCreateCommand.cs" />
-    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebBrowserInfoCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebBrowserInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSwitchWebBrowserWindowCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserCreateWebBrowserInstanceCommand.cs" />
     <Compile Include="Core\Automation\Commands\Window\MoveWindowCommand.cs" />
@@ -955,7 +949,7 @@
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserNavigateBackCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserNavigateForwardCommand.cs" />
     <Compile Include="Core\Automation\Commands\IE\IEBrowserNavigateURLCommand.cs" />
-    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserNavigateURLCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserNavigateToURLCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserRefreshCommand.cs" />
     <Compile Include="Core\Automation\Commands\Window\SetWindowStateCommand.cs" />
     <Compile Include="Core\Automation\Commands\Misc\SMTPSendEmailCommand.cs" />
@@ -991,7 +985,7 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGoToCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelOpenWorkbookCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelRunMacroCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelRunExcelMacroCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSaveAsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSaveCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetCellCommand.cs" />
@@ -1681,26 +1675,30 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rmdir /s /q "$(ProjectDir)$(OutDir)selenium-manager\linux"
-rmdir /s /q "$(ProjectDir)$(OutDir)selenium-manager\macos"</PostBuildEvent>
+rmdir /s /q "$(ProjectDir)$(OutDir)selenium-manager\macos"
+del "$(ProjectDir)$(OutDir)tasktOnTheFly.exe"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>robocopy "$(ProjectDir)Samples" "$(ProjectDir)$(OutDir)Samples" *.xml /xo /E /S
-robocopy "$(ProjectDir)Samples" "$(ProjectDir)$(OutDir)Samples" *.exe /xo /E /S
+robocopy "$(ProjectDir)Samples\Resources" "$(ProjectDir)$(OutDir)Samples\Resources" *.* /xo /E /S
 robocopy "$(ProjectDir)Manual" "$(ProjectDir)$(OutDir)Manual" *.txt /xo /E /S
 mkdir "$(ProjectDir)$(OutDir)AutoSave"
 mkdir "$(ProjectDir)$(OutDir)RunWithoutSaving"
 mkdir "$(ProjectDir)$(OutDir)BeforeConverted"
 if %25ERRORLEVEL%25 LSS 8 EXIT 0</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2739.15\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2739.15\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.2739.15\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.2739.15\build\Microsoft.Web.WebView2.targets'))" />
-    <Error Condition="!Exists('..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\Tesseract.5.2.0\build\Tesseract.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Tesseract.5.2.0\build\Tesseract.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.2849.39\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.2849.39\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.4.26.1\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.4.26.1\build\Selenium.WebDriver.targets'))" />
   </Target>
-  <Import Project="..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets')" />
+  <Import Project="..\packages\Tesseract.5.2.0\build\Tesseract.targets" Condition="Exists('..\packages\Tesseract.5.2.0\build\Tesseract.targets')" />
+  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2849.39\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2849.39\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="..\packages\Selenium.WebDriver.4.26.1\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.26.1\build\Selenium.WebDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -175,7 +175,7 @@ namespace taskt.UI.Forms.ScriptBuilder.CommandEditor.Supplemental
             {
                 if (times > 1)
                 {
-                    result += "{" + key + " [" + times + "]}";
+                    result += "{" + key + " " + times + "}";
                 }
                 else
                 {

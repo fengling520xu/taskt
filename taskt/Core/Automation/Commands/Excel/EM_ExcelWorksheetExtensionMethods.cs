@@ -226,7 +226,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="startRow"></param>
         /// <param name="targetType"></param>
         /// <returns></returns>
-        public static int LastRowIndex(this Worksheet sheet, int column, int startRow, string targetType)
+        public static int LastRowIndex(this Worksheet sheet, int column, int startRow, string targetType, bool useFastMethodToCellValue = false)
         {
             int lastRow = startRow;
             //switch (targetType.ToLower())
@@ -248,13 +248,20 @@ namespace taskt.Core.Automation.Commands
             //        break;
             //}
 
-            var func = GetCheckNotEmptyFunction(targetType);
-            while(func(sheet, lastRow, column))
+            if ((targetType.ToLower() == "cell") && useFastMethodToCellValue)
             {
-                lastRow++;
+                return (int)sheet.Cells[sheet.Rows.Count, column].End(XlDirection.xlUp).Row;
             }
+            else
+            {
+                var func = GetCheckNotEmptyFunction(targetType);
+                while (func(sheet, lastRow, column))
+                {
+                    lastRow++;
+                }
 
-            return --lastRow;
+                return --lastRow;
+            }
         }
 
         /// <summary>
@@ -333,7 +340,7 @@ namespace taskt.Core.Automation.Commands
             //}
 
             var func = GetCheckNotEmptyFunction(targetType);
-            while(func(sheet, row, lastColumn))
+            while (func(sheet, row, lastColumn))
             {
                 lastColumn++;
             }
