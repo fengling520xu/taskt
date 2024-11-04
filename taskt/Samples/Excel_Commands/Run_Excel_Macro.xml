@@ -2,7 +2,7 @@
 <Script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Commands>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="45e3ac94-3318-42b5-80fb-a1317a3c0798" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Run Macro sample" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="45e3ac94-3318-42b5-80fb-a1317a3c0798" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Run Excel Macro sample" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="2078acdd-4db5-4d4e-b1b3-b56ae74a7932" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Open Excel File" CommandEnabled="true" />
@@ -27,11 +27,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.5</TasktVersion>
+    <TasktVersion>3.5.2.10</TasktVersion>
     <Author />
     <LastRunTime>1990-01-01T00:00:00</LastRunTime>
     <RunTimes>0</RunTimes>
-    <Revision>1</Revision>
+    <Revision>2</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

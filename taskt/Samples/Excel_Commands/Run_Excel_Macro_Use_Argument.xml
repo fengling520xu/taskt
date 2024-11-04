@@ -2,7 +2,7 @@
 <Script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Commands>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="45e3ac94-3318-42b5-80fb-a1317a3c0798" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Run Macro to Module Procedure sample" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="45e3ac94-3318-42b5-80fb-a1317a3c0798" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Run Excel Macro use Argument sample" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="2078acdd-4db5-4d4e-b1b3-b56ae74a7932" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Open Excel File" CommandEnabled="true" />
@@ -17,7 +17,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="0ce1e550-377e-4387-bd15-3d0a9a8cfad3" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" v_Comment="Run Macro" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelRunMacroCommand" CommandID="ae0398cb-586d-4ff6-894f-24276da64030" CommandName="ExcelRunMacroCommand" IsCommented="false" SelectionName="Run Macro" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_MacroName="Module1.ProcedureName" v_Argument1="" />
+      <ScriptCommand xsi:type="ExcelRunMacroCommand" CommandID="ae0398cb-586d-4ff6-894f-24276da64030" CommandName="ExcelRunMacroCommand" IsCommented="false" SelectionName="Run Macro" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_MacroName="**Your Procedure Name**" v_Argument1="**Argument Value**" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="e53edc64-4686-427f-bada-02ab01cf6793" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="7" PauseBeforeExeucution="false" v_Comment="Close Excel" CommandEnabled="true" />
@@ -25,9 +25,15 @@
     <ScriptAction>
       <ScriptCommand xsi:type="ExcelCloseExcelInstanceCommand" CommandID="597972c6-f2fb-4143-9ba6-528bd76df5db" CommandName="ExcelCloseExcelInstanceCommand" IsCommented="false" SelectionName="Close Excel Instance" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_ExcelSaveOnExit="" />
     </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CommentCommand" CommandID="6ae6da7b-baf4-4276-919e-cce3d8715ab3" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" v_Comment="Currently only one argument of type String is available" CommandEnabled="true" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CommentCommand" CommandID="2da4a551-b8d9-4664-ba2d-a75f0eb98ef4" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" v_Comment="Multiple arguments are not available, so you must retrieve the value of the cell that contains the parameter value in the procedure, for example" CommandEnabled="true" />
+    </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.5</TasktVersion>
+    <TasktVersion>3.5.2.10</TasktVersion>
     <Author />
     <LastRunTime>1990-01-01T00:00:00</LastRunTime>
     <RunTimes>0</RunTimes>
