@@ -760,8 +760,8 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetRowValuesFormDictionaryCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetRowValuesFormListCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetRowValuesAsListCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetInfoCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetExcelInfoCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetInformationCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetExcelInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetCurrentWorksheetCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetWorksheetsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteWorksheetCommand.cs" />
@@ -799,8 +799,8 @@
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunPowerShellScriptFileCommand.cs" />
     <Compile Include="Core\Automation\Commands\Text\CreateTextVariableCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationWaitForUIElementToExistsCommand.cs" />
-    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistCommand.cs" />
-    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistByXPathCommand.cs" />
+    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistsCommand.cs" />
+    <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationCheckUIElementExistsByXPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationClickUIElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationGetChildrenUIElementsInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationWaitForUIElementToExistsByXPathCommand.cs" />
@@ -985,7 +985,7 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGoToCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelOpenWorkbookCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelRunMacroCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelRunExcelMacroCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSaveAsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSaveCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetCellCommand.cs" />

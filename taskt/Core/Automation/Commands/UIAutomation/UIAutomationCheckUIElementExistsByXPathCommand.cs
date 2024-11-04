@@ -8,13 +8,13 @@ namespace taskt.Core.Automation.Commands
     [Serializable]
     [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("Search UIElement")]
-    [Attributes.ClassAttributes.CommandSettings("Check UIElement Exist By XPath")]
+    [Attributes.ClassAttributes.CommandSettings("Check UIElement Exists By XPath")]
     [Attributes.ClassAttributes.Description("This command allows you to check UIElement existence.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to check UIElement existence.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class UIAutomationCheckUIElementExistByXPathCommand : ScriptCommand
+    public sealed class UIAutomationCheckUIElementExistsByXPathCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -35,7 +35,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyFirstValue("0")]
         public string v_WaitTime { get; set; }
 
-        public UIAutomationCheckUIElementExistByXPathCommand()
+        public UIAutomationCheckUIElementExistsByXPathCommand()
         {
             //this.CommandName = "UIAutomationCheckElementExistByXPathCommand";
             //this.SelectionName = "Check Element Exist By XPath";

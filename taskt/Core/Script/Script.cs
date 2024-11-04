@@ -428,6 +428,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_0(doc);
             convertTo3_5_2_1(doc);
             convertTo3_5_2_6(doc);
+            convertTo3_5_2_11(doc);
             return doc;
         }
 
@@ -3406,6 +3407,24 @@ namespace taskt.Core.Script
             ChangeCommandName(doc, "GetPixelCommand", "GetPixelColourCommand", "Get Pixel Colour");
             // FindPixelCommand -> FindPixelColourCommand
             ChangeCommandName(doc, "FindPixelCommand", "FindPixelColourCommand", "Find Pixel Colour");
+        }
+
+        private static void convertTo3_5_2_11(XDocument doc)
+        {
+            // ExcelGetExcelInfoCommand -> ExcelGetExcelInformationCommand
+            ChangeCommandName(doc, "ExcelGetExcelInfoCommand", "ExcelGetExcelInformationCommand", "Get Excel Information");
+
+            // ExcelGetWorksheetInfoCommand -> ExcelGetWorksheetInformationCommand
+            ChangeCommandName(doc, "ExcelGetWorksheetInfoCommand", "ExcelGetWorksheetInformationCommand", "Get Worksheet Information");
+
+            // ExcelRunMacroCommand -> ExcelRunExcelMacroCommand
+            ChangeCommandName(doc, "ExcelRunMacroCommand", "ExcelRunExcelMacroCommand", "Run Excel Macro");
+
+            // UIAutomationCheckUIElementExistByXPathCommand -> UIAutomationCheckUIElementExistsByXPathCommand
+            ChangeCommandName(doc, "UIAutomationCheckUIElementExistByXPathCommand", "UIAutomationCheckUIElementExistsByXPathCommand", "Check UIElement Exists By XPath");
+
+            // UIAutomationCheckUIElementExistCommand -> UIAutomationCheckUIElementExistsCommand
+            ChangeCommandName(doc, "UIAutomationCheckUIElementExistCommand", "UIAutomationCheckUIElementExistsCommand", "Check UIElement Exists");
         }
 
         /// <summary>
