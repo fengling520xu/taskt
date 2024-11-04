@@ -8,14 +8,14 @@ namespace taskt.Core.Automation.Commands
     [Serializable]
     [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Instance")]
-    [Attributes.ClassAttributes.CommandSettings("Get Web Browser Info")]
+    [Attributes.ClassAttributes.CommandSettings("Get Web Browser Information")]
     [Attributes.ClassAttributes.Description("This command allows you to navigate a Selenium web browser session to a given URL or resource.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to navigate an existing Selenium instance to a known URL or web resource")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Selenium to achieve automation.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class SeleniumBrowserGetWebBrowserInfoCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetWebBrowserInformationCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -39,7 +39,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         public string v_applyToVariableName { get; set; }
 
-        public SeleniumBrowserGetWebBrowserInfoCommand()
+        public SeleniumBrowserGetWebBrowserInformationCommand()
         {
             //this.CommandName = "SeleniumBrowserInfoCommand";
             //this.SelectionName = "Get Browser Info";

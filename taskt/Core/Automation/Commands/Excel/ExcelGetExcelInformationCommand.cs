@@ -8,14 +8,14 @@ namespace taskt.Core.Automation.Commands
     [Serializable]
     [Attributes.ClassAttributes.Group("Excel")]
     [Attributes.ClassAttributes.SubGruop("Other")]
-    [Attributes.ClassAttributes.CommandSettings("Get Excel Info")]
+    [Attributes.ClassAttributes.CommandSettings("Get Excel Information")]
     [Attributes.ClassAttributes.Description("This command allows you to get current sheet name.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to launch a new instance of Excel.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Excel Interop to achieve automation.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class ExcelGetExcelInfoCommand : AExcelInstanceCommands
+    public sealed class ExcelGetExcelInformationCommand : AExcelInstanceCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
@@ -43,7 +43,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(6001)]
         public string v_Result { get; set; }
 
-        public ExcelGetExcelInfoCommand()
+        public ExcelGetExcelInformationCommand()
         {
             //this.CommandName = "ExcelGetExcelInfoCommand";
             //this.SelectionName = "Get Excel Info";

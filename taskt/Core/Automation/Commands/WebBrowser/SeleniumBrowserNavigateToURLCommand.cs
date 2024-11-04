@@ -7,14 +7,14 @@ namespace taskt.Core.Automation.Commands
     [Serializable]
     [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Navigate")]
-    [Attributes.ClassAttributes.CommandSettings("Navigate to URL")]
+    [Attributes.ClassAttributes.CommandSettings("Navigate To URL")]
     [Attributes.ClassAttributes.Description("This command allows you to navigate a Selenium web browser session to a given URL or resource.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to navigate an existing Selenium instance to a known URL or web resource")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Selenium to achieve automation.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class SeleniumBrowserNavigateURLCommand : ScriptCommand
+    public sealed class SeleniumBrowserNavigateToURLCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -46,7 +46,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(false, "")]
         public string v_UseHttps { get; set; }
 
-        public SeleniumBrowserNavigateURLCommand()
+        public SeleniumBrowserNavigateToURLCommand()
         {
             //this.CommandName = "SeleniumBrowserNavigateURLCommand";
             //this.SelectionName = "Navigate to URL";

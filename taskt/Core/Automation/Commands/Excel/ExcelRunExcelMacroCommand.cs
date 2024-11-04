@@ -7,14 +7,14 @@ namespace taskt.Core.Automation.Commands
     [Serializable]
     [Attributes.ClassAttributes.Group("Excel")]
     [Attributes.ClassAttributes.SubGruop("Other")]
-    [Attributes.ClassAttributes.CommandSettings("Run Macro")]
+    [Attributes.ClassAttributes.CommandSettings("Run Excel Macro")]
     [Attributes.ClassAttributes.Description("This command runs a macro.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get a run a specific macro in the Excel workbook.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Excel Interop to achieve automation.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class ExcelRunMacroCommand : AExcelInstanceCommands
+    public sealed class ExcelRunExcelMacroCommand : AExcelInstanceCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
@@ -44,7 +44,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(6001)]
         public string v_Argument1 { get; set; }
 
-        public ExcelRunMacroCommand()
+        public ExcelRunExcelMacroCommand()
         {
             //this.CommandName = "ExcelRunMacroCommand";
             //this.SelectionName = "Run Macro";

@@ -269,7 +269,7 @@ namespace taskt.Core.Automation.Commands
                     switch (elemAction)
                     {
                         case "check uielement exists":
-                            var chkElem = new UIAutomationCheckUIElementExistByXPathCommand()
+                            var chkElem = new UIAutomationCheckUIElementExistsByXPathCommand()
                             {
                                 v_TargetElement = myWinElem.VariableName,
                                 v_SearchXPath = this.v_UIASearchParameters,
