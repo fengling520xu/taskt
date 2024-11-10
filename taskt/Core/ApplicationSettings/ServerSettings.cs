@@ -21,5 +21,14 @@ namespace taskt.Core
         {
             HTTPServerURL = "https://localhost:44377/";
         }
+
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public ServerSettings Clone()
+        {
+            return (ServerSettings)MemberwiseClone();
+        }
     }
 }

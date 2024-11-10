@@ -225,5 +225,14 @@ namespace taskt.Core
             ChangeItemsWithWheelWhenNotForcused = false;
             DisplayNumberBeforeParameterDescription = true;
         }
+
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public ClientSettings Clone()
+        {
+            return (ClientSettings)MemberwiseClone();
+        }
     }
 }

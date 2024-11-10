@@ -85,6 +85,15 @@ namespace taskt.Core
             MaxUIElementInspectSiblingNodes = int.MaxValue;
         }
 
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public EngineSettings Clone()
+        {
+            return (EngineSettings)MemberwiseClone();
+        }
+
         // todo: move these methods to other file
         //public string convertToIntermediate(string targetString)
         //{

@@ -138,7 +138,7 @@ namespace taskt
         /// <returns></returns>
         public static SafeAutomationEngineInstanceApplicationSettings GetAutomationEngineInstanceApplicationSettings()
         {
-            return new SafeAutomationEngineInstanceApplicationSettings(Taskt_UNSAFE_Settings);
+            return (new SafeAutomationEngineInstanceApplicationSettings(Taskt_UNSAFE_Settings)).Clone();
         }
     }
 }

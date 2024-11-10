@@ -118,12 +118,28 @@ namespace taskt.Core
         {
         }
 
+        /// <summary>
+        /// create instance by FileIOApplicationSettings
+        /// </summary>
+        /// <param name="settings"></param>
         private ApplicationSettings(FileIOApplicationSettings settings)
         {
             ServerSettings = settings.ServerSettings;
             EngineSettings = settings.EngineSettings;
             ClientSettings = settings.ClientSettings;
             ListenerSettings = settings.ListenerSettings;
+        }
+
+        /// <summary>
+        /// copy constructor
+        /// </summary>
+        /// <param name="appSettings"></param>
+        private ApplicationSettings(ApplicationSettings appSettings)
+        {
+            ServerSettings = appSettings.GetServerSettings().Clone();
+            EngineSettings = appSettings.GetEngineSettings().Clone();
+            ClientSettings = appSettings.GetClientSettings().Clone();
+            ListenerSettings = appSettings.GetLocalListenerSettings().Clone();
         }
 
         /// <summary>
@@ -322,6 +338,15 @@ namespace taskt.Core
         public LocalListenerSettings GetLocalListenerSettings()
         {
             return (LocalListenerSettings)ListenerSettings;
+        }
+
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public ApplicationSettings Clone()
+        {
+            return new ApplicationSettings(this);
         }
     }
 }

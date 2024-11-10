@@ -25,5 +25,14 @@ namespace taskt.Core
             AuthKey = Guid.NewGuid().ToString();
             IPWhiteList = "";
         }
+
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public LocalListenerSettings Clone()
+        {
+            return (LocalListenerSettings)MemberwiseClone();
+        }
     }
 }

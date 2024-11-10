@@ -29,6 +29,20 @@
         }
 
         /// <summary>
+        /// copy constructor
+        /// </summary>
+        /// <param name="appSettings"></param>
+        private SafeApplicationSettings(SafeApplicationSettings appSettings) : this(appSettings.applicationSettings.Clone())
+        {
+            //this.applicationSettings = appSettings.applicationSettings.Clone();
+
+            //this.ClientSettings = new SafeClientSettings(this.applicationSettings.GetClientSettings());
+            //this.EngineSettings = new SafeEngineSettings(this.applicationSettings.GetEngineSettings());
+            //this.ServerSettings = new SafeServerSettings(this.applicationSettings.GetServerSettings());
+            //this.ListenerSettings = new SafeLocalListenerSettings(this.applicationSettings.GetLocalListenerSettings());
+        }
+
+        /// <summary>
         /// get ClientSettings As SafeClientSettings
         /// </summary>
         /// <returns></returns>
@@ -62,6 +76,15 @@
         public SafeLocalListenerSettings GetLocalListenerSettings()
         {
             return (SafeLocalListenerSettings)ListenerSettings;
+        }
+
+        /// <summary>
+        /// clone instance
+        /// </summary>
+        /// <returns></returns>
+        public SafeApplicationSettings Clone()
+        {
+            return new SafeApplicationSettings(this);
         }
     }
 }
