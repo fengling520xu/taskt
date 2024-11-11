@@ -142,16 +142,16 @@ namespace taskt.Core
             ListenerSettings = appSettings.GetLocalListenerSettings().Clone();
         }
 
-        /// <summary>
-        /// save taskt settigs file as XML
-        /// </summary>
-        public void Save()
-        {
-            //create file path
-            var filePath = Files.GetSettigsFilePath();
+        ///// <summary>
+        ///// save taskt settigs file as XML
+        ///// </summary>
+        //public void Save()
+        //{
+        //    //create file path
+        //    var filePath = Files.GetSettigsFilePath();
 
-            SaveProcess(this, filePath);
-        }
+        //    SaveProcess(this, filePath);
+        //}
 
         /// <summary>
         /// Save taskt settigs file as XML, the file name is specified by a argument
@@ -181,29 +181,29 @@ namespace taskt.Core
             SaveAs(settings, filePath);
         }
 
-        /// <summary>
-        /// save taskt settigs xml file, settigs is specified
-        /// </summary>
-        /// <param name="settings"></param>
-        public static void Save(ApplicationSettings settings)
-        {
-            //create file path
-            var filePath = Files.GetSettigsFilePath();
+        ///// <summary>
+        ///// save taskt settigs xml file, settigs is specified
+        ///// </summary>
+        ///// <param name="settings"></param>
+        //public static void Save(ApplicationSettings settings)
+        //{
+        //    //create file path
+        //    var filePath = Files.GetSettigsFilePath();
 
-            SaveProcess(settings, filePath);
-        }
+        //    SaveProcess(settings, filePath);
+        //}
 
-        /// <summary>
-        /// save taskt settigs xml file, settigs and fileName are specified
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="fileName">file name of file path</param>
-        public static void Save(ApplicationSettings settings, string fileName)
-        {
-            var filePath = (Path.IsPathRooted(fileName)) ? fileName : Files.GetSettigsFilePath(fileName);
+        ///// <summary>
+        ///// save taskt settigs xml file, settigs and fileName are specified
+        ///// </summary>
+        ///// <param name="settings"></param>
+        ///// <param name="fileName">file name of file path</param>
+        //public static void Save(ApplicationSettings settings, string fileName)
+        //{
+        //    var filePath = (Path.IsPathRooted(fileName)) ? fileName : Files.GetSettigsFilePath(fileName);
 
-            SaveProcess(settings, filePath);
-        }
+        //    SaveProcess(settings, filePath);
+        //}
 
         /// <summary>
         /// Save settigs file as XML
@@ -222,17 +222,17 @@ namespace taskt.Core
             FileIOApplicationSettings.SaveAs(appSettings, filePath);
         }
 
-        /// <summary>
-        /// get taskt settigs from file or create taskt settigs
-        /// </summary>
-        /// <returns></returns>
-        public static ApplicationSettings GetOrCreateApplicationSettings()
-        {
-            //create file path
-            var filePath = Files.GetSettigsFilePath();
+        ///// <summary>
+        ///// get taskt settigs from file or create taskt settigs
+        ///// </summary>
+        ///// <returns></returns>
+        //public static ApplicationSettings GetOrCreateApplicationSettings()
+        //{
+        //    //create file path
+        //    var filePath = Files.GetSettigsFilePath();
 
-            return GetOrCreateApplicationSettingsProcess(filePath);
-        }
+        //    return GetOrCreateApplicationSettingsProcess(filePath);
+        //}
 
         /// <summary>
         /// get taskt settigs from file or create taskt settigs, fileName is specified

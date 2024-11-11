@@ -58,7 +58,7 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
         {
             //newAppSettings = new Core.ApplicationSettings();
             //newAppSettings = newAppSettings.GetOrCreateApplicationSettings();
-            newAppSettings = ApplicationSettings.GetOrCreateApplicationSettings();
+            newAppSettings = ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
 
             // Network -> Server
             Core.Server.LocalTCPListener.ListeningStarted += AutomationTCPListener_ListeningStarted;
@@ -76,7 +76,8 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
             //Keys key = (Keys)Enum.Parse(typeof(Keys), cboCancellationKey.Text);
             //newAppSettings.EngineSettings.CancellationKey = key;
             //newAppSettings.Save(newAppSettings);
-            newAppSettings.Save();
+            //newAppSettings.Save();
+            newAppSettings.Save(App.Taskt_Settings_File_Path);
             Core.Server.SocketClient.LoadSettings();
             this.Close();
         }
@@ -1015,7 +1016,7 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
                 {
                     //newAppSettings = new Core.ApplicationSettings();
                     //newAppSettings = newAppSettings.GetOrCreateApplicationSettings();
-                    newAppSettings = ApplicationSettings.GetOrCreateApplicationSettings();
+                    newAppSettings = ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
 
                     txtAddress.Text = newAppSettings.ServerSettings.HTTPGuid.ToString();
                     MessageBox.Show("Connected Successfully!\nGUID will be reloaded automatically the next time settings is loaded!", "Taskt", MessageBoxButtons.OK);
@@ -1359,7 +1360,8 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
                     try
                     {
                         //Core.ApplicationSettings.SaveAs(newAppSettings, frm.FileName);
-                        Core.ApplicationSettings.Save(newAppSettings, frm.FileName);
+                        //Core.ApplicationSettings.Save(newAppSettings, frm.FileName);
+                        newAppSettings.Save(frm.FileName);
                         MessageBox.Show("Exported", "taskt", MessageBoxButtons.OK);
                     }
                     catch

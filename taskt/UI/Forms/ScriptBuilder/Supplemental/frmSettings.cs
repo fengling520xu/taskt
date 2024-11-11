@@ -35,7 +35,7 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
         {
             //newAppSettings = new Core.ApplicationSettings();
             //newAppSettings = newAppSettings.GetOrCreateApplicationSettings();
-            newAppSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings();
+            newAppSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
 
             var serverSettings = newAppSettings.ServerSettings;
             chkServerEnabled.DataBindings.Add("Checked", serverSettings, "ServerConnectionEnabled", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -135,7 +135,8 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
             //newAppSettings.EngineSettings.CancellationKey = key;
             newAppSettings.GetEngineSettings().CancellationKey = key;
             //newAppSettings.Save(newAppSettings);
-            newAppSettings.Save();
+            //newAppSettings.Save();
+            newAppSettings.Save(App.Taskt_Settings_File_Path);
             Core.Server.SocketClient.LoadSettings();
             this.Close();
         }
@@ -470,7 +471,7 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
                 {
                     //newAppSettings = new Core.ApplicationSettings();
                     //newAppSettings = newAppSettings.GetOrCreateApplicationSettings();
-                    newAppSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings();
+                    newAppSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
                     txtHttpsAddress.Text = newAppSettings.ServerSettings.HTTPGuid.ToString();
                     MessageBox.Show("Connected Successfully! GUID will be reloaded automatically the next time settings is loaded!");
                 }

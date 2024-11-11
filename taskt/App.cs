@@ -93,7 +93,7 @@ namespace taskt
         /// </summary>
         public static void SaveSettings()
         {
-            Taskt_UNSAFE_Settings.Save();
+            Taskt_UNSAFE_Settings.Save(Taskt_Settings_File_Path);
         }
 
         /// <summary>

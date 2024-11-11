@@ -55,13 +55,14 @@ namespace taskt
             //if the exe was passed a filename argument then run the script
             if (args.Length > 0)
             {
-                string type = "run";
+                string type = "";
                 string scriptFilePath = "";
                 string settingsFilePath = "";
                 if (args.Length == 1)
                 {
                     // only file name
                     scriptFilePath = args[0];
+                    type = "run";
                 }
                 else if ((args.Length > 1) && (args.Length % 2 == 0))
                 {
@@ -71,6 +72,7 @@ namespace taskt
                         {
                             case "-r":
                             case "-e":
+                                type = "run";
                                 scriptFilePath = args[i + 1];
                                 break;
                             case "-o":
@@ -117,46 +119,75 @@ namespace taskt
                     return;
                 }
                 
-                // script file
-                string checkFilePath = scriptFilePath.StartsWith("*") ? scriptFilePath.Substring(1) : scriptFilePath;
-                if (!Path.IsPathRooted(checkFilePath))
+                if (type == "run" || type == "open")
                 {
-                    checkFilePath = Path.Combine(Core.IO.Folders.GetScriptsFolderPath(), checkFilePath);
-                }
-
-                if (!File.Exists(checkFilePath))
-                {
-                    MessageBox.Show($"taskt Script File does not exits.\r\nPath: {scriptFilePath}", App.Taskt_VersionInfo.ProductName);
-
-                    using (var eventLog = new EventLog("Application"))
+                    // script file
+                    string checkFilePath = scriptFilePath.StartsWith("*") ? scriptFilePath.Substring(1) : scriptFilePath;
+                    if (!Path.IsPathRooted(checkFilePath))
                     {
-                        eventLog.Source = "Application";
-                        eventLog.WriteEntry($"An attempt was made to run a taskt script file from '{scriptFilePath}' but the file was not found.  Please verify that the file exists at the path indicated.", EventLogEntryType.Error, 101, 1);
+                        checkFilePath = Path.Combine(Core.IO.Folders.GetScriptsFolderPath(), checkFilePath);
                     }
 
-                    Application.Exit();
-                    return;
-                }
-                else
-                {
-                    scriptFilePath = scriptFilePath.StartsWith("*") ? $"*{checkFilePath}" : checkFilePath;
+                    if (!File.Exists(checkFilePath))
+                    {
+                        MessageBox.Show($"taskt Script File does not exits.\r\nPath: {scriptFilePath}", App.Taskt_VersionInfo.ProductName);
+
+                        using (var eventLog = new EventLog("Application"))
+                        {
+                            eventLog.Source = "Application";
+                            eventLog.WriteEntry($"An attempt was made to run a taskt script file from '{scriptFilePath}' but the file was not found.  Please verify that the file exists at the path indicated.", EventLogEntryType.Error, 101, 1);
+                        }
+
+                        Application.Exit();
+                        return;
+                    }
+                    else
+                    {
+                        scriptFilePath = scriptFilePath.StartsWith("*") ? $"*{checkFilePath}" : checkFilePath;
+                    }
                 }
 
-                if (type == "run")
+                switch (type) 
                 {
-                    // execute
-                    Application.Run(new UI.Forms.ScriptEngine.frmScriptEngine(scriptFilePath, null, null, true));
-                }
-                else
-                {
-                    // edit
-                    SplashForm = new UI.Forms.Splash.frmSplash();
-                    SplashForm.Show();
+                    case "run":
+                        // execute
+                        Application.Run(new UI.Forms.ScriptEngine.frmScriptEngine(scriptFilePath, null, null, true));
+                        break;
 
-                    Application.DoEvents();
+                    case "open":
+                        // edit
+                        SplashForm = new UI.Forms.Splash.frmSplash();
+                        SplashForm.Show();
 
-                    Application.Run(new UI.Forms.ScriptBuilder.frmScriptBuilder(scriptFilePath));
+                        Application.DoEvents();
+
+                        Application.Run(new UI.Forms.ScriptBuilder.frmScriptBuilder(scriptFilePath));
+                        break;
+
+                    default:
+                        SplashForm = new UI.Forms.Splash.frmSplash();
+                        SplashForm.Show();
+
+                        Application.DoEvents();
+
+                        Application.Run(new UI.Forms.ScriptBuilder.frmScriptBuilder());
+                        break;
                 }
+                //if (type == "run")
+                //{
+                //    // execute
+                //    Application.Run(new UI.Forms.ScriptEngine.frmScriptEngine(scriptFilePath, null, null, true));
+                //}
+                //else
+                //{
+                //    // edit
+                //    SplashForm = new UI.Forms.Splash.frmSplash();
+                //    SplashForm.Show();
+
+                //    Application.DoEvents();
+
+                //    Application.Run(new UI.Forms.ScriptBuilder.frmScriptBuilder(scriptFilePath));
+                //}
             }
             else
             {
