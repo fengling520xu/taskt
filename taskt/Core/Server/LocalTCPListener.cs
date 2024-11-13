@@ -16,12 +16,28 @@ namespace taskt.Core.Server
     public static class LocalTCPListener
     {
         public static Automation.Engine.AutomationEngineInstance automationInstance;
+        
         public static Automation.Engine.AutomationEngineInstance ExecuteCommandEngine;
+        
+        /// <summary>
+        /// LocalListener Logger
+        /// </summary>
         private static Serilog.Core.Logger automationLogger;
+        
+        /// <summary>
+        /// TcpListener for LocalListener
+        /// </summary>
         public static TcpListener automationListener;
+        
         private static ILocalListenerSettings listenerSettings;
+        
         public static UI.Forms.ScriptBuilder.frmScriptBuilder associatedBuilder;
+
         public static int Port;
+
+        /// <summary>
+        /// LocalListener is Listening state
+        /// </summary>
         public static bool IsListening { get; set; }
 
         public static string TasktResult { get; set; }
@@ -70,6 +86,10 @@ namespace taskt.Core.Server
             automationLogger.Information("Automation Listener Finished Initializing");
         }
 
+        /// <summary>
+        /// start LocalListener thread
+        /// </summary>
+        /// <param name="port"></param>
         public static void StartListening(int port)
         {
             if (!listenerSettings.LocalListeningEnabled)
@@ -80,18 +100,22 @@ namespace taskt.Core.Server
 
             new Thread(() =>
             {
-                Thread.CurrentThread.IsBackground = true;
+                Thread.CurrentThread.IsBackground = true;   // back ground thread
                 StartAutomationListener(port);
             }).Start();
         }
 
+        /// <summary>
+        /// LocalListener start and wait/recieve data
+        /// </summary>
+        /// <param name="port"></param>
         public static void StartAutomationListener(int port)
         {
             try
             {
                 // TcpListener server = new TcpListener(port);
                 automationListener = new TcpListener(IPAddress.Any, port);
-                Port = port;
+                Port = port;    // "Port" is static variable, what?
 
                 // Start listening for client requests.
                 automationListener.Start();
@@ -107,7 +131,6 @@ namespace taskt.Core.Server
                 {
                     IsListening = true;
 
-
                     ListeningStarted?.Invoke(null, null);
                     automationLogger.Information($"Automation Listener Waiting for Request");
 
@@ -118,10 +141,9 @@ namespace taskt.Core.Server
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
 
-                    int i;
-
                     try
                     {
+                        int i;
                         // Loop to receive all the data sent by the client.
                         while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                         {
@@ -129,17 +151,18 @@ namespace taskt.Core.Server
                             data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                             automationLogger.Information($"Client Message Content: {data}");
 
-                            //break out request content
+                            //break out request content, split NewLine
                             var messageContent = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
                             if (listenerSettings.EnableWhitelist)
                             {
+                                // check WhiteList
                                 automationLogger.Information($"Listener requires IP Verification (Whitelist)");
 
-                                //verify that client is allowed to connect
+                                // verify that client is allowed to connect
                                 var clientAddress = (((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
-                                //get list of ip
+                                // get list of WhiteList-IP
                                 var enabledIPs = listenerSettings.IPWhiteList.Split(',');
 
                                 if (enabledIPs.Any(s => s.Trim().Contains(clientAddress)))
@@ -160,6 +183,9 @@ namespace taskt.Core.Server
 
                             if (listenerSettings.RequireListenerAuthenticationKey)
                             {
+                                // check AuthenticationKey
+                                
+                                // extract AuthKey
                                 string authKey = "";
                                 foreach (var item in messageContent)
                                 {
@@ -170,41 +196,39 @@ namespace taskt.Core.Server
                                     }
                                 }
 
-                                //auth key check
+                                // auth key check
                                 if (string.IsNullOrEmpty(authKey))
                                 {
-                                    //auth key not provided
+                                    // auth key not provided
                                     automationLogger.Information($"Closing Client Connection due to Null/Empty Auth Key");
                                     SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
                                     break;
-
                                 }
                                 else if (authKey != listenerSettings.AuthKey)
                                 {
-                                    //auth key invalid   
+                                    // auth key invalid   
                                     automationLogger.Information($"Closing Client Connection due to Invalid Auth Key");
                                     SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
                                     break;
                                 }
                                 else if (authKey == listenerSettings.AuthKey)
                                 {
-                                    //auth key valid
+                                    // auth key valid
                                     automationLogger.Information($"Auth Key Verified");
                                     ProcessRequest(data, messageContent, stream);
                                 }
                             }
                             else
                             {
-                                //verification not required
+                                // verification not required
                                 automationLogger.Information($"Auth Key Verification Not Required");
                                 ProcessRequest(data, messageContent, stream);
                             }
-
                         }
                     }
                     catch (Exception ex)
                     {
-                        automationLogger.Information($"Error Occured Reading Stream: {ex.ToString()}");
+                        automationLogger.Information($"Error Occured Reading Stream: {ex}");
                     }
 
                     // Shutdown and end connection
@@ -225,17 +249,23 @@ namespace taskt.Core.Server
             }
         }
 
+        /// <summary>
+        /// process request by LocalListener messages
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="messageContent"></param>
+        /// <param name="stream"></param>
         private static void ProcessRequest(string data, string[] messageContent, NetworkStream stream)
         {
             if ((data.StartsWith("POST /ExecuteScript")) || (data.StartsWith("POST /AwaitScript")))
             {
                 automationLogger.Information($"Client Requests Script Execution");
 
-                //locate the body content
-                string dataParameter = "";
-                bool isFileLocation = false;
+                // locate the body content
+                string dataParameter = "";  // data
+                bool isFileLocation = false;    // specified script location or not
 
-                //find the script parameter
+                // find the script parameter (ScriptData or ScriptLocation)
                 foreach (var item in messageContent)
                 {
                     if (item.StartsWith("ScriptData: "))
@@ -253,13 +283,14 @@ namespace taskt.Core.Server
                     }
                 }
 
-                //check to see if nothing was provided
+                // check to see if nothing was provided
                 if (string.IsNullOrEmpty(dataParameter))
                 {
                     automationLogger.Information($"Client Script Data Not Found");
                     return;
                 }
 
+                // convert to Base64
                 if (dataParameter.TryParseBase64(out var base64SourceString))
                 {
                     automationLogger.Information($"Client Passed Base64 String: {base64SourceString}");
@@ -270,36 +301,35 @@ namespace taskt.Core.Server
                     automationLogger.Information($"Client Did Not Pass Base64 String");
                 }
 
-                //check if data parameter references file location
+                // check if data parameter references file location
                 if (isFileLocation)
                 {
                     if (File.Exists(dataParameter))
                     {
-                        //file was found at path provided
+                        // file was found at path provided
                         dataParameter = File.ReadAllText(dataParameter);
                     }
                     //else if (File.Exists(Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), dataParameter)))
                     else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter)))
                     {
-                        //file was found at fallback to scripts folder
+                        // file was found at fallback to scripts folder
                         //dataParameter = Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), dataParameter);
                         dataParameter = Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter);
                         dataParameter = File.ReadAllText(dataParameter);
                     }
                     else
                     {
-                        //file not found
+                        // file not found
                         automationLogger.Information($"Client Script Location Not Found: {dataParameter}");
                         SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found: {dataParameter}", stream);
                         return;
                     }
-
                 }
 
-                //log execution
+                // log execution
                 automationLogger.Information($"Executing Script: {dataParameter}");
 
-                //invoke builder and pass it script data to execute
+                // invoke builder and pass it script data to execute
                 associatedBuilder.Invoke(new MethodInvoker(delegate ()
                 {
                     var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine();
@@ -327,8 +357,8 @@ namespace taskt.Core.Server
                     SendResponse(ResponseCode.OK, automationInstance.TasktResult, stream);
                 }
                 else
-                {
-                    //return success immediately
+                {   // POST /ExecuteScript
+                    // return success immediately
                     SendResponse(ResponseCode.OK, "Script Launched Successfully", stream);
                 }
             }
@@ -336,10 +366,10 @@ namespace taskt.Core.Server
             {
                 automationLogger.Information($"Client Requests Command Execution");
 
-                //locate the body content
+                // locate the body content
                 string dataParameter = "";
 
-                //find the script parameter
+                // find the script parameter (CommandData)
                 foreach (var item in messageContent)
                 {
                     if (item.StartsWith("CommandData: "))
@@ -349,7 +379,7 @@ namespace taskt.Core.Server
                     }
                 }
 
-                //check to see if nothing was provided
+                // check to see if nothing was provided
                 if (string.IsNullOrEmpty(dataParameter))
                 {
                     automationLogger.Information($"Client Command Data Not Found");
@@ -368,19 +398,19 @@ namespace taskt.Core.Server
 
                 try
                 {
-                    //deserialize command
+                    // deserialize command (JSON?)
                     var command = Newtonsoft.Json.JsonConvert.DeserializeObject(dataParameter, new Newtonsoft.Json.JsonSerializerSettings() { TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All });
 
-                    //log execution
+                    // log execution
                     automationLogger.Information($"Executing Command: {dataParameter}");
 
-                    //define script action
+                    // define script action
                     var scriptAction = new Script.ScriptAction() { ScriptCommand = (Core.Automation.Commands.ScriptCommand)command };
 
-                    //execute command
+                    // execute command
                     ExecuteCommandEngine.ExecuteCommand(scriptAction);
 
-                    //send back response
+                    // send back response
                     SendResponse(ResponseCode.OK, "Command Executed Successfully", stream);
                 }
                 catch (Exception ex)
@@ -400,7 +430,7 @@ namespace taskt.Core.Server
                 Application.Restart();
             }
             else
-            {
+            {   // i don't know this message :-(
                 automationLogger.Information($"Invalid Client Request");
                 SendResponse(ResponseCode.InternalServerError, "Invalid Client Request", stream);
             }
@@ -412,11 +442,19 @@ namespace taskt.Core.Server
             TasktResult = automationInstance.TasktResult;
         }
 
+        /// <summary>
+        /// send LocalListener Response(Result) to Client
+        /// </summary>
+        /// <param name="ResponseCode"></param>
+        /// <param name="content"></param>
+        /// <param name="networkStream"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public static void SendResponse(ResponseCode ResponseCode, string content, Stream networkStream)
         {
             System.IO.StreamWriter writer = new System.IO.StreamWriter(networkStream);
 
-            string responseHeader = "";
+            // i want to change switch()
+            string responseHeader;
             if (ResponseCode == ResponseCode.OK)
             {
                 responseHeader = "HTTP/1.1 200 OK";
@@ -434,7 +472,7 @@ namespace taskt.Core.Server
                 throw new NotImplementedException();
             }
 
-
+            // send result message
             writer.Write(responseHeader);
             writer.Write(Environment.NewLine);
             writer.Write("Content-Type: text/plain; charset=UTF-8");
@@ -445,34 +483,41 @@ namespace taskt.Core.Server
             writer.Write(content);
             writer.Flush();
         }
+
         public static void StopAutomationListener()
         {
             automationListener.Stop();
         }
 
+        /// <summary>
+        /// send task to LocalListener(server) from Client
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="parameterType"></param>
+        /// <param name="timeout"></param>
+        /// <param name="scriptData"></param>
+        /// <param name="awaitPreference"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         public static string SendAutomationTask(string endpoint, string parameterType, string timeout, string scriptData = "", string awaitPreference = "")
         {
-
-            if (!endpoint.StartsWith("http://"))
-            {
-                endpoint = $"http://{endpoint}";
-            }
-
-            var client = new RestSharp.RestClient(endpoint);
             var request = new RestSharp.RestRequest();
             //request.Method = RestSharp.Method.POST;
             request.Method = Method.Post;
             request.AddHeader("Content-Type", "text/plain");
 
+            // authKey get from appSettings, it's ok? really?
             if (listenerSettings.RequireListenerAuthenticationKey)
             {
                 request.AddHeader("AuthKey", listenerSettings.AuthKey);
             }
 
-            //check type of execution needed
+            // MEMO: Resource part of the remote endpoint URL. For example, when using the client-level base URL https://localhost:5000/api and Resource set to weather, the request will be sent to https://localhost:5000/api/weather
+
+            // check type of execution needed
             if (parameterType == "run raw script data")
             {
-                //handle await preference
+                // handle await preference
                 if (awaitPreference == "await for result")
                 {
                     request.Resource = "/AwaitScript";
@@ -482,12 +527,12 @@ namespace taskt.Core.Server
                     request.Resource = "/ExecuteScript";
                 }
 
-                //add script data
+                // add raw script data (convert to Base64)
                 request.AddParameter("ScriptData", scriptData.ConvertToBase64(), RestSharp.ParameterType.HttpHeader);
             }
             else if (parameterType == "run local file")
             {
-                //handle await preference
+                // handle await preference
                 if (awaitPreference == "await for result")
                 {
                     request.Resource = "/AwaitScript";
@@ -505,7 +550,7 @@ namespace taskt.Core.Server
                 //else if (File.Exists(Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), scriptData)))
                 else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), scriptData)))
                 {
-                    //file was found at fallback to scripts folder
+                    // file was found at fallback to scripts folder
                     //scriptData = Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), scriptData);
                     scriptData = Path.Combine(IO.Folders.GetScriptsFolderPath(), scriptData);
                     scriptData = File.ReadAllText(scriptData);
@@ -515,12 +560,12 @@ namespace taskt.Core.Server
                     throw new FileNotFoundException(scriptData);
                 }
 
-                //add script data
+                // add script data (convert to Base64)
                 request.AddParameter("ScriptData", scriptData.ConvertToBase64(), RestSharp.ParameterType.HttpHeader);
             }
             else if (parameterType == "run remote file")
             {
-                //handle await preference
+                // handle await preference
                 if (awaitPreference == "await for result")
                 {
                     request.Resource = "/AwaitScript";
@@ -530,14 +575,14 @@ namespace taskt.Core.Server
                     request.Resource = "/ExecuteScript";
                 }
 
-                //add script parameter
+                // add script parameter (NOT Convert to Base64)
                 request.AddParameter("ScriptLocation", scriptData, RestSharp.ParameterType.HttpHeader);
             }
             else if (parameterType == "run command json")
             {
                 request.Resource = "/ExecuteCommand";
 
-                //add script data
+                // add script data
                 request.AddParameter("CommandData", scriptData.ConvertToBase64(), RestSharp.ParameterType.HttpHeader);
             }
             else if (parameterType == "get engine status")
@@ -550,6 +595,12 @@ namespace taskt.Core.Server
             }
 
             request.Timeout = new TimeSpan(int.Parse(timeout));
+
+            if (!endpoint.StartsWith("http://"))
+            {
+                endpoint = $"http://{endpoint}";
+            }
+            var client = new RestSharp.RestClient(endpoint);
 
             var resp = client.Execute<RestResponse>(request);
 
@@ -583,6 +634,11 @@ namespace taskt.Core.Server
             return content;
         }
 
+        /// <summary>
+        /// get LocalListener IP and Port
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static string GetListeningAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -597,6 +653,7 @@ namespace taskt.Core.Server
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
     }
+
     public enum ResponseCode
     {
         OK = 200,
