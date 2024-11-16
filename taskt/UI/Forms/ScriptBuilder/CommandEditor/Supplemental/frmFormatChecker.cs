@@ -69,6 +69,7 @@ namespace taskt.UI.Forms.ScriptBuilder.CommandEditor.Supplemental
             if (string.IsNullOrEmpty(fmt))
             {
                 txtResult.Text = "Error! Format is Empty.";
+                return;
             }
 
             switch (cmbType.Text)
