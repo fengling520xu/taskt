@@ -33,9 +33,17 @@ namespace taskt.Core.Automation.Commands
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             //(_, var targetSheet) = v_InstanceName.ExpandValueOrUserVariableAsExcelInstanceAndWorksheet(engine);
-            (_, var targetSheet) = this.ExpandValueOrVariableAsExcelInstanceAndCurrentWorksheet(engine);
+            (var excelInstance, var targetSheet) = this.ExpandValueOrVariableAsExcelInstanceAndWorksheet(engine);
 
-            targetSheet.Delete();
+            //excelInstance.DisplayAlerts = false;
+            //targetSheet.Delete();
+            //excelInstance.DisplayAlerts = true;
+            excelInstance.HideDisplayAlertProcess(
+                new Action(() =>
+                {
+                    targetSheet.Delete();
+                })
+            );
         }
     }
 }

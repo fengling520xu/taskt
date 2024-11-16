@@ -167,5 +167,18 @@ namespace taskt.Core.Automation.Commands
                 throw new Exception($"Strange Excel RC Location. Row: '{row}', Column: '{column}'");
             }
         }
+
+        /// <summary>
+        /// execute process in Hide display alert
+        /// </summary>
+        /// <param name="excelInstance"></param>
+        /// <param name="act"></param>
+        public static void HideDisplayAlertProcess(this Application excelInstance, System.Action act)
+        {
+            var state = excelInstance.DisplayAlerts;
+            excelInstance.DisplayAlerts = false;
+            act();
+            excelInstance.DisplayAlerts = state;
+        }
     }
 }
