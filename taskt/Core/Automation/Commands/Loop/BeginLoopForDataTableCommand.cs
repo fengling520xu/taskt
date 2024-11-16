@@ -238,7 +238,7 @@ namespace taskt.Core.Automation.Commands
                     if (engine.CurrentLoopCancelled)
                     {
                         engine.ReportProgress($"Exiting Loop From Line {loopCommand.LineNumber}");
-                        engine.CurrentLoopCancelled = false;
+                        //engine.CurrentLoopCancelled = false;
                         return;
                     }
 
@@ -261,7 +261,16 @@ namespace taskt.Core.Automation.Commands
                         for (int j =  columnFirstValue; columnCondition(j); j = columnNextValue(j))
                         {
                             loopBodyProcess(i, j);
+                            if (engine.CurrentLoopCancelled)
+                            {
+                                break;
+                            }
                             count++;
+                        }
+                        if (engine.CurrentLoopCancelled)
+                        {
+                            engine.CurrentLoopCancelled = false;
+                            break;
                         }
                     }
                     break;
@@ -272,7 +281,16 @@ namespace taskt.Core.Automation.Commands
                         {
                         
                             loopBodyProcess(i, j);
+                            if (engine.CurrentLoopCancelled)
+                            {
+                                break;
+                            }
                             count++;
+                        }
+                        if (engine.CurrentLoopCancelled)
+                        {
+                            engine.CurrentLoopCancelled = false;
+                            break;
                         }
                     }
                     break;
