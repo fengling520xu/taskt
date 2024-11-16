@@ -429,6 +429,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_1(doc);
             convertTo3_5_2_6(doc);
             convertTo3_5_2_11(doc);
+            convertTo3_5_2_13(doc);
             return doc;
         }
 
@@ -3431,6 +3432,12 @@ namespace taskt.Core.Script
 
             // SeleniumBrowserGetWebBrowserInfoCommand -> SeleniumBrowserGetWebBrowserInformationCommand
             ChangeCommandName(doc, "SeleniumBrowserGetWebBrowserInfoCommand", "SeleniumBrowserGetWebBrowserInformationCommand", "Get Web Browser Information");
+        }
+
+        private static void convertTo3_5_2_13(XDocument doc)
+        {
+            // GetExponential v_Exp
+            ChangeAttributeName(doc, "GetExponentialCommand", "v_Power", "v_Exp");
         }
 
         /// <summary>

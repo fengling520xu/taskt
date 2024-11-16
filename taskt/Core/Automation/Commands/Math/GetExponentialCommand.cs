@@ -17,10 +17,10 @@ namespace taskt.Core.Automation.Commands
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_Value))]
-        [PropertyDescription("Power")]
-        [InputSpecification("Power", true)]
-        [PropertyDisplayText(true, "Power")]
-        public string v_Power { get; set; }
+        [PropertyDescription("Exponential")]
+        [InputSpecification("Exponential", true)]
+        [PropertyDisplayText(true, "Exponential")]
+        public string v_Exp { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_OutputNumericalVariableName))]
@@ -32,7 +32,7 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var v = (double)this.ExpandValueOrUserVariableAsDecimal(nameof(v_Power), engine);
+            var v = (double)this.ExpandValueOrUserVariableAsDecimal(nameof(v_Exp), engine);
             Math.Exp(v).StoreInUserVariable(engine, v_Result);
         }
     }
