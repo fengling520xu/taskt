@@ -44,7 +44,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static int ExpandValueOrVariableAsWindowYPosition(this IWindowPositionProperties command, IntPtr whnd, AutomationEngineInstance engine)
         {
-            var v = command.v_XPosition;
+            var v = command.v_YPosition;
             var rect = WindowControls.GetWindowRect(whnd);
 
             if ((v == VariableNameControls.GetWrappedVariableName(SystemVariables.Window_CurrentPosition.VariableName, engine)) ||
