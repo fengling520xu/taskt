@@ -65,6 +65,13 @@ namespace taskt.UI.Forms.ScriptBuilder.CommandEditor.Supplemental
         {
             string value = txtValue.Text;
             string fmt = txtFormat.Text;
+
+            if (string.IsNullOrEmpty(fmt))
+            {
+                txtResult.Text = "Error! Format is Empty.";
+                return;
+            }
+
             switch (cmbType.Text)
             {
                 case "Number":

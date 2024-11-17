@@ -34,7 +34,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyParameterOrder(9000)]
+        [PropertyParameterOrder(11000)]
         public string v_Result { get; set; }
 
         public GetDataTableValueCommand()

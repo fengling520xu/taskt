@@ -35,7 +35,17 @@ namespace taskt.Core.Automation.Commands
         public static DataTable CloneDataTableOnlyColumns(this DataTable table)
         {
             var newDT = new DataTable();
-            newDT.Columns.AddRange(table.Columns.Cast<DataColumn>().ToArray());
+
+            //table.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToArray()
+
+            //newDT.Columns.AddRange(table.Columns.Cast<DataColumn>().ToArray());
+
+            var cols = table.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToArray();
+            foreach(var c in cols)
+            {
+                newDT.Columns.Add(c);
+            }
+
             return newDT;
         }
     }

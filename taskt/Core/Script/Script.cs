@@ -429,6 +429,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_1(doc);
             convertTo3_5_2_6(doc);
             convertTo3_5_2_11(doc);
+            convertTo3_5_2_13(doc);
             return doc;
         }
 
@@ -849,7 +850,7 @@ namespace taskt.Core.Script
             ChangeCommandName(doc, "AddDictionaryCommand", "AddDictionaryItemCommand", "Add Dictionary Item");
 
             // ConvertDictionaryToDataTableCommand (fix typo)
-            ChangeCommandName(doc, "ConvertDictionaryToDataTableCommand", "ConvertDictionaryToDataTableCommand", "Convert Dictionary To DataTable");
+            ChangeCommandName(doc, "ConvertDictionaryTDataTableCommand", "ConvertDictionaryToDataTableCommand", "Convert Dictionary To DataTable");
 
             // GetDictionaryValueCommand (fix Display Command Name)
             ChangeCommandName(doc, "GetDictionaryValueCommand", "GetDictionaryValueCommand", "Get Dictionary Value");
@@ -3431,6 +3432,39 @@ namespace taskt.Core.Script
 
             // SeleniumBrowserGetWebBrowserInfoCommand -> SeleniumBrowserGetWebBrowserInformationCommand
             ChangeCommandName(doc, "SeleniumBrowserGetWebBrowserInfoCommand", "SeleniumBrowserGetWebBrowserInformationCommand", "Get Web Browser Information");
+        }
+
+        private static void convertTo3_5_2_13(XDocument doc)
+        {
+            // GetExponential v_Exp
+            ChangeAttributeName(doc, "GetExponentialCommand", "v_Power", "v_Exp");
+
+            // GetExcelInformation parameter value
+            ChangeAttributeValue(doc, "ExcelGetExcelInformationCommand", "v_InfoType", new Action<XAttribute>((attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "file name":
+                            attr.SetValue("File Name");
+                            break;
+                        case "full path file name":
+                            attr.SetValue("Full Path File Name");
+                            break;
+                        case "current sheet":
+                            attr.SetValue("Current Worksheet");
+                            break;
+                        case "number of sheets":
+                            attr.SetValue("Number Of Worksheets");
+                            break;
+                        case "first sheet":
+                            attr.SetValue("First Worksheet");
+                            break;
+                        case "last sheet":
+                            attr.SetValue("Last Worksheet");
+                            break;
+                    }
+                }))
+            );
         }
 
         /// <summary>

@@ -26,16 +26,16 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="53a1393e-af18-420a-ab36-8b4ba0036915" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" v_Comment="Get Excel Informations" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetExcelInfoCommand" CommandID="f51b310c-c053-417b-9926-7c18b1517fc6" CommandName="ExcelGetExcelInfoCommand" IsCommented="false" SelectionName="Get Excel Info" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="File name" v_Result="vExcelFileName" />
+      <ScriptCommand xsi:type="ExcelGetExcelInformationCommand" CommandID="f51b310c-c053-417b-9926-7c18b1517fc6" CommandName="ExcelGetExcelInformationCommand" IsCommented="false" SelectionName="Get Excel Information" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="File Name" v_Result="vExcelFileName" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetExcelInfoCommand" CommandID="707e1dfb-3459-4d3f-96e7-02219ce9ff42" CommandName="ExcelGetExcelInfoCommand" IsCommented="false" SelectionName="Get Excel Info" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Full path file name" v_Result="vExcelPath" />
+      <ScriptCommand xsi:type="ExcelGetExcelInformationCommand" CommandID="707e1dfb-3459-4d3f-96e7-02219ce9ff42" CommandName="ExcelGetExcelInformationCommand" IsCommented="false" SelectionName="Get Excel Information" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Full Path File Name" v_Result="vExcelPath" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetExcelInfoCommand" CommandID="bb1a49de-e9ee-4df2-be65-b32efe75175c" CommandName="ExcelGetExcelInfoCommand" IsCommented="false" SelectionName="Get Excel Info" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Current sheet" v_Result="vCurrentSheet" />
+      <ScriptCommand xsi:type="ExcelGetExcelInformationCommand" CommandID="bb1a49de-e9ee-4df2-be65-b32efe75175c" CommandName="ExcelGetExcelInformationCommand" IsCommented="false" SelectionName="Get Excel Information" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Current Worksheet" v_Result="vCurrentSheet" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetExcelInfoCommand" CommandID="b4de3715-58cd-4557-9a87-4d7a65738509" CommandName="ExcelGetExcelInfoCommand" IsCommented="false" SelectionName="Get Excel Info" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Number of sheets" v_Result="vSheets" />
+      <ScriptCommand xsi:type="ExcelGetExcelInformationCommand" CommandID="b4de3715-58cd-4557-9a87-4d7a65738509" CommandName="ExcelGetExcelInformationCommand" IsCommented="false" SelectionName="Get Excel Information" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_InfoType="Number Of Worksheets" v_Result="vSheets" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="17f93b60-b145-4074-96e2-2104fd2dcba7" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Excel File Name: ⦃vExcelFileName⦄&#xD;&#xA;Excel File Path: ⦃vExcelPath⦄&#xD;&#xA;Current Worksheet: ⦃vCurrentSheet⦄&#xD;&#xA;Sheets: ⦃vSheets⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
@@ -48,11 +48,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.10</TasktVersion>
+    <TasktVersion>3.5.2.13</TasktVersion>
     <Author />
     <LastRunTime>2024-09-29T10:00:50.6060382+09:00</LastRunTime>
     <RunTimes>4</RunTimes>
-    <Revision>11</Revision>
+    <Revision>12</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

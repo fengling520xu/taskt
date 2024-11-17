@@ -360,7 +360,8 @@ namespace taskt.Core.Automation.Commands
                 case "formula":
                     return new Func<Worksheet, int, int, bool>((sheet, row, column) =>
                     {
-                        return !string.IsNullOrEmpty(sheet.CellFormula(row, column));
+                        //return !string.IsNullOrEmpty(sheet.CellFormula(row, column));
+                        return sheet.CellFormula(row, column).StartsWith("=");
                     });
 
                 case "back color":

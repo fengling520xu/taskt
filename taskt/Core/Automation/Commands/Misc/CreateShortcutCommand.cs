@@ -22,10 +22,10 @@ namespace taskt.Core.Automation.Commands
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFolderSelectionHelper)]
         [InputSpecification("File, Folder, or URL", true)]
-        [PropertyDetailSampleUsage("**C:\\temp\\target.txt", PropertyDetailSampleUsage.ValueType.Value, "Target File")]
-        [PropertyDetailSampleUsage("**C:\\temp\\", PropertyDetailSampleUsage.ValueType.Value, "Target Folder")]
-        [PropertyDetailSampleUsage("**http://example.com", PropertyDetailSampleUsage.ValueType.Value, "Target URL")]
-        [PropertyDetailSampleUsage("**{{{vPath}}}", PropertyDetailSampleUsage.ValueType.VariableValue, "Target File, Folder, or URL")]
+        [PropertyDetailSampleUsage("**C:\\temp\\target.txt**", PropertyDetailSampleUsage.ValueType.Value, "Target File")]
+        [PropertyDetailSampleUsage("**C:\\temp\\**", PropertyDetailSampleUsage.ValueType.Value, "Target Folder")]
+        [PropertyDetailSampleUsage("**http://example.com**", PropertyDetailSampleUsage.ValueType.Value, "Target URL")]
+        [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Target File, Folder, or URL")]
         [PropertyValidationRule("Target", PropertyValidationRule.ValidationRuleFlags.Empty)]
         public string v_TargetPath { get; set; }
 

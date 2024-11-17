@@ -15,6 +15,12 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static int ExpandValueOrUserVariableAsDataTableRow(this ILDataTableRowPositionProperties command, DataTable table, Engine.AutomationEngineInstance engine)
         {
+            // fix if row index empty
+            if (string.IsNullOrEmpty(command.v_RowIndex))
+            {
+                command.v_RowIndex = "0";   // TODO: in fact, i'd like to set {DataTable.CurrentRow}
+            }
+
             var index = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_RowIndex), "Row Index", engine);
             if (index < 0)
             {

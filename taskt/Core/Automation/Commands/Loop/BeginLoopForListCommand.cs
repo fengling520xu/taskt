@@ -41,7 +41,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Reverse Loop")]
-        [PropertyIsOptional(true)]
+        [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
         [PropertyDisplayText(false, "")]
         [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
@@ -150,7 +150,7 @@ namespace taskt.Core.Automation.Commands
                     if (engine.CurrentLoopCancelled)
                     {
                         engine.ReportProgress($"Exiting Loop From Line {loopCommand.LineNumber}");
-                        engine.CurrentLoopCancelled = false;
+                        //engine.CurrentLoopCancelled = false;
                         return;
                     }
 
@@ -174,6 +174,12 @@ namespace taskt.Core.Automation.Commands
                 for (int i = listToLoop.Count - 1; i >= 0; i--, count++)
                 {
                     loopBodyProcess(i);
+
+                    if (engine.CurrentLoopCancelled)
+                    {
+                        engine.CurrentLoopCancelled = false;
+                        break;
+                    }
                 }
             }
             else
@@ -184,6 +190,11 @@ namespace taskt.Core.Automation.Commands
                     loopBodyProcess(i);
                     //dummyAction(i);
                     //Console.WriteLine(i);
+                    if (engine.CurrentLoopCancelled)
+                    {
+                        engine.CurrentLoopCancelled = false;
+                        break;
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 using System.Linq;
+using taskt.Core.Automation.Engine;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -18,9 +19,11 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
     public sealed class GetWindowNamesCommand : AAnyWindowNameCommands, ICanHandleList
     {
-        //[XmlAttribute]
-        //[PropertyVirtualProperty(nameof(WindowNameControls), nameof(WindowNameControls.v_WindowName))]
-        //public string v_WindowName { get; set; }
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(WindowControls), nameof(WindowControls.v_WindowName))]
+        [PropertyAvailableSystemVariable(SystemVariables.LimitedSystemVariableNames.Window_AllWindows)]
+        [PropertyIsWindowNamesList(true, true, true, false)]
+        public override string v_WindowName { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(WindowNameControls), nameof(WindowNameControls.v_CompareMethod))]

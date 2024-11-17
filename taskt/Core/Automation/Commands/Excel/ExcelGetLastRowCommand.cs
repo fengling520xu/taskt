@@ -82,6 +82,12 @@ namespace taskt.Core.Automation.Commands
             var lastRow = excelSheet.LastRowIndex(columnIndex, 1, valueType, useFastMethod);
 
             //lastRow.ToString().StoreInUserVariable(engine, v_Result);
+
+            if (lastRow == 0)
+            {
+                lastRow = 1;
+            }
+
             lastRow.StoreInUserVariable(engine, v_Result);
         }
     }
