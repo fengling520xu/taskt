@@ -50,7 +50,9 @@ namespace taskt.Core.Automation.Commands
             catch (Exception ex)
             {
                 var msg = ex.Message;
-                if (msg.StartsWith("Worksheet '") && msg.EndsWith("' does not exists."))
+                if (msg.StartsWith("Worksheet '") && msg.EndsWith("' does not exists.") || 
+                    (msg.StartsWith("No Next Worksheet. CurrentSheet: ")) ||
+                    (msg.StartsWith("No Previous Worksheet. CurrentSheet")))
                 {
                     false.StoreInUserVariable(engine, v_Result);
                 }
