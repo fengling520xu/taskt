@@ -28,7 +28,7 @@ namespace taskt.UI.Forms.ScriptEngine
 
         public string filePath { get; set; }
 
-        public string xmlData { get; set; }
+        //public string xmlData { get; set; }
 
         public Core.Server.Task remoteTask { get; set; }
 
@@ -174,14 +174,16 @@ namespace taskt.UI.Forms.ScriptEngine
             engineInstance.serverExecution = this.serverExecution;
             Core.Server.LocalTCPListener.automationInstance = engineInstance;
 
-            if (xmlData == null)
-            {
-                engineInstance.ExecuteScriptAsync(this, filePath, Variables, PreloadedTasks);
-            }
-            else
-            {
-                engineInstance.ExecuteScriptXML(xmlData);
-            }
+            //if (xmlData == null)
+            //{
+            //    engineInstance.ExecuteScriptAsync(this, filePath, Variables, PreloadedTasks);
+            //}
+            //else
+            //{
+            //    engineInstance.ExecuteScriptXML(xmlData);
+            //}
+
+            engineInstance.ExecuteScriptAsync(this, filePath, Variables, PreloadedTasks);
         }
 
         /// <summary>
