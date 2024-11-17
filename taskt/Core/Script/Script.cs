@@ -3438,6 +3438,33 @@ namespace taskt.Core.Script
         {
             // GetExponential v_Exp
             ChangeAttributeName(doc, "GetExponentialCommand", "v_Power", "v_Exp");
+
+            // GetExcelInformation parameter value
+            ChangeAttributeValue(doc, "ExcelGetExcelInformationCommand", "v_InfoType", new Action<XAttribute>((attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "file name":
+                            attr.SetValue("File Name");
+                            break;
+                        case "full path file name":
+                            attr.SetValue("Full Path File Name");
+                            break;
+                        case "current sheet":
+                            attr.SetValue("Current Worksheet");
+                            break;
+                        case "number of sheets":
+                            attr.SetValue("Number Of Worksheets");
+                            break;
+                        case "first sheet":
+                            attr.SetValue("First Worksheet");
+                            break;
+                        case "last sheet":
+                            attr.SetValue("Last Worksheet");
+                            break;
+                    }
+                }))
+            );
         }
 
         /// <summary>

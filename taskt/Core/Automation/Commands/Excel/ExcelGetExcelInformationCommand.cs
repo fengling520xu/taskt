@@ -27,12 +27,12 @@ namespace taskt.Core.Automation.Commands
         [SampleUsage("**File name** or **Full path file name** or **Current sheet** or **Number of sheets** or **First sheet** or **Last sheet**")]
         [Remarks("")]
         [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyUISelectionOption("File name")]
-        [PropertyUISelectionOption("Full path file name")]
-        [PropertyUISelectionOption("Current sheet")]
-        [PropertyUISelectionOption("Number of sheets")]
-        [PropertyUISelectionOption("First sheet")]
-        [PropertyUISelectionOption("Last sheet")]
+        [PropertyUISelectionOption("File Name")]
+        [PropertyUISelectionOption("Full Path File Name")]
+        [PropertyUISelectionOption("Current Worksheet")]
+        [PropertyUISelectionOption("Number Of Worksheets")]
+        [PropertyUISelectionOption("First Worksheet")]
+        [PropertyUISelectionOption("Last Worksheet")]
         [PropertyValidationRule("Type", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Type")]
         [PropertyParameterOrder(6000)]
@@ -65,12 +65,12 @@ namespace taskt.Core.Automation.Commands
                 case "full path file name":
                     ret = excelInstance.ActiveWorkbook?.FullName ?? "";
                     break;
-                case "current sheet":
+                case "current worksheet":
                     //var sheet = engine.engineSettings.CurrentWorksheetKeyword.ExpandValueOrUserVariableAsExcelWorksheet(engine, excelInstance, true);
                     //ret = (sheet == null) ? "" : sheet.Name;
                     ret = (excelInstance.Worksheets.Count > 0) ? excelInstance.ActiveSheet.Name : "";
                     break;
-                case "number of sheets":
+                case "number of worksheets":
                     try
                     {
                         ret = excelInstance.Worksheets.Count.ToString();
@@ -80,7 +80,7 @@ namespace taskt.Core.Automation.Commands
                         ret = "0";
                     }
                     break;
-                case "first sheet":
+                case "first worksheet":
                     try
                     {
 
@@ -91,7 +91,7 @@ namespace taskt.Core.Automation.Commands
                         ret = "";
                     }
                     break;
-                case "last sheet":
+                case "last worksheet":
                     try
                     {
                         ret = ((Worksheet)excelInstance.Worksheets[excelInstance.Worksheets.Count]).Name;
