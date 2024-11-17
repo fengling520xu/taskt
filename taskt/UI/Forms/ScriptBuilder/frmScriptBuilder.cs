@@ -3182,7 +3182,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             //clear selected items
             ClearSelectedListViewItems();
 
-            Notify("Running Script..");
+            Notify("Running Script.");
 
             var newEngine = new Forms.ScriptEngine.frmScriptEngine(ScriptFilePath, this);
             newEngine.callBackForm = this;
