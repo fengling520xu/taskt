@@ -46,7 +46,7 @@ namespace taskt.Core.Server
 
         static LocalTCPListener()
         {
-            automationLogger = new Core.Logging().CreateLogger("Automation Client", Serilog.RollingInterval.Day);
+            automationLogger = new Logging().CreateLogger("Automation Client", Serilog.RollingInterval.Day);
             ExecuteCommandEngine = new Automation.Engine.AutomationEngineInstance();
         }
 
@@ -122,10 +122,6 @@ namespace taskt.Core.Server
 
                 automationLogger.Information($"Automation Listener Endpoint started at {automationListener.LocalEndpoint}");
 
-                // Buffer for reading data
-                Byte[] bytes = new Byte[2048];
-                String data = null;
-
                 // Enter the listening loop.
                 while (true)
                 {
@@ -140,91 +136,198 @@ namespace taskt.Core.Server
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
+                    stream.ReadTimeout = 10000;
+                    stream.WriteTimeout = 10000;
+
+                    // Buffer for reading data
+                    //Byte[] bytes = new Byte[2048];
+                    byte[] bytes = new byte[16384]; // 16kB
+                    string data = null;
 
                     try
                     {
-                        int i;
-                        // Loop to receive all the data sent by the client.
-                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        //int i;
+                        //// Loop to receive all the data sent by the client.
+                        //while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        //{
+                        //    // Translate data bytes to a ASCII string.
+                        //    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                        //    automationLogger.Information($"Client Message Content: {data}");
+
+                        //    //break out request content, split NewLine
+                        //    var messageContent = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        //    if (listenerSettings.EnableWhitelist)
+                        //    {
+                        //        // check WhiteList
+                        //        automationLogger.Information($"Listener requires IP Verification (Whitelist)");
+
+                        //        // verify that client is allowed to connect
+                        //        var clientAddress = (((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+                        //        // get list of WhiteList-IP
+                        //        var enabledIPs = listenerSettings.IPWhiteList.Split(',');
+
+                        //        if (enabledIPs.Any(s => s.Trim().Contains(clientAddress)))
+                        //        {
+                        //            automationLogger.Information($"Client '{clientAddress}' verified from WhiteList '{listenerSettings.IPWhiteList}'");
+                        //        }
+                        //        else
+                        //        {
+                        //            automationLogger.Information($"Closing Client Connection due to IP verification failure");
+                        //            SendResponse(ResponseCode.Unauthorized, $"Unauthorized", stream);
+                        //            return;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        automationLogger.Information($"Listener does not require IP Verification");
+                        //    }
+
+                        //    if (listenerSettings.RequireListenerAuthenticationKey)
+                        //    {
+                        //        // check AuthenticationKey
+
+                        //        // extract AuthKey
+                        //        string authKey = "";
+                        //        foreach (var item in messageContent)
+                        //        {
+                        //            if (item.StartsWith("AuthKey: "))
+                        //            {
+                        //                authKey = item.Replace("AuthKey: ", "");
+                        //                break;
+                        //            }
+                        //        }
+
+                        //        // auth key check
+                        //        if (string.IsNullOrEmpty(authKey))
+                        //        {
+                        //            // auth key not provided
+                        //            automationLogger.Information($"Closing Client Connection due to Null/Empty Auth Key");
+                        //            SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
+                        //            break;
+                        //        }
+                        //        else if (authKey != listenerSettings.AuthKey)
+                        //        {
+                        //            // auth key invalid   
+                        //            automationLogger.Information($"Closing Client Connection due to Invalid Auth Key");
+                        //            SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
+                        //            break;
+                        //        }
+                        //        else if (authKey == listenerSettings.AuthKey)
+                        //        {
+                        //            // auth key valid
+                        //            automationLogger.Information($"Auth Key Verified");
+                        //            ProcessRequest(data, messageContent, stream);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        // verification not required
+                        //        automationLogger.Information($"Auth Key Verification Not Required");
+                        //        ProcessRequest(data, messageContent, stream);
+                        //    }
+                        //}
+
+                        // MEMO: https://progtech.device-mobile.com/csharp/csharp-004.html
+                        using (var ms = new MemoryStream())
                         {
-                            // Translate data bytes to a ASCII string.
-                            data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                            automationLogger.Information($"Client Message Content: {data}");
-
-                            //break out request content, split NewLine
-                            var messageContent = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-
-                            if (listenerSettings.EnableWhitelist)
+                            int resSize = 0;
+                            do
                             {
-                                // check WhiteList
-                                automationLogger.Information($"Listener requires IP Verification (Whitelist)");
-
-                                // verify that client is allowed to connect
-                                var clientAddress = (((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
-
-                                // get list of WhiteList-IP
-                                var enabledIPs = listenerSettings.IPWhiteList.Split(',');
-
-                                if (enabledIPs.Any(s => s.Trim().Contains(clientAddress)))
+                                try
                                 {
-                                    automationLogger.Information($"Client '{clientAddress}' verified from WhiteList '{listenerSettings.IPWhiteList}'");
+                                    resSize = stream.Read(bytes, 0, bytes.Length);
                                 }
-                                else
+                                catch 
                                 {
-                                    automationLogger.Information($"Closing Client Connection due to IP verification failure");
-                                    SendResponse(ResponseCode.Unauthorized, $"Unauthorized", stream);
-                                    return;
+                                    break;
                                 }
+                                ms.Write(bytes, 0, resSize);
+
+                                // DBG
+                                //Console.WriteLine("### Recieve Data!");
+                                //Console.WriteLine(System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length));
+
+                            } while (stream.DataAvailable || bytes[resSize - 1] != '\n');
+                        }
+                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                        automationLogger.Information($"Client Message Content: {data}");
+
+                        //break out request content, split NewLine
+                        var messageContent = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        if (listenerSettings.EnableWhitelist)
+                        {
+                            // check WhiteList
+                            automationLogger.Information($"Listener requires IP Verification (Whitelist)");
+
+                            // verify that client is allowed to connect
+                            var clientAddress = (((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+                            // get list of WhiteList-IP
+                            var enabledIPs = listenerSettings.IPWhiteList.Split(',');
+
+                            if (enabledIPs.Any(s => s.Trim().Contains(clientAddress)))
+                            {
+                                automationLogger.Information($"Client '{clientAddress}' verified from WhiteList '{listenerSettings.IPWhiteList}'");
                             }
                             else
                             {
-                                automationLogger.Information($"Listener does not require IP Verification");
+                                automationLogger.Information($"Closing Client Connection due to IP verification failure");
+                                SendResponse(ResponseCode.Unauthorized, $"Unauthorized", stream);
+                                return;
                             }
+                        }
+                        else
+                        {
+                            automationLogger.Information($"Listener does not require IP Verification");
+                        }
 
-                            if (listenerSettings.RequireListenerAuthenticationKey)
+                        if (listenerSettings.RequireListenerAuthenticationKey)
+                        {
+                            // check AuthenticationKey
+
+                            // extract AuthKey
+                            string authKey = "";
+                            foreach (var item in messageContent)
                             {
-                                // check AuthenticationKey
-                                
-                                // extract AuthKey
-                                string authKey = "";
-                                foreach (var item in messageContent)
+                                if (item.StartsWith("AuthKey: "))
                                 {
-                                    if (item.StartsWith("AuthKey: "))
-                                    {
-                                        authKey = item.Replace("AuthKey: ", "");
-                                        break;
-                                    }
-                                }
-
-                                // auth key check
-                                if (string.IsNullOrEmpty(authKey))
-                                {
-                                    // auth key not provided
-                                    automationLogger.Information($"Closing Client Connection due to Null/Empty Auth Key");
-                                    SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
+                                    authKey = item.Replace("AuthKey: ", "");
                                     break;
                                 }
-                                else if (authKey != listenerSettings.AuthKey)
-                                {
-                                    // auth key invalid   
-                                    automationLogger.Information($"Closing Client Connection due to Invalid Auth Key");
-                                    SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
-                                    break;
-                                }
-                                else if (authKey == listenerSettings.AuthKey)
-                                {
-                                    // auth key valid
-                                    automationLogger.Information($"Auth Key Verified");
-                                    ProcessRequest(data, messageContent, stream);
-                                }
                             }
-                            else
+
+                            // auth key check
+                            if (string.IsNullOrEmpty(authKey))
                             {
-                                // verification not required
-                                automationLogger.Information($"Auth Key Verification Not Required");
+                                // auth key not provided
+                                automationLogger.Information($"Closing Client Connection due to Null/Empty Auth Key");
+                                SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
+                                break;
+                            }
+                            else if (authKey != listenerSettings.AuthKey)
+                            {
+                                // auth key invalid   
+                                automationLogger.Information($"Closing Client Connection due to Invalid Auth Key");
+                                SendResponse(ResponseCode.Unauthorized, $"Invalid Auth Key", stream);
+                                break;
+                            }
+                            else if (authKey == listenerSettings.AuthKey)
+                            {
+                                // auth key valid
+                                automationLogger.Information($"Auth Key Verified");
                                 ProcessRequest(data, messageContent, stream);
                             }
                         }
+                        else
+                        {
+                            // verification not required
+                            automationLogger.Information($"Auth Key Verification Not Required");
+                            ProcessRequest(data, messageContent, stream);
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -257,44 +360,62 @@ namespace taskt.Core.Server
         /// <param name="stream"></param>
         private static void ProcessRequest(string data, string[] messageContent, NetworkStream stream)
         {
+            // states
+            bool isExecuteScript = false;
+            bool isAwaitScript = false; ;
+
             if ((data.StartsWith("POST /ExecuteScript")) || (data.StartsWith("POST /AwaitScript")))
             {
+                if (data.StartsWith("POST /ExecuteScript"))
+                {
+                    isExecuteScript = true;
+                    isAwaitScript = false;
+                }
+                else
+                {
+                    isAwaitScript = true;
+                    isExecuteScript |= false;
+                }
                 automationLogger.Information($"Client Requests Script Execution");
 
                 // locate the body content
-                string dataParameter = "";  // data
+                string dataParameter64 = "";  // data (base64)
                 bool isFileLocation = false;    // specified script location or not
 
                 // find the script parameter (ScriptData or ScriptLocation)
                 foreach (var item in messageContent)
                 {
-                    if (item.StartsWith("ScriptData: "))
+                    var line = item.Replace("\"", "").Trim();
+                    //if (item.StartsWith("ScriptData: "))
+                    if (line.StartsWith("ScriptData: "))
                     {
-                        dataParameter = item.Replace("ScriptData: ", "");
+                        //dataParameter = item.Replace("ScriptData: ", "");
+                        dataParameter64 = line.Replace("ScriptData: ", "");
                         isFileLocation = false;
-
                         break;
                     }
-                    else if (item.StartsWith("ScriptLocation: "))
+                    //else if (item.StartsWith("ScriptLocation: "))
+                    else if (line.StartsWith("ScriptLocation: "))
                     {
-                        dataParameter = item.Replace("ScriptLocation: ", "");
+                        //dataParameter = item.Replace("ScriptLocation: ", "");
+                        dataParameter64 = line.Replace("ScriptLocation: ", "");
                         isFileLocation = true;
                         break;
                     }
                 }
 
                 // check to see if nothing was provided
-                if (string.IsNullOrEmpty(dataParameter))
+                if (string.IsNullOrEmpty(dataParameter64))
                 {
                     automationLogger.Information($"Client Script Data Not Found");
                     return;
                 }
 
-                // convert to Base64
-                if (dataParameter.TryParseBase64(out var base64SourceString))
+                // decode from Base64
+                if (dataParameter64.TryParseBase64(out var rawString))
                 {
-                    automationLogger.Information($"Client Passed Base64 String: {base64SourceString}");
-                    dataParameter = base64SourceString;
+                    automationLogger.Information($"Client Passed Base64 String: {rawString}");
+                    //dataParameter = rawString;
                 }
                 else
                 {
@@ -304,42 +425,63 @@ namespace taskt.Core.Server
                 // check if data parameter references file location
                 if (isFileLocation)
                 {
-                    if (File.Exists(dataParameter))
+                    // specified file path
+                    string filePath;
+                    if (File.Exists(rawString))
                     {
-                        // file was found at path provided
-                        dataParameter = File.ReadAllText(dataParameter);
+                        // file was found at path provided, specified full path
+                        //dataParameter64 = File.ReadAllText(dataParameter64);
+                        filePath = rawString;
                     }
                     //else if (File.Exists(Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), dataParameter)))
-                    else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter)))
+                    //else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter64)))
+                    else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), rawString)))
                     {
-                        // file was found at fallback to scripts folder
+                        // file was found at fallback to scripts folder, specified only file name
                         //dataParameter = Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), dataParameter);
-                        dataParameter = Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter);
-                        dataParameter = File.ReadAllText(dataParameter);
+                        //dataParameter64 = Path.Combine(IO.Folders.GetScriptsFolderPath(), dataParameter64);
+                        //dataParameter64 = File.ReadAllText(dataParameter64);
+                        filePath = Path.Combine(IO.Folders.GetScriptsFolderPath(), rawString);
                     }
                     else
                     {
                         // file not found
-                        automationLogger.Information($"Client Script Location Not Found: {dataParameter}");
-                        SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found: {dataParameter}", stream);
+                        //automationLogger.Information($"Client Script Location Not Found: {dataParameter64}");
+                        //SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found: {dataParameter64}", stream);
+                        automationLogger.Information($"Client Script Location Not Found: {rawString}");
+                        SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found: {rawString}", stream);
                         return;
                     }
+
+                    automationLogger.Information($"Executing Script: {filePath}");
+                    associatedBuilder.Invoke(new MethodInvoker(delegate ()
+                    {
+                        var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine(filePath, associatedBuilder);
+                        newEngine.callBackForm = null;
+                        newEngine.Show();
+                    }));
+                }
+                else
+                {
+                    // specified script file data
+                    // log execution
+                    //automationLogger.Information($"Executing Script: {dataParameter64}");
+                    automationLogger.Information($"Executing Script: {rawString}");
+
+                    // invoke builder and pass it script data to execute
+                    associatedBuilder.Invoke(new MethodInvoker(delegate ()
+                    {
+                        var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine();
+                        //newEngine.xmlData = dataParameter64;
+                        newEngine.xmlData = rawString;
+                        newEngine.callBackForm = null;
+                        //instance = newEngine.engineInstance;
+                        newEngine.Show();
+                    }));
                 }
 
-                // log execution
-                automationLogger.Information($"Executing Script: {dataParameter}");
-
-                // invoke builder and pass it script data to execute
-                associatedBuilder.Invoke(new MethodInvoker(delegate ()
-                {
-                    var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine();
-                    newEngine.xmlData = dataParameter;
-                    newEngine.callBackForm = null;
-                    //instance = newEngine.engineInstance;
-                    newEngine.Show();
-                }));
-
-                if (data.StartsWith("POST /AwaitScript"))
+                //if (data.StartsWith("POST /AwaitScript"))
+                if (isAwaitScript)
                 {
                     //reset result value
                     TasktResult = "";
@@ -362,7 +504,7 @@ namespace taskt.Core.Server
                     SendResponse(ResponseCode.OK, "Script Launched Successfully", stream);
                 }
             }
-            else if (data.StartsWith("POST /ExecuteCommand"))
+            else if (data.StartsWith("POST /ExecuteCommand"))   // I think this place will not be executed.
             {
                 automationLogger.Information($"Client Requests Command Execution");
 
@@ -405,7 +547,7 @@ namespace taskt.Core.Server
                     automationLogger.Information($"Executing Command: {dataParameter}");
 
                     // define script action
-                    var scriptAction = new Script.ScriptAction() { ScriptCommand = (Core.Automation.Commands.ScriptCommand)command };
+                    var scriptAction = new Script.ScriptAction() { ScriptCommand = (Automation.Commands.ScriptCommand)command };
 
                     // execute command
                     ExecuteCommandEngine.ExecuteCommand(scriptAction);
@@ -421,7 +563,7 @@ namespace taskt.Core.Server
             else if (data.StartsWith("POST /EngineStatus"))
             {
                 automationLogger.Information($"Returning Engine Status: {Client.ClientStatus}");
-                SendResponse(ResponseCode.OK, Core.Client.ClientStatus, stream);
+                SendResponse(ResponseCode.OK, Client.ClientStatus, stream);
             }
             else if (data.StartsWith("POST /RestartTaskt"))
             {
@@ -451,7 +593,7 @@ namespace taskt.Core.Server
         /// <exception cref="NotImplementedException"></exception>
         public static void SendResponse(ResponseCode ResponseCode, string content, Stream networkStream)
         {
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(networkStream);
+            var writer = new StreamWriter(networkStream);
 
             // i want to change switch()
             string responseHeader;
@@ -484,6 +626,9 @@ namespace taskt.Core.Server
             writer.Flush();
         }
 
+        /// <summary>
+        /// stop listener
+        /// </summary>
         public static void StopAutomationListener()
         {
             automationListener.Stop();
@@ -501,7 +646,7 @@ namespace taskt.Core.Server
         /// <exception cref="FileNotFoundException"></exception>
         public static string SendAutomationTask(string endpoint, string parameterType, string timeout, string scriptData = "", string awaitPreference = "")
         {
-            var request = new RestSharp.RestRequest();
+            var request = new RestRequest();
             //request.Method = RestSharp.Method.POST;
             request.Method = Method.Post;
             request.AddHeader("Content-Type", "text/plain");
@@ -600,7 +745,7 @@ namespace taskt.Core.Server
             {
                 endpoint = $"http://{endpoint}";
             }
-            var client = new RestSharp.RestClient(endpoint);
+            var client = new RestClient(endpoint);
 
             var resp = client.Execute<RestResponse>(request);
 
