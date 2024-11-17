@@ -468,12 +468,19 @@ namespace taskt.Core.Server
                     //automationLogger.Information($"Executing Script: {dataParameter64}");
                     automationLogger.Information($"Executing Script: {rawString}");
 
+                    // save script file
+                    var tempFilePath = Script.Script.GetRunWithoutSavingScriptFilePath();
+                    using (var writer = new StreamWriter(tempFilePath))
+                    {
+                        writer.Write(rawString);
+                    }
+
                     // invoke builder and pass it script data to execute
                     associatedBuilder.Invoke(new MethodInvoker(delegate ()
                     {
-                        var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine();
+                        var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine(tempFilePath, associatedBuilder);
                         //newEngine.xmlData = dataParameter64;
-                        newEngine.xmlData = rawString;
+                        //newEngine.xmlData = rawString;
                         newEngine.callBackForm = null;
                         //instance = newEngine.engineInstance;
                         newEngine.Show();
