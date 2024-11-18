@@ -229,29 +229,118 @@ namespace taskt.Core.Server
                         //    }
                         //}
 
+
+
+                        // MEMO: https://qiita.com/hollydad/items/475e666ef981a4f61284
+
                         // MEMO: https://progtech.device-mobile.com/csharp/csharp-004.html
                         using (var ms = new MemoryStream())
                         {
                             int resSize = 0;
+                            //do
+                            //{
+                            //    try
+                            //    {
+                            //        resSize = stream.Read(bytes, 0, bytes.Length);
+                            //    }
+                            //    catch 
+                            //    {
+                            //        break;
+                            //    }
+                            //    ms.Write(bytes, 0, resSize);
+
+                            //    // DBG
+                            //    //Console.WriteLine($"##read! {resSize}, {stream.DataAvailable}, {(char)bytes[resSize - 1] != '\n'}, {(int)bytes[resSize - 1]}, {(int)'\n'}");
+
+                            //    // DBG
+                            //    //Console.WriteLine("### Recieve Data!");
+                            //    //Console.WriteLine(System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length));
+                            //} while (stream.DataAvailable || bytes[resSize - 1] != '\n');
+
                             do
                             {
                                 try
                                 {
                                     resSize = stream.Read(bytes, 0, bytes.Length);
+                                    if (resSize > 0)
+                                    {
+                                        ms.Write(bytes, 0, resSize);
+                                    }
                                 }
-                                catch 
+                                catch
                                 {
                                     break;
                                 }
-                                ms.Write(bytes, 0, resSize);
-
-                                // DBG
-                                //Console.WriteLine("### Recieve Data!");
-                                //Console.WriteLine(System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length));
-
-                            } while (stream.DataAvailable || bytes[resSize - 1] != '\n');
+                            } while (resSize > 0);
+                            data = System.Text.Encoding.ASCII.GetString(ms.GetBuffer(), 0, (int)ms.Length);
                         }
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                        //data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+
+                        // parse data
+                        var header = data.Trim();
+                        var heads = header.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        foreach(var h in heads)
+                        {
+                            if (h.StartsWith("Content-Length: "))
+                            {
+                                var len = int.Parse(h.Replace("Content-Length: ", ""));
+
+                                if (len > 0)
+                                {
+                                    byte[] newBytes = new byte[len + 4];
+                                    string newData = null;
+
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        int resSize = 0;
+                                        //do
+                                        //{
+                                        //    try
+                                        //    {
+                                        //        resSize = stream.Read(newBytes, 0, newBytes.Length);
+                                        //    }
+                                        //    catch
+                                        //    {
+                                        //        break;
+                                        //    }
+                                        //    ms.Write(newBytes, 0, resSize);
+
+                                        //    // DBG
+                                        //    //Console.WriteLine($"##read! {resSize}, {stream.DataAvailable}, {(char)bytes[resSize - 1] != '\n'}, {(int)bytes[resSize - 1]}, {(int)'\n'}");
+
+                                        //    // DBG
+                                        //    //Console.WriteLine("### Recieve Data!");
+                                        //    //Console.WriteLine(System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length));
+                                        //} while (stream.DataAvailable || bytes[resSize - 1] != '\n');
+
+                                        do
+                                        {
+                                            try
+                                            {
+                                                resSize = stream.Read(newBytes, 0, newBytes.Length);
+                                                if (resSize > 0)
+                                                {
+                                                    ms.Write(newBytes, 0, resSize);
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        } while (resSize > 0);
+
+                                        newData = System.Text.Encoding.ASCII.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+                                    }
+                                    // DBG
+                                    //Console.Write(newData);
+
+                                    data += newData;
+                                }
+                                break;
+                            }
+                        }
+
                         automationLogger.Information($"Client Message Content: {data}");
 
                         //break out request content, split NewLine
@@ -699,11 +788,9 @@ namespace taskt.Core.Server
                     //file was found at path provided
                     scriptData = File.ReadAllText(scriptData);
                 }
-                //else if (File.Exists(Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), scriptData)))
                 else if (File.Exists(Path.Combine(IO.Folders.GetScriptsFolderPath(), scriptData)))
                 {
                     // file was found at fallback to scripts folder
-                    //scriptData = Path.Combine(IO.Folders.GetFolder(IO.Folders.FolderType.ScriptsFolder), scriptData);
                     scriptData = Path.Combine(IO.Folders.GetScriptsFolderPath(), scriptData);
                     scriptData = File.ReadAllText(scriptData);
                 }
@@ -727,8 +814,8 @@ namespace taskt.Core.Server
                     request.Resource = "/ExecuteScript";
                 }
 
-                // add script parameter (NOT Convert to Base64)
-                request.AddParameter("ScriptLocation", scriptData, RestSharp.ParameterType.HttpHeader);
+                // add script parameter (convert to Base64)
+                request.AddParameter("ScriptLocation", scriptData.ConvertToBase64(), RestSharp.ParameterType.HttpHeader);
             }
             else if (parameterType == "run command json")
             {
