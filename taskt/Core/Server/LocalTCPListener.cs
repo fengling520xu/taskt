@@ -888,10 +888,6 @@ namespace taskt.Core.Server
                 case "run raw script data":
                     sendBodyObject.Add("ScriptData", scriptData.ConvertToBase64());
                     request.AddJsonBody(sendBodyObject);
-                    //request.AddJsonBody(new
-                    //{
-                    //    ScriptData = scriptData.ConvertToBase64()
-                    //});
                     break;
                 case "run local file":
                     if (File.Exists(scriptData))
@@ -912,26 +908,14 @@ namespace taskt.Core.Server
 
                     sendBodyObject.Add("ScriptData", scriptData.ConvertToBase64());
                     request.AddJsonBody(sendBodyObject);
-                    //request.AddJsonBody(new
-                    //{
-                    //    ScriptData = scriptData.ConvertToBase64()
-                    //});
                     break;
                 case "run remote file":
                     sendBodyObject.Add("ScriptLocation", scriptData.ConvertToBase64());
                     request.AddJsonBody(sendBodyObject);
-                    //request.AddJsonBody(new
-                    //{
-                    //    ScriptLocation = scriptData.ConvertToBase64()
-                    //});
                     break;
                 case "run command json":
                     sendBodyObject.Add("CommandData", scriptData.ConvertToBase64());
                     request.AddJsonBody(sendBodyObject);
-                    //request.AddJsonBody(new
-                    //{
-                    //    CommandData = scriptData.ConvertToBase64()
-                    //});
                     break;
             }
 
