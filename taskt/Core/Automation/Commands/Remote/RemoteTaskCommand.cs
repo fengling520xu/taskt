@@ -60,11 +60,11 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
-        [PropertyDescription("Request Timeout (ms)")]
+        [PropertyDescription("Request Timeout (sec)")]
         [InputSpecification("Request Timeout", true)]
         [PropertyDetailSampleUsage("**1000**", PropertyDetailSampleUsage.ValueType.Value, "Timeout")]
         [PropertyDetailSampleUsage("**{{{vTime}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Timeout")]
-        [PropertyFirstValue("120000")]
+        [PropertyFirstValue("12")]
         [PropertyValidationRule("Timeout", PropertyValidationRule.ValidationRuleFlags.Empty | PropertyValidationRule.ValidationRuleFlags.LessThanZero)]
         [PropertyDisplayText(true, "Timeout")]
         public string v_RequestTimeout { get; set; }
