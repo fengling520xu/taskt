@@ -196,7 +196,7 @@ namespace taskt.Core.IO
         /// <returns></returns>
         public static string GetAutoSaveFolderPath()
         {
-            return Path.Combine(TASKT_EXECUTE_FOLDER_PATH, $"{AUTOSAVE_FOLDER_NAME}\\");
+            return Path.Combine(GetRootFolderPath(), $"{AUTOSAVE_FOLDER_NAME}\\");
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace taskt.Core.IO
         /// <returns></returns>
         public static string GetRunWithoutSavingFolderPath()
         {
-            return Path.Combine(TASKT_EXECUTE_FOLDER_PATH, $"{RUN_WITHOUT_SAVING_FOLDER_NAME}\\");
+            return Path.Combine(GetRootFolderPath(), $"{RUN_WITHOUT_SAVING_FOLDER_NAME}\\");
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace taskt.Core.IO
         /// <returns></returns>
         public static string GetBeforeConvertedFolderPath()
         {
-            return Path.Combine(TASKT_EXECUTE_FOLDER_PATH, $"{BEFORE_CONVERTED_FOLDER_NAME}\\");
+            return Path.Combine(GetRootFolderPath(), $"{BEFORE_CONVERTED_FOLDER_NAME}\\");
         }
 
         /// <summary>

@@ -929,8 +929,8 @@
     <Compile Include="Core\Automation\Commands\Outlook\OutlookMoveEmailsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Outlook\OutlookReplyToEmailsCommand.cs" />
     <Compile Include="Core\Automation\Commands\JSON\GetMultiJSONValueListCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Remote\RemoteAPICommand.cs" />
-    <Compile Include="Core\Automation\Commands\Remote\RemoteTaskCommand.cs" />
+    <Compile Include="Core\Automation\Commands\LocalListener\RemoteAPICommand.cs" />
+    <Compile Include="Core\Automation\Commands\LocalListener\CallLocalListenerAPICommand.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\FilterDataTableCommand.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\SearchAndDeleteDataTableRowsCommand.cs" />
     <Compile Include="Core\Automation\Commands\Folder\RenameFolderCommand.cs" />

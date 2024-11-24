@@ -78,6 +78,7 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
             //newAppSettings.Save(newAppSettings);
             //newAppSettings.Save();
             newAppSettings.Save(App.Taskt_Settings_File_Path);
+            App.UpdateSettings(App.Taskt_Settings_File_Path);
             Core.Server.SocketClient.LoadSettings();
             this.Close();
         }
