@@ -1705,9 +1705,6 @@ del "$(ProjectDir)$(OutDir)tasktOnTheFly.exe"
     <PreBuildEvent>robocopy "$(ProjectDir)Samples" "$(ProjectDir)$(OutDir)Samples" *.xml /xo /E /S
 robocopy "$(ProjectDir)Samples\Resources" "$(ProjectDir)$(OutDir)Samples\Resources" *.* /xo /E /S
 robocopy "$(ProjectDir)Manual" "$(ProjectDir)$(OutDir)Manual" *.txt /xo /E /S
-mkdir "$(ProjectDir)$(OutDir)AutoSave"
-mkdir "$(ProjectDir)$(OutDir)RunWithoutSaving"
-mkdir "$(ProjectDir)$(OutDir)BeforeConverted"
 if %25ERRORLEVEL%25 LSS 8 EXIT 0</PreBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
