@@ -21,6 +21,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(WindowControls), nameof(WindowControls.v_WindowName))]
         [PropertyIsWindowNamesList(true, true, false, true)]
+        [PropertyAvailableSystemVariable(Engine.SystemVariables.LimitedSystemVariableNames.Window_Desktop)]
         public string v_WindowName { get; set; }
 
         [XmlAttribute]
