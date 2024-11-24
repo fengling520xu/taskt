@@ -502,7 +502,7 @@ namespace taskt.Core.Server
                             {
                                 // file not found
                                 automationLogger.Information($"Client Script Location Not Found: {rawString}");
-                                SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found: {rawString}", stream);
+                                SendResponse(ResponseCode.InternalServerError, $"Client Script Location Not Found.", stream);
                                 return;
                             }
 
@@ -684,7 +684,7 @@ namespace taskt.Core.Server
                 // send result message
                 writer.Write(responseHeader);
                 writer.Write(Environment.NewLine);
-                writer.Write("Content-Type: text/plain; charset=UTF-8");
+                writer.Write("Content-Type: text/plain; charset=utf-8");
                 writer.Write(Environment.NewLine);
                 writer.Write("Content-Length: " + content.Length);
                 writer.Write(Environment.NewLine);
