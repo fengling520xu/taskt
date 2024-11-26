@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
-
     [Serializable]
     [Attributes.ClassAttributes.Group("Folder Operation")]
     [Attributes.ClassAttributes.CommandSettings("Get Folders")]
@@ -15,7 +16,7 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class GetFoldersCommand : ScriptCommand, ICanHandleList
+    public sealed class GetFoldersCommand : ScriptCommand, ITextCompareProperties, IListResultProperties
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
@@ -34,14 +35,24 @@ namespace taskt.Core.Automation.Commands
         public string v_SearchFolderName { get; set; }
 
         [XmlAttribute]
-        [PropertyDetailSampleUsage(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
-        [PropertyDescription("Folder Name Search Method")]
-        [PropertyUISelectionOption("Contains")]
-        [PropertyUISelectionOption("Starts with")]
-        [PropertyUISelectionOption("Ends with")]
-        [PropertyUISelectionOption("Exact match")]
-        [PropertyIsOptional(true, "Contains")]
+        //[PropertyDetailSampleUsage(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        //[PropertyDescription("Folder Name Search Method")]
+        //[PropertyUISelectionOption("Contains")]
+        //[PropertyUISelectionOption("Starts with")]
+        //[PropertyUISelectionOption("Ends with")]
+        //[PropertyUISelectionOption("Exact match")]
+        //[PropertyIsOptional(true, "Contains")]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CompareMethod))]
+        [PropertyDescription("Folder Name Compare Method")]
         public string v_CompareMethod { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CaseSensitive))]
+        public string v_CaseSensitive { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_TrimBeforeCompare))]
+        public string v_TrimBeforeCompare { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_OutputListName))]
@@ -61,34 +72,45 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //apply variable logic
             var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_SourceFolderPath), nameof(v_WaitForFolder), engine);
 
-            //delete folder
-            var directoriesList = System.IO.Directory.GetDirectories(sourceFolder).ToList();
+            // get folder list
+            var directoriesList = Directory.GetDirectories(sourceFolder).ToList();
 
             var searchFolder = v_SearchFolderName.ExpandValueOrUserVariableAsFolderName(engine);
-            if (!String.IsNullOrEmpty(searchFolder))
+            //if (!string.IsNullOrEmpty(searchFolder))
+            //{
+            //    switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine))
+            //    {
+            //        case "contains":
+            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Contains(searchFolder)).ToList();
+            //            break;
+            //        case "starts with":
+            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).StartsWith(searchFolder)).ToList();
+            //            break;
+            //        case "ends with":
+            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).EndsWith(searchFolder)).ToList();
+            //            break;
+            //        case "exact match":
+            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Equals(searchFolder)).ToList();
+            //            break;
+            //    }
+            //}
+
+            var compareFunc = this.GetCompareFunction(engine);
+
+            var filteredDirectory = new List<string>();
+            foreach (var f in directoriesList) 
             {
-                switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine))
+                if (compareFunc(Path.GetFileName(f), searchFolder))
                 {
-                    case "contains":
-                        directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Contains(searchFolder)).ToList();
-                        break;
-                    case "starts with":
-                        directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).StartsWith(searchFolder)).ToList();
-                        break;
-                    case "ends with":
-                        directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).EndsWith(searchFolder)).ToList();
-                        break;
-                    case "exact match":
-                        directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Equals(searchFolder)).ToList();
-                        break;
+                    filteredDirectory.Add(f);
                 }
             }
 
             //directoriesList.StoreInUserVariable(engine, v_UserVariableName);
-            this.StoreListInUserVariable(directoriesList, nameof(v_Result), engine);
+            //this.StoreListInUserVariable(directoriesList, nameof(v_Result), engine);
+            this.StoreListInUserVariable(filteredDirectory, engine);
         }
     }
 }

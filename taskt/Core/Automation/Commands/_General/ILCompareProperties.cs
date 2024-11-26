@@ -3,7 +3,7 @@
     /// <summary>
     /// general compare properties
     /// </summary>
-    public interface ICompareProperties : ILExpandableProperties
+    public interface ILCompareProperties : ILExpandableProperties
     {
         /// <summary>
         /// compare method

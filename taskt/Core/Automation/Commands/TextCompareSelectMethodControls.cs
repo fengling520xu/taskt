@@ -2,7 +2,7 @@
 
 namespace taskt.Core.Automation.Commands
 {
-    public static class CompareSelectMethodControls
+    public static class TextCompareSelectMethodControls
     {
         /// <summary>
         /// compare method
@@ -13,6 +13,10 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Starts with")]
         [PropertyUISelectionOption("Ends with")]
         [PropertyUISelectionOption("Exact match")]
+        [PropertyUISelectionOption("Not Contains")]
+        [PropertyUISelectionOption("Not Starts with")]
+        [PropertyUISelectionOption("Not Ends with")]
+        [PropertyUISelectionOption("Not Match")]
         [Remarks("")]
         [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyIsOptional(true, "Contains")]
@@ -21,6 +25,10 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**Starts with**", "It's like Comparing whether to Starts With **hello**.")]
         [PropertyDetailSampleUsage("**Ends with**", "It's like Comparing whether to Ends With **hello**.")]
         [PropertyDetailSampleUsage("**Exact match**", "It's like Comparing whether an Exact matche to **hello**.")]
+        [PropertyDetailSampleUsage("**Not Contains**", "It's like Comparing whether to Not Contains **hello**.")]
+        [PropertyDetailSampleUsage("**Not Starts with**", "It's like Comparing whether to Not Starts With **hello**.")]
+        [PropertyDetailSampleUsage("**Not Ends with**", "It's like Comparing whether to Not Ends With **hello**.")]
+        [PropertyDetailSampleUsage("**Not Match**", "It's like Comparing whether an Not Matche to **hello**.")]
         [PropertyDisplayText(true, "Compare Method")]
         [PropertyParameterOrder(5000)]
         public static string v_CompareMethod { get; }
@@ -40,6 +48,26 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(false, "Case Sensitive")]
         [PropertyParameterOrder(5000)]
         public static string v_CaseSensitive { get; }
+
+        /// <summary>
+        /// trim before compare
+        /// </summary>
+        [PropertyDescription("Trim Before Compare")]
+        [InputSpecification("", true)]
+        [Remarks("")]
+        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        [PropertyUISelectionOption("Trim")]
+        [PropertyUISelectionOption("Trim Start")]
+        [PropertyUISelectionOption("Trim End")]
+        [PropertyUISelectionOption("No")]
+        [PropertyIsOptional(true, "No")]
+        [PropertyDetailSampleUsage("**Trim**", "Remove White Space at the Start and End of Text")]
+        [PropertyDetailSampleUsage("**Trim Start**", "Remove White Space at the Start of Text")]
+        [PropertyDetailSampleUsage("**Trim End**", "Remove White Space at the End of Text")]
+        [PropertyDetailSampleUsage("**No**", "Not Trim")]
+        [PropertyDisplayText(false, "Case Sensitive")]
+        [PropertyParameterOrder(5000)]
+        public static string v_TrimBeforeCompare { get; }
 
         /// <summary>
         /// select method, select one item

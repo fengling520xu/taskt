@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Linq;
+using System.IO;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
@@ -15,7 +16,7 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class GetFilesCommand : ScriptCommand, ICanHandleList
+    public sealed class GetFilesCommand : ScriptCommand, ITextCompareProperties, IListResultProperties
     {
         [XmlAttribute]
         //[PropertyDescription("Path to the Source Folder")]
@@ -43,15 +44,25 @@ namespace taskt.Core.Automation.Commands
         public string v_SearchFileName { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
-        [PropertyDescription("File Name Search Method")]
-        [PropertyUISelectionOption("Contains")]
-        [PropertyUISelectionOption("Starts with")]
-        [PropertyUISelectionOption("Ends with")]
-        [PropertyUISelectionOption("Exact match")]
-        [PropertyIsOptional(true, "Contains")]
-        [PropertyDisplayText(true, "Search Method")]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        //[PropertyDescription("File Name Search Method")]
+        //[PropertyUISelectionOption("Contains")]
+        //[PropertyUISelectionOption("Starts with")]
+        //[PropertyUISelectionOption("Ends with")]
+        //[PropertyUISelectionOption("Exact match")]
+        //[PropertyIsOptional(true, "Contains")]
+        //[PropertyDisplayText(true, "Search Method")]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CompareMethod))]
+        [PropertyDescription("File Name Compare Method")]
         public string v_CompareMethod { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CaseSensitive))]
+        public string v_CaseSensitive { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_TrimBeforeCompare))]
+        public string v_TrimBeforeCompare { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -88,40 +99,55 @@ namespace taskt.Core.Automation.Commands
 
             var searchFile = v_SearchFileName.ExpandValueOrUserVariableAsFileName(engine);
 
-            var ext = v_SearchExtension.ExpandValueOrUserVariable(engine).ToLower();
-
             // get all files
-            List<string> filesList;
-            filesList = System.IO.Directory.GetFiles(sourceFolder).ToList();
+            List<string> fullFilesList;
+            fullFilesList = Directory.GetFiles(sourceFolder).ToList();
 
-            if (!string.IsNullOrEmpty(searchFile))
-            {
-                var searchMethod = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine);
-                switch (searchMethod)
+            //if (!string.IsNullOrEmpty(searchFile))
+            //{
+            //    var searchMethod = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine);
+            //    switch (searchMethod)
+            //    {
+            //        case "contains":
+            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Contains(searchFile)).ToList();
+            //            break;
+            //        case "starts with":
+            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).StartsWith(searchFile)).ToList();
+            //            break;
+            //        case "ends with":
+            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).EndsWith(searchFile)).ToList();
+            //            break;
+            //        case "exact match":
+            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Equals(searchFile)).ToList();
+            //            break;
+            //    }
+            //}
+
+            var compareFunc = this.GetCompareFunction(engine);
+            var comparedFilesList = new List<string>();
+            foreach (var f in fullFilesList) 
+            { 
+                if (compareFunc(Path.GetFileNameWithoutExtension(f), searchFile))
                 {
-                    case "contains":
-                        filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Contains(searchFile)).ToList();
-                        break;
-                    case "starts with":
-                        filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).StartsWith(searchFile)).ToList();
-                        break;
-                    case "ends with":
-                        filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).EndsWith(searchFile)).ToList();
-                        break;
-                    case "exact match":
-                        filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Equals(searchFile)).ToList();
-                        break;
+                    comparedFilesList.Add(f);
                 }
             }
 
+            var ext = v_SearchExtension.ExpandValueOrUserVariable(engine).ToLower();
+            List<string> extFilterdList;
             if (!string.IsNullOrEmpty(ext))
             {
                 ext = "." + ext;
-                filesList = filesList.Where(t => System.IO.Path.GetExtension(t).ToLower() == ext).ToList();
+                extFilterdList = comparedFilesList.Where(t => Path.GetExtension(t).ToLower() == ext).ToList();
+            }
+            else
+            {
+                extFilterdList = comparedFilesList;
             }
 
             //filesList.StoreInUserVariable(engine, v_UserVariableName);
-            this.StoreListInUserVariable(filesList, nameof(v_Result), engine);
+            //this.StoreListInUserVariable(fullFilesList, nameof(v_Result), engine);
+            this.StoreListInUserVariable(extFilterdList, engine);
         }
     }
 }
