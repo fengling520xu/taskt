@@ -6,7 +6,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("Text")]
-    [Attributes.ClassAttributes.SubGruop("Action")]
+    [Attributes.ClassAttributes.SubGruop("Check/Get")]
     [Attributes.ClassAttributes.CommandSettings("Get Last Index Of")]
     [Attributes.ClassAttributes.Description("This command allows you to the Last Position of the Specified Text")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to the Last Position of the Specified Text")]
