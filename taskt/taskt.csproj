@@ -576,6 +576,9 @@
     <Compile Include="Core\Automation\Commands\Math\EM_MathValueResultPropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\ProcessControls.cs" />
     <Compile Include="Core\Automation\Commands\Script\IHaveSequenceAdditionalCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Text\TextGetIndexOfCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Text\TextGetLastIndexOfCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Text\TextGetNthIndexOfCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationGetPropertyValueFromUIElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationGetUIElementPositionCommand.cs" />
     <Compile Include="Core\Automation\Commands\UIAutomation\UIAutomationGetUIElementSizeCommand.cs" />

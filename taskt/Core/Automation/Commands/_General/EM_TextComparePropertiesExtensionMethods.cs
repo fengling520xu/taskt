@@ -60,6 +60,29 @@ namespace taskt.Core.Automation.Commands
         }
 
         /// <summary>
+        /// check text is boolean (loose determine)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private static bool IsBooleanLoose(string str)
+        {
+            switch (str.ToLower())
+            {
+                case "true":
+                case "false":
+                case "yes":
+                case "no":
+                case "1":
+                case "0":
+                case "t":
+                case "f":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// create compare function
         /// </summary>
         /// <param name="command"></param>
@@ -120,6 +143,54 @@ namespace taskt.Core.Automation.Commands
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return !preFunc(trgStr).Equals(preFunc(condition));
+                    });
+                    break;
+                case "not empty":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return !string.IsNullOrEmpty(preFunc(trgStr));
+                    });
+                    break;
+                case "is a number":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return decimal.TryParse(preFunc(trgStr), out _);
+                    });
+                    break;
+                case "is a boolean":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return bool.TryParse(preFunc(trgStr), out _);
+                    });
+                    break;
+                case "is a boolean loose":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return IsBooleanLoose(preFunc(trgStr));
+                    });
+                    break;
+                case "is empty":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return string.IsNullOrEmpty(preFunc(trgStr));
+                    });
+                    break;
+                case "is not a number":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return !decimal.TryParse(preFunc(trgStr), out _);
+                    });
+                    break;
+                case "is not a boolean":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return !bool.TryParse(preFunc(trgStr), out _);
+                    });
+                    break;
+                case "is not a boolean loose":
+                    ret = new Func<string, string, bool>((trgStr, condition) =>
+                    {
+                        return !IsBooleanLoose(preFunc(trgStr));
                     });
                     break;
                 default:
