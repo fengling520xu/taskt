@@ -25,19 +25,47 @@
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="e29cb80b-5100-4186-bcfd-4254b208ade3" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Result: ⦃vResult⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
     </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CommentCommand" CommandID="ff247c94-b02a-485a-b98c-849b4e2968b8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" v_Comment="Check starts with &quot;Hell&quot; or &quot;hall&quot;" CommandEnabled="true" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CheckTextCommand" CommandID="3b5c0108-b5b3-47ac-8d54-720e6d9502b0" CommandName="CheckTextCommand" IsCommented="false" SelectionName="Check Text" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="⦃vText⦄" v_CheckMethod="Starts with" v_CheckParameter="Hell" v_CaseSensitive="" v_applyToVariableName="vResult" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CheckTextCommand" CommandID="6ee28f48-8423-48df-811b-41eafe57f633" CommandName="CheckTextCommand" IsCommented="false" SelectionName="Check Text" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="⦃vText⦄" v_CheckMethod="Starts with" v_CheckParameter="hall" v_CaseSensitive="" v_applyToVariableName="vResult2" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="ShowMessageCommand" CommandID="a534e651-c235-4af8-9f8d-7a678effa5eb" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="hell: ⦃vResult⦄&#xD;&#xA;hall: ⦃vResult2⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CommentCommand" CommandID="6971d0eb-3a48-41ba-b098-44344e4c8511" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" v_Comment="Check ends with &quot;rld!&quot; or &quot;rld&quot;" CommandEnabled="true" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CheckTextCommand" CommandID="df08aba9-0389-455b-8505-3621dcefed62" CommandName="CheckTextCommand" IsCommented="false" SelectionName="Check Text" DefaultPause="0" LineNumber="14" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="⦃vText⦄" v_CheckMethod="Ends with" v_CheckParameter="rld!" v_CaseSensitive="" v_applyToVariableName="vResult" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="CheckTextCommand" CommandID="54e47761-0263-4a05-8d08-25e6bfa45c1a" CommandName="CheckTextCommand" IsCommented="false" SelectionName="Check Text" DefaultPause="0" LineNumber="15" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="⦃vText⦄" v_CheckMethod="Ends with" v_CheckParameter="rld" v_CaseSensitive="" v_applyToVariableName="vResult2" />
+    </ScriptAction>
+    <ScriptAction>
+      <ScriptCommand xsi:type="ShowMessageCommand" CommandID="f69bf1e6-d246-41bb-99de-7ba647cd96db" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="16" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="rld!: ⦃vResult⦄&#xD;&#xA;rld: ⦃vResult2⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
+    </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.4</TasktVersion>
+    <TasktVersion>3.5.2.15</TasktVersion>
     <Author />
-    <LastRunTime>2024-09-21T15:07:48.8687276+09:00</LastRunTime>
-    <RunTimes>1</RunTimes>
-    <Revision>2</Revision>
+    <LastRunTime>2024-12-01T10:02:01.8065906+09:00</LastRunTime>
+    <RunTimes>4</RunTimes>
+    <Revision>8</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>
   <Variables>
     <ScriptVariable>
       <VariableName>vResult</VariableName>
+      <VariableValue xsi:type="xsd:string"></VariableValue>
+    </ScriptVariable>
+    <ScriptVariable>
+      <VariableName>vResult2</VariableName>
       <VariableValue xsi:type="xsd:string"></VariableValue>
     </ScriptVariable>
     <ScriptVariable>
