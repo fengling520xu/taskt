@@ -60,7 +60,7 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.6.0.0</TasktVersion>
+    <TasktVersion>3.5.2.15</TasktVersion>
     <Author />
     <LastRunTime>2024-12-01T11:43:29.163279+09:00</LastRunTime>
     <RunTimes>6</RunTimes>
