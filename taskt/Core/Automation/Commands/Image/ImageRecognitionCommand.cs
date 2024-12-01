@@ -360,7 +360,8 @@ namespace taskt.Core.Automation.Commands
         private void RunImageCapture(object sender, EventArgs e)
         {
             //get input control
-            var imageSource = ((UIPictureBox)((CommandItemControl)sender).Tag).EncodedImage;
+            //var imageSource = ((UIPictureBox)((CommandItemControl)sender).Tag).EncodedImage;
+            var imageSource = this.v_ImageCapture;
 
             // image is empty
             if (string.IsNullOrEmpty(imageSource))
