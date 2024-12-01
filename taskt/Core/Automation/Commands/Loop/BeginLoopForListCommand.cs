@@ -22,7 +22,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store List Value")]
+        [PropertyDescription("Variable Name to Store List Value (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("List Value", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "List Value")]
@@ -31,7 +31,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store List Index")]
+        [PropertyDescription("Variable Name to Store List Index (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("List Index", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "List Index")]

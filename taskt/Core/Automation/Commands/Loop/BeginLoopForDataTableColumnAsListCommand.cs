@@ -28,7 +28,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Column Index")]
+        [PropertyDescription("Variable Name to Store Column Index (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Column Index", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Column Index")]
@@ -37,7 +37,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Column Name")]
+        [PropertyDescription("Variable Name to Store Column Name (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Column Name", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Column Name")]

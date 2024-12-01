@@ -22,7 +22,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Dictionary Value")]
+        [PropertyDescription("Variable Name to Store Dictionary Value (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Dictionary Value", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Dictionary Value")]
@@ -31,7 +31,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Dictionary Key")]
+        [PropertyDescription("Variable Name to Store Dictionary Key (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Dictionary Key", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Dictionary Key")]

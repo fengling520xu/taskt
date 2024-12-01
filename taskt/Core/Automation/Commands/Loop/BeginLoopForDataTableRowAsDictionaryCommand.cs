@@ -28,7 +28,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Row Index")]
+        [PropertyDescription("Variable Name to Store Row Index (Readonly)")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Row Index", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Row Index")]
