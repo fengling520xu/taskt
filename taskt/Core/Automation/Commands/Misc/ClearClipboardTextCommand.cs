@@ -25,7 +25,8 @@ namespace taskt.Core.Automation.Commands
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             //User32Functions.SetClipboardText("");
-            ClipboardControls.SetClipboardText("");
+            //ClipboardControls.SetClipboardText("");
+            ClipboardControls.ClearClipboard();
         }
     }
 }
