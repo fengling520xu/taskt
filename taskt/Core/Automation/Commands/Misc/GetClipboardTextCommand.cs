@@ -21,6 +21,14 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Variable Name to Store Clipboard Contents")]
         public string v_userVariableName { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        [PropertyDescription("Clear Clipboard After Get Text")]
+        [PropertyIsOptional(true, "No")]
+        [PropertyValidationRule("Clear Clipboard", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "")]
+        public string v_ClearClipboadAfterGet { get; set; }
+
         public GetClipboardTextCommand()
         {
             //this.CommandName = "ClipboardCommand";
@@ -33,6 +41,11 @@ namespace taskt.Core.Automation.Commands
         {
             //User32Functions.GetClipboardText().StoreInUserVariable(sender, v_userVariableName);
             ClipboardControls.GetClipboardText().StoreInUserVariable(engine, v_userVariableName);
+
+            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_ClearClipboadAfterGet), engine))
+            {
+                ClipboardControls.ClearClipboard();
+            }
         }
     }
 }
