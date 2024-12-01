@@ -44,7 +44,7 @@ namespace taskt.Core.Automation.Commands
         [InputSpecification("Search Start Position")]
         [PropertyIsOptional(true, "-1")]
         [PropertyShowSampleUsageInDescription(true)]
-        [PropertyFirstValue("0")]
+        [PropertyFirstValue("-1")]
         [PropertyDetailSampleUsage("**0**", "Specify First Charactor Position")]
         [PropertyDetailSampleUsage("**-1**", "Specify Last Charactor Position")]
         [PropertyDetailSampleUsage("**{{{vPos}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Search Start Position")]
