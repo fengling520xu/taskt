@@ -153,8 +153,8 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyDescription("Index of the List")]
         [InputSpecification("Index of the List", true)]
-        [PropertyDetailSampleUsage("**0**", "Get First List Item")]
-        [PropertyDetailSampleUsage("**-1**", "Get Last List Item")]
+        [PropertyDetailSampleUsage("**0**", "Specify First List Item")]
+        [PropertyDetailSampleUsage("**-1**", "Specify Last List Item")]
         [PropertyDetailSampleUsage("**{{{vIndex}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Index")]
         [Remarks("**-1** means index of the last row. If it is empty, it will be the value of Current Position, which can be used for Loop List command.")]
         [PropertyShowSampleUsageInDescription(true)]
