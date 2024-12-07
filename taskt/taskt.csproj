@@ -361,6 +361,7 @@
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByExcelSerialCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByTextCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\ConvertDateTimeToUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CreateDateTimeFromUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\EM_DateTimeResultPropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByUnixTimeCommand.cs" />
