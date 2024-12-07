@@ -14,53 +14,53 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class CalculateDateTimeCommand : ADateTimeConvertCommands
+    public sealed class CalculateDateTimeCommand : ACalculateDateTimeCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(DateTimeControls), nameof(DateTimeControls.v_InputDateTime))]
         //public string v_DateTime { get; set; }
 
-        [XmlAttribute]
-        [PropertyDescription("Calculation Method")]
-        [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
-        [InputSpecification("")]
-        [Remarks("")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyUISelectionOption("Add Years")]
-        [PropertyUISelectionOption("Add Months")]
-        [PropertyUISelectionOption("Add Days")]
-        [PropertyUISelectionOption("Add Hours")]
-        [PropertyUISelectionOption("Add Minutes")]
-        [PropertyUISelectionOption("Add Seconds")]
-        [PropertyUISelectionOption("Substract Years")]
-        [PropertyUISelectionOption("Substract Months")]
-        [PropertyUISelectionOption("Substract Days")]
-        [PropertyUISelectionOption("Substract Hours")]
-        [PropertyUISelectionOption("Substract Minutes")]
-        [PropertyUISelectionOption("Substract Seconds")]
-        [PropertyValidationRule("Calculation Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Method")]
-        [PropertyParameterOrder(6000)]
-        public string v_CalculationMethod { get; set; }
+        //[XmlAttribute]
+        //[PropertyDescription("Calculation Method")]
+        //[PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
+        //[InputSpecification("")]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyUISelectionOption("Add Years")]
+        //[PropertyUISelectionOption("Add Months")]
+        //[PropertyUISelectionOption("Add Days")]
+        //[PropertyUISelectionOption("Add Hours")]
+        //[PropertyUISelectionOption("Add Minutes")]
+        //[PropertyUISelectionOption("Add Seconds")]
+        //[PropertyUISelectionOption("Substract Years")]
+        //[PropertyUISelectionOption("Substract Months")]
+        //[PropertyUISelectionOption("Substract Days")]
+        //[PropertyUISelectionOption("Substract Hours")]
+        //[PropertyUISelectionOption("Substract Minutes")]
+        //[PropertyUISelectionOption("Substract Seconds")]
+        //[PropertyValidationRule("Calculation Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Method")]
+        //[PropertyParameterOrder(6000)]
+        //public string v_CalculationMethod { get; set; }
 
-        [XmlAttribute]
-        [PropertyDescription("Value to Add or Substruct")]
-        [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
-        [InputSpecification("")]
-        [PropertyDetailSampleUsage("**5**", "Add or Substruct **5**")]
-        [PropertyDetailSampleUsage("**{{{vValue}}}**", "Add or Substruct Value of Variable **vValue**")]
-        [Remarks("Adding **-5** is same as Substructing **5**")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
-        [PropertyValidationRule("Value", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Value")]
-        [PropertyParameterOrder(6001)]
-        public string v_Value { get; set; }
+        //[XmlAttribute]
+        //[PropertyDescription("Value to Add or Substruct")]
+        //[PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
+        //[InputSpecification("")]
+        //[PropertyDetailSampleUsage("**5**", "Add or Substruct **5**")]
+        //[PropertyDetailSampleUsage("**{{{vValue}}}**", "Add or Substruct Value of Variable **vValue**")]
+        //[Remarks("Adding **-5** is same as Substructing **5**")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyValidationRule("Value", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Value")]
+        //[PropertyParameterOrder(6001)]
+        //public string v_Value { get; set; }
 
-        [XmlAttribute]
-        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyInstanceType(PropertyInstanceType.InstanceType.DateTime, true)]
-        public override string v_Result { get; set; }
+        //[XmlAttribute]
+        ////[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        //[PropertyInstanceType(PropertyInstanceType.InstanceType.DateTime, true)]
+        //public override string v_Result { get; set; }
 
         public CalculateDateTimeCommand()
         {
@@ -72,8 +72,6 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //var myDT = v_DateTime.ExpandUserVariableAsDateTime(engine);
-            //var myDT = this.ExpandValueOrVariableAsDateTime(nameof(v_DateTime), engine);
             var myDT = this.ExpandValueOrVariableAsDateTime(engine);
 
             string meth = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CalculationMethod), engine);
@@ -109,8 +107,8 @@ namespace taskt.Core.Automation.Commands
                     break;
             }
 
-            //calcDT.StoreInUserVariable(engine, v_Result);
-            this.StoreDateTimeInUserVariable(calcDT, nameof(v_Result), engine);
+            //this.StoreDateTimeInUserVariable(calcDT, nameof(v_Result), engine);
+            this.StoreDateTimeInUserVariable(calcDT, engine);
         }
     }
 }
