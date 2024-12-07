@@ -358,6 +358,8 @@
     <Compile Include="Core\Automation\Commands\Color\IColorProperties.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\AFormatDateTimeCommands.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\ACalculateDateTimeCommands.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByExcelSerialCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByTextCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\EM_DateTimeResultPropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByExcelSerialCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByTextCommand.cs" />
