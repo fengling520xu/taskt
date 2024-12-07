@@ -357,6 +357,7 @@
     <Compile Include="Core\Automation\Commands\Color\IColorCreateProperties.cs" />
     <Compile Include="Core\Automation\Commands\Color\IColorProperties.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\AFormatDateTimeCommands.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByExcelSerialCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByTextCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />
     <Compile Include="Core\Automation\Commands\TextCompareSelectMethodControls.cs" />
