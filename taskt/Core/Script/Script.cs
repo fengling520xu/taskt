@@ -3664,6 +3664,9 @@ namespace taskt.Core.Script
 
             // GetFoldersCommand -> GetFoldersPathAsListCommand
             ChangeCommandName(doc, "GetFoldersCommand", "GetFoldersPathAsListCommand", "Get Folders Path As List");
+
+            // ExcelGetLastRowCommand -> ExcelGetLastRowIndexCommand
+            ChangeCommandName(doc, "ExcelGetLastRowCommand", "ExcelGetLastRowIndexCommand", "Get Last Row Index");
         }
 
         /// <summary>

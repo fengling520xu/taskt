@@ -1028,7 +1028,7 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteRowCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetCellCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowIndexCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGoToCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelOpenWorkbookCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelRunExcelMacroCommand.cs" />
