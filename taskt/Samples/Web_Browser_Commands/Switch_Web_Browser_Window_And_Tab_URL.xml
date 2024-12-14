@@ -2,7 +2,7 @@
 <Script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Commands>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="871bf4d7-4a47-4fff-9131-a7ea0814ee52" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Switch Web Browser Window, URL sample" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="871bf4d7-4a47-4fff-9131-a7ea0814ee52" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Switch Web Browser Window And Tab, URL sample" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="053191a7-41e1-453c-8920-1fbbd786fb93" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Execute Edge" CommandEnabled="true" />
@@ -14,7 +14,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="4b04f96e-064d-4ebe-a8cc-9ebd0123185b" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" v_Comment="Move to https://rcktrncn.githu.io/rpa-web/" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserNavigateURLCommand" CommandID="3add5e2d-aa3e-442e-a030-1fc2bafa5055" CommandName="SeleniumBrowserNavigateURLCommand" IsCommented="false" SelectionName="Navigate to URL" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/tab_window_parent.html" v_UseHttps="" />
+      <ScriptCommand xsi:type="SeleniumBrowserNavigateToURLCommand" CommandID="3add5e2d-aa3e-442e-a030-1fc2bafa5055" CommandName="SeleniumBrowserNavigateToURLCommand" IsCommented="false" SelectionName="Navigate To URL" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/tab_window_parent.html" v_UseHttps="" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="34b6ea64-a66d-4f64-b865-a90e51dd9d5a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" v_Comment="Click link and Open New Tab" CommandEnabled="true" />
@@ -75,7 +75,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="21c20613-5f7e-4057-af05-5ddb60602af8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" v_Comment="Move to index.html, Change background tab" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserNavigateURLCommand" CommandID="aeb1c28e-5216-4eee-b30a-f953a6eb1a0a" CommandName="SeleniumBrowserNavigateURLCommand" IsCommented="false" SelectionName="Navigate to URL" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/index.html" v_UseHttps="" />
+      <ScriptCommand xsi:type="SeleniumBrowserNavigateToURLCommand" CommandID="aeb1c28e-5216-4eee-b30a-f953a6eb1a0a" CommandName="SeleniumBrowserNavigateToURLCommand" IsCommented="false" SelectionName="Navigate To URL" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/index.html" v_UseHttps="" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="2551043e-7680-4970-8b85-803d4a93362b" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Check Edge" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
@@ -84,13 +84,13 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="75c6f463-5f78-40eb-bd25-fee04e9bfb88" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" v_Comment="Change target to a tab whose URL is &quot;tab_window.html&quot;." CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserSwitchWebBrowserWindowCommand" CommandID="6f1f5b8a-b71f-4729-a4d6-85b7d514b1ca" CommandName="SeleniumBrowserSwitchWebBrowserWindowCommand" IsCommented="false" SelectionName="Switch Web Browser Window" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" v_Comment="" CommandEnabled="true" v_InstanceName="RPABrowser" v_WindowMatchType="Window URL" v_MatchSpecification="" v_CaseSensitiveMatch="" v_MatchParameter="https://rcktrncn.github.io/rpa-web/tab_window.html" />
+      <ScriptCommand xsi:type="SeleniumBrowserSwitchWebBrowserWindowAndTabCommand" CommandID="6f1f5b8a-b71f-4729-a4d6-85b7d514b1ca" CommandName="SeleniumBrowserSwitchWebBrowserWindowAndTabCommand" IsCommented="false" SelectionName="Switch Web Browser Window And Tab" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" v_Comment="" CommandEnabled="true" v_InstanceName="RPABrowser" v_WindowMatchType="Window URL" v_MatchSpecification="" v_CaseSensitiveMatch="" v_MatchParameter="https://rcktrncn.github.io/rpa-web/tab_window.html" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="cc9f7deb-de32-4ad8-8722-bba44760157f" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" v_Comment="Move to index.html" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserNavigateURLCommand" CommandID="7c97c18d-2dc1-4132-b417-ea95c52927ae" CommandName="SeleniumBrowserNavigateURLCommand" IsCommented="false" SelectionName="Navigate to URL" DefaultPause="0" LineNumber="14" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/index.html" v_UseHttps="" />
+      <ScriptCommand xsi:type="SeleniumBrowserNavigateToURLCommand" CommandID="7c97c18d-2dc1-4132-b417-ea95c52927ae" CommandName="SeleniumBrowserNavigateToURLCommand" IsCommented="false" SelectionName="Navigate To URL" DefaultPause="0" LineNumber="14" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/index.html" v_UseHttps="" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="fc281783-3492-4a96-824d-4bc9c5aa94d1" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="15" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Check Edge" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
@@ -103,11 +103,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.8</TasktVersion>
+    <TasktVersion>3.5.2.17</TasktVersion>
     <Author />
     <LastRunTime>2024-10-20T11:15:32.5992633+09:00</LastRunTime>
     <RunTimes>6</RunTimes>
-    <Revision>11</Revision>
+    <Revision>12</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>
