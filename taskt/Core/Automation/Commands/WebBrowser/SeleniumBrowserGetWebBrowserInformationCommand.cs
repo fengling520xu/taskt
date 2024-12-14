@@ -26,9 +26,9 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Information Type")]
         [PropertyUISelectionOption("Window Title")]
         [PropertyUISelectionOption("Window URL")]
-        [PropertyUISelectionOption("Current Handle ID")]
+        [PropertyUISelectionOption("Current Handle")]
         [PropertyUISelectionOption("HTML Page Source")]
-        [PropertyUISelectionOption("Handle IDs JSON Array")]
+        [PropertyUISelectionOption("Handles JSON Array")]
         [InputSpecification("", true)]
         [SampleUsage("")]
         [PropertyValidationRule("Information Type", PropertyValidationRule.ValidationRuleFlags.Empty)]
@@ -61,13 +61,13 @@ namespace taskt.Core.Automation.Commands
                 case "window url":
                     info = seleniumInstance.Url;
                     break;
-                case "current handle id":
+                case "current handle":
                     info = seleniumInstance.CurrentWindowHandle;
                     break;
                 case "html page source":
                     info = seleniumInstance.PageSource;
                     break;
-                case "handle ids json array":
+                case "handles json array":
                     info = Newtonsoft.Json.JsonConvert.SerializeObject(seleniumInstance.WindowHandles);
                     break;
             }

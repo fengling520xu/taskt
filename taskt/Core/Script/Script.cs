@@ -3674,8 +3674,11 @@ namespace taskt.Core.Script
                 {
                     switch (attr.Value.ToLower())
                     {
+                        case "current handle id":
+                            attr.SetValue("Current Handle");
+                            break;
                         case "handle id list":
-                            attr.SetValue("Handle IDs JSON Array");
+                            attr.SetValue("Handles JSON Array");
                             break;
                     }
                 })
