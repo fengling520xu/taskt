@@ -606,6 +606,8 @@
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetHTMLFromWebElementCommand .cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetMatchedWebElementsCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabHandlesListCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabURLsAsDictionaryCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabTitlesAsDictionaryCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabURLsAsListCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabTitlesAsListCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabCountCommand.cs" />
