@@ -8,14 +8,14 @@ namespace taskt.Core.Automation.Commands
 
     [Serializable]
     [Attributes.ClassAttributes.Group("File Operation")]
-    [Attributes.ClassAttributes.CommandSettings("Get File Info")]
+    [Attributes.ClassAttributes.CommandSettings("Get File Information")]
     [Attributes.ClassAttributes.Description("This command returns a list of file paths from a specified location")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to return a list of file paths from a specific location.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class GetFileInfoCommand : ScriptCommand
+    public sealed class GetFileInformationCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
@@ -47,7 +47,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
         public string v_ResultPath { get; set; }
 
-        public GetFileInfoCommand()
+        public GetFileInformationCommand()
         {
             //this.CommandName = "GetFileInfoCommand";
             //this.SelectionName = "Get File Info";

@@ -26,7 +26,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="d5b9ca8c-bb56-45a3-8201-c945baf1caf3" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" v_Comment="Get Last Row of Column A" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetLastRowCommand" CommandID="59f86986-f376-429f-bbed-62a1dc600437" CommandName="ExcelGetLastRowCommand" IsCommented="false" SelectionName="Get Last Row Index" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_ColumnType="" v_ColumnIndex="A" v_ValueType="" v_Result="vRow" />
+      <ScriptCommand xsi:type="ExcelGetLastRowIndexCommand" CommandID="59f86986-f376-429f-bbed-62a1dc600437" CommandName="ExcelGetLastRowIndexCommand" IsCommented="false" SelectionName="Get Last Row Index" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_ColumnType="" v_ColumnIndex="A" v_ValueType="" v_Result="vRow" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="02f469be-2830-48a2-be8a-04dc49bd89de" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Column A: ⦃vRow⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
@@ -35,7 +35,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="b39d8ad7-c133-4c74-aace-4b21e65b431f" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" v_Comment="Get Last Row of Column B" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ExcelGetLastRowCommand" CommandID="4ce0021f-4688-463b-8231-9d794d96f84f" CommandName="ExcelGetLastRowCommand" IsCommented="false" SelectionName="Get Last Row Index" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_ColumnType="" v_ColumnIndex="B" v_ValueType="" v_Result="vRow" />
+      <ScriptCommand xsi:type="ExcelGetLastRowIndexCommand" CommandID="4ce0021f-4688-463b-8231-9d794d96f84f" CommandName="ExcelGetLastRowIndexCommand" IsCommented="false" SelectionName="Get Last Row Index" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPAExcel" v_ColumnType="" v_ColumnIndex="B" v_ValueType="" v_Result="vRow" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="ShowMessageCommand" CommandID="86031a62-7a8b-4b00-8d04-fa4414bd1065" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="Column B: ⦃vRow⦄" v_AutoCloseAfter="0" v_FontName="" v_FontSize="" />
@@ -48,11 +48,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.5</TasktVersion>
+    <TasktVersion>3.5.2.17</TasktVersion>
     <Author />
     <LastRunTime>2024-09-29T14:44:00.0819209+09:00</LastRunTime>
     <RunTimes>4</RunTimes>
-    <Revision>8</Revision>
+    <Revision>9</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

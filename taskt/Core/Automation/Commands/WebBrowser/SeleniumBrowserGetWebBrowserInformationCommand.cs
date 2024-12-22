@@ -9,8 +9,8 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Instance")]
     [Attributes.ClassAttributes.CommandSettings("Get Web Browser Information")]
-    [Attributes.ClassAttributes.Description("This command allows you to navigate a Selenium web browser session to a given URL or resource.")]
-    [Attributes.ClassAttributes.UsesDescription("Use this command when you want to navigate an existing Selenium instance to a known URL or web resource")]
+    [Attributes.ClassAttributes.Description("This command allows you to Get Web Browser Information.")]
+    [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Get Web Browser Information.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Selenium to achieve automation.")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
@@ -26,9 +26,9 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Information Type")]
         [PropertyUISelectionOption("Window Title")]
         [PropertyUISelectionOption("Window URL")]
-        [PropertyUISelectionOption("Current Handle ID")]
+        [PropertyUISelectionOption("Current Handle")]
         [PropertyUISelectionOption("HTML Page Source")]
-        [PropertyUISelectionOption("Handle ID List")]
+        [PropertyUISelectionOption("Handles JSON Array")]
         [InputSpecification("", true)]
         [SampleUsage("")]
         [PropertyValidationRule("Information Type", PropertyValidationRule.ValidationRuleFlags.Empty)]
@@ -61,13 +61,13 @@ namespace taskt.Core.Automation.Commands
                 case "window url":
                     info = seleniumInstance.Url;
                     break;
-                case "current handle id":
+                case "current handle":
                     info = seleniumInstance.CurrentWindowHandle;
                     break;
                 case "html page source":
                     info = seleniumInstance.PageSource;
                     break;
-                case "handle id list":
+                case "handles json array":
                     info = Newtonsoft.Json.JsonConvert.SerializeObject(seleniumInstance.WindowHandles);
                     break;
             }

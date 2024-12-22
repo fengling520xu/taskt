@@ -88,7 +88,8 @@ namespace taskt.Core.Automation.Commands
                         return (a == b.ToLower());
                     };
                 }
-                foreach(var opt in options)
+
+                foreach (var opt in options)
                 {
                     if (chkFunc(value, opt.uiOption))
                     {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using OpenQA.Selenium;
@@ -615,7 +614,7 @@ namespace taskt.Core.Automation.Commands
                     return sz.Width.ToString() + "," + sz.Height.ToString();
 
                 default:
-                    var attr = element.GetAttribute(attributeName);
+                    var attr = element.GetDomAttribute(attributeName) ?? element.GetDomProperty(attributeName);
                     if (attr != null)
                     {
                         return attr;

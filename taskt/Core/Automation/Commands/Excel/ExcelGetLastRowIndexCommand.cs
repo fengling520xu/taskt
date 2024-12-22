@@ -14,7 +14,7 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class ExcelGetLastRowCommand : AExcelColumnSpecifiedCommands
+    public sealed class ExcelGetLastRowIndexCommand : AExcelColumnSpecifiedCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
@@ -55,7 +55,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(9000)]
         public string v_UseFastMethodToCell { get; set; }
 
-        public ExcelGetLastRowCommand()
+        public ExcelGetLastRowIndexCommand()
         {
             //this.CommandName = "ExcelGetLastRowCommand";
             //this.SelectionName = "Get Last Row Index";

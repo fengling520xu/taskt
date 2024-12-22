@@ -107,11 +107,11 @@
     <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.2024.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="MailKit, Version=4.8.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
-      <HintPath>..\packages\MailKit.4.8.0\lib\net48\MailKit.dll</HintPath>
+    <Reference Include="MailKit, Version=4.9.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.4.9.0\lib\net48\MailKit.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.38.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Markdig.0.38.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.39.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Markdig.0.39.1\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -141,8 +141,8 @@
     <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.11.0.0, Culture=neutral, PublicKeyToken=e25603a88b3aa7da, processorArchitecture=MSIL">
       <HintPath>..\packages\TaskScheduler.2.11.0\lib\net48\Microsoft.Win32.TaskScheduler.dll</HintPath>
     </Reference>
-    <Reference Include="MimeKit, Version=4.8.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
-      <HintPath>..\packages\MimeKit.4.8.0\lib\net48\MimeKit.dll</HintPath>
+    <Reference Include="MimeKit, Version=4.9.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.4.9.0\lib\net48\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -321,8 +321,8 @@
       <HintPath>..\packages\WebSocket4Net.0.15.2\lib\net45\WebSocket4Net.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="ZstdSharp, Version=0.8.3.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZstdSharp.Port.0.8.3\lib\net462\ZstdSharp.dll</HintPath>
+    <Reference Include="ZstdSharp, Version=0.8.4.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZstdSharp.Port.0.8.4\lib\net462\ZstdSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -605,10 +605,22 @@
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserClickWebElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetHTMLFromWebElementCommand .cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetMatchedWebElementsCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabInformationsAsJSONCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabURLsAsJSONCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabTitlesAsJSONCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabHandlesAsJSONCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabHandlesAsListCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabURLsAsDictionaryCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabTitlesAsDictionaryCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabInformationsAsDataTableCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabURLsAsListCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabTitlesAsListCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWindowAndTabCountCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebElementSizeCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebElementPositionCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebElementsCountCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSearchWebElementFromWebEelementCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSendSpecialKeystrokesToWebElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSwitchFrameToWebElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSelectOptionForWebElementCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetOptionsFromWebElementCommand.cs" />
@@ -815,7 +827,7 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelCopyWorksheetCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelRenameWorksheetCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelSetCellRCCommand.cs" />
-    <Compile Include="Core\Automation\Commands\File\GetFileInfoCommand.cs" />
+    <Compile Include="Core\Automation\Commands\File\GetFileInformationCommand.cs" />
     <Compile Include="Core\Automation\Commands\JSON\ConvertJSONToDataTableCommand.cs" />
     <Compile Include="Core\Automation\Commands\JSON\ConvertJSONToDictionaryCommand.cs" />
     <Compile Include="Core\Automation\Commands\JSON\ConvertJSONToListCommand.cs" />
@@ -913,8 +925,8 @@
     <Compile Include="Core\Automation\Commands\_RemovedCommands\GetDataRowCommand.cs" />
     <Compile Include="Core\Automation\Commands\_RemovedCommands\GetDataRowCountCommand.cs" />
     <Compile Include="Core\Automation\Commands\_RemovedCommands\GetDataRowValueCommand.cs" />
-    <Compile Include="Core\Automation\Commands\File\GetFilesCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Folder\GetFoldersCommand.cs" />
+    <Compile Include="Core\Automation\Commands\File\GetFilesPathAsListCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\GetFoldersPathAsListCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\GetListCountCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\GetListItemCommand.cs" />
     <Compile Include="Core\Automation\Commands\Folder\MoveFolderCommand.cs" />
@@ -983,7 +995,7 @@
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserCloseWebBrowserInstanceCommand.cs" />
     <Compile Include="Core\Automation\Commands\IE\IEBrowserCreateCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserGetWebBrowserInformationCommand.cs" />
-    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSwitchWebBrowserWindowCommand.cs" />
+    <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserSwitchWebBrowserWindowAndTabCommand.cs" />
     <Compile Include="Core\Automation\Commands\WebBrowser\SeleniumBrowserCreateWebBrowserInstanceCommand.cs" />
     <Compile Include="Core\Automation\Commands\Window\MoveWindowCommand.cs" />
     <Compile Include="Core\Automation\Commands\Window\ResizeWindowCommand.cs" />
@@ -1028,7 +1040,7 @@
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelDeleteRowCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGetCellCommand.cs" />
-    <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Excel\ExcelGetLastRowIndexCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelGoToCellCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelOpenWorkbookCommand.cs" />
     <Compile Include="Core\Automation\Commands\Excel\ExcelRunExcelMacroCommand.cs" />

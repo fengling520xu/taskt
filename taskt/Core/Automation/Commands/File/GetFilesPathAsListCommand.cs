@@ -9,14 +9,14 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("File Operation")]
-    [Attributes.ClassAttributes.CommandSettings("Get Files")]
+    [Attributes.ClassAttributes.CommandSettings("Get Files Path As List")]
     [Attributes.ClassAttributes.Description("This command returns a list of file paths from a specified location")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to return a list of file paths from a specific location.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class GetFilesCommand : ScriptCommand, ITextCompareProperties, IListResultProperties
+    public sealed class GetFilesPathAsListCommand : ScriptCommand, ITextCompareProperties, IListResultProperties
     {
         [XmlAttribute]
         //[PropertyDescription("Path to the Source Folder")]
@@ -84,7 +84,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
         public string v_WaitForFolder { get; set; }
 
-        public GetFilesCommand()
+        public GetFilesPathAsListCommand()
         {
             //this.CommandName = "GetFilesCommand";
             //this.SelectionName = "Get Files";

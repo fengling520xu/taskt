@@ -2,7 +2,7 @@
 <Script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Commands>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="871bf4d7-4a47-4fff-9131-a7ea0814ee52" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Switch Web Browser Window, Popup sample" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="871bf4d7-4a47-4fff-9131-a7ea0814ee52" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Switch Web Browser Window And Tab, Popup sample" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="053191a7-41e1-453c-8920-1fbbd786fb93" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Execute Edge" CommandEnabled="true" />
@@ -14,7 +14,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="4b04f96e-064d-4ebe-a8cc-9ebd0123185b" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" v_Comment="Move to https://rcktrncn.githu.io/rpa-web/" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserNavigateURLCommand" CommandID="3add5e2d-aa3e-442e-a030-1fc2bafa5055" CommandName="SeleniumBrowserNavigateURLCommand" IsCommented="false" SelectionName="Navigate to URL" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/popup_window_parent.html" v_UseHttps="" />
+      <ScriptCommand xsi:type="SeleniumBrowserNavigateToURLCommand" CommandID="3add5e2d-aa3e-442e-a030-1fc2bafa5055" CommandName="SeleniumBrowserNavigateToURLCommand" IsCommented="false" SelectionName="Navigate To URL" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_URL="https://rcktrncn.github.io/rpa-web/popup_window_parent.html" v_UseHttps="" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="34b6ea64-a66d-4f64-b865-a90e51dd9d5a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" v_Comment="Click button and Open New Window" CommandEnabled="true" />
@@ -60,9 +60,11 @@
               </WebActionParameterTable102024.122138>
               <WebActionParameterTable102024.122138 diffgr:id="WebActionParameterTable102024.1221382" msdata:rowOrder="1">
                 <Parameter_x0020_Name>X Offset</Parameter_x0020_Name>
+                <Parameter_x0020_Value></Parameter_x0020_Value>
               </WebActionParameterTable102024.122138>
               <WebActionParameterTable102024.122138 diffgr:id="WebActionParameterTable102024.1221383" msdata:rowOrder="2">
                 <Parameter_x0020_Name>Y Offset</Parameter_x0020_Name>
+                <Parameter_x0020_Value></Parameter_x0020_Value>
               </WebActionParameterTable102024.122138>
             </diffgr:before>
           </diffgr:diffgram>
@@ -73,7 +75,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="5bdd9da1-25f8-473f-a4e7-2e06447900cb" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" v_Comment="Change to Popup Window" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="SeleniumBrowserSwitchWebBrowserWindowCommand" CommandID="3ddaa498-d567-47ea-a5f7-568b33fd23d3" CommandName="SeleniumBrowserSwitchWebBrowserWindowCommand" IsCommented="false" SelectionName="Switch Web Browser Window" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_WindowMatchType="Window Title" v_MatchSpecification="" v_CaseSensitiveMatch="" v_MatchParameter="Popup Window" />
+      <ScriptCommand xsi:type="SeleniumBrowserSwitchWebBrowserWindowAndTabCommand" CommandID="3ddaa498-d567-47ea-a5f7-568b33fd23d3" CommandName="SeleniumBrowserSwitchWebBrowserWindowAndTabCommand" IsCommented="false" SelectionName="Switch Web Browser Window And Tab" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="RPABrowser" v_WindowMatchType="Window Title" v_MatchSpecification="" v_CaseSensitiveMatch="" v_MatchParameter="Popup Window" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="2109c8e2-c62e-47d9-bcc2-8ecd7f851e5b" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" v_Comment="Click button" CommandEnabled="true" />
@@ -119,9 +121,11 @@
               </WebActionParameterTable102024.122225>
               <WebActionParameterTable102024.122225 diffgr:id="WebActionParameterTable102024.1222252" msdata:rowOrder="1">
                 <Parameter_x0020_Name>X Offset</Parameter_x0020_Name>
+                <Parameter_x0020_Value></Parameter_x0020_Value>
               </WebActionParameterTable102024.122225>
               <WebActionParameterTable102024.122225 diffgr:id="WebActionParameterTable102024.1222253" msdata:rowOrder="2">
                 <Parameter_x0020_Name>Y Offset</Parameter_x0020_Name>
+                <Parameter_x0020_Value></Parameter_x0020_Value>
               </WebActionParameterTable102024.122225>
             </diffgr:before>
           </diffgr:diffgram>
@@ -139,11 +143,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.8</TasktVersion>
+    <TasktVersion>3.5.2.17</TasktVersion>
     <Author />
     <LastRunTime>2024-10-20T12:22:56.218754+09:00</LastRunTime>
     <RunTimes>6</RunTimes>
-    <Revision>11</Revision>
+    <Revision>12</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

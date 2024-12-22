@@ -435,6 +435,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_14(doc);
             convertTo3_5_2_15(doc);
             convertTo3_5_2_16(doc);
+            convertTo3_5_2_17(doc);
             return doc;
         }
 
@@ -3651,6 +3652,53 @@ namespace taskt.Core.Script
                     restParams.Add(badAdvElems);
                 }
             }
+        }
+
+        private static void convertTo3_5_2_17(XDocument doc)
+        {
+            // GetFileInfoCommand -> GetFileInformatioCommand
+            ChangeCommandName(doc, "GetFileInfoCommand", "GetFileInformationCommand", "Get File Information");
+
+            // GetFilesCommand -> GetFilesPathAsListCommand
+            ChangeCommandName(doc, "GetFilesCommand", "GetFilesPathAsListCommand", "Get Files Path As List");
+
+            // GetFoldersCommand -> GetFoldersPathAsListCommand
+            ChangeCommandName(doc, "GetFoldersCommand", "GetFoldersPathAsListCommand", "Get Folders Path As List");
+
+            // ExcelGetLastRowCommand -> ExcelGetLastRowIndexCommand
+            ChangeCommandName(doc, "ExcelGetLastRowCommand", "ExcelGetLastRowIndexCommand", "Get Last Row Index");
+
+            // SeleniumBrowserGetWebBrowserInformationCommand v_InfoType value
+            ChangeAttributeValue(doc, "SeleniumBrowserGetWebBrowserInformationCommand", "v_InfoType",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "current handle id":
+                            attr.SetValue("Current Handle");
+                            break;
+                        case "handle id list":
+                            attr.SetValue("Handles JSON Array");
+                            break;
+                    }
+                })
+            );
+
+            // SeleniumBrowserSwitchWebBrowserWindowCommand v_WindowMatchType
+            ChangeAttributeValue(doc, "SeleniumBrowserSwitchWebBrowserWindowCommand", "v_WindowMatchType",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "handle id":
+                            attr.SetValue("Handle");
+                            break;
+                    }
+                })
+            );
+
+            // SeleniumBrowserSwitchWebBrowserWindowCommand -> SeleniumBrowserSwitchWebBrowserWindowAndTabCommand
+            ChangeCommandName(doc, "SeleniumBrowserSwitchWebBrowserWindowCommand", "SeleniumBrowserSwitchWebBrowserWindowAndTabCommand", "Switch Web Browser Window And Tab");
         }
 
         /// <summary>
