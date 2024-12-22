@@ -105,6 +105,7 @@ namespace taskt.Core.Automation.Commands
                 sendKey += OpenQA.Selenium.Keys.Alt;
             }
 
+            // TODO: not case sensitive
             // send key
             var key = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_SendKey), "Send Key", engine);
             //var keys = this.CreateSendKeyList();
