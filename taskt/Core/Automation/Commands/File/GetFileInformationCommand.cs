@@ -37,7 +37,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        public string v_UserVariableName { get; set; }
+        public string v_Result { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
@@ -117,7 +117,7 @@ namespace taskt.Core.Automation.Commands
                             break;
                     }
 
-                    ret.StoreInUserVariable(engine, v_UserVariableName);
+                    ret.StoreInUserVariable(engine, v_Result);
                 })
             );
         }
@@ -131,7 +131,7 @@ namespace taskt.Core.Automation.Commands
                 case "readonly file":
                 case "hidden file":
                     var boolType = new Automation.Attributes.PropertyAttributes.PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true);
-                    var ins = (String.IsNullOrEmpty(v_UserVariableName) ? "" : v_UserVariableName);
+                    var ins = (String.IsNullOrEmpty(v_Result) ? "" : v_Result);
                     counter.addInstance(ins, boolType, true);
                     counter.addInstance(ins, boolType, false);
                     break;
@@ -147,7 +147,7 @@ namespace taskt.Core.Automation.Commands
                 case "readonly file":
                 case "hidden file":
                     var boolType = new Automation.Attributes.PropertyAttributes.PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true);
-                    var ins = (String.IsNullOrEmpty(v_UserVariableName) ? "" : v_UserVariableName);
+                    var ins = (String.IsNullOrEmpty(v_Result) ? "" : v_Result);
                     counter.removeInstance(ins, boolType, true);
                     counter.removeInstance(ins, boolType, false);
                     break;

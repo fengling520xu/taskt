@@ -3823,6 +3823,20 @@ namespace taskt.Core.Script
                     }
                 }), "v_WaitTime", "v_WaitTimeForFile"
             );
+
+            // CheckFileExistsCommand, GetFileInformationCommand v_UserVariableName -> v_Result
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CheckFileExistsCommand":
+                        case "GetFileInformationCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_UserVariableName", "v_Result"
+            );
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(BooleanControls), nameof(BooleanControls.v_Result))]
         [Remarks("When the File Exists, Result is **TRUE**")]
-        public string v_UserVariableName { get; set; }
+        public string v_Result { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
@@ -57,11 +57,11 @@ namespace taskt.Core.Automation.Commands
             FilePathControls.FileAction(this, engine,
                 new Action<string>(path =>
                 {
-                    true.StoreInUserVariable(engine, v_UserVariableName);
+                    true.StoreInUserVariable(engine, v_Result);
                 }),
                 new Action<Exception>(ex =>
                 {
-                    false.StoreInUserVariable(engine, v_UserVariableName);
+                    false.StoreInUserVariable(engine, v_Result);
                 })
             );
         }
