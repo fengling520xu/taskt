@@ -3786,35 +3786,43 @@ namespace taskt.Core.Script
             // WaitForFolderToExistCommand v_FolderName -> v_TargetFolderPath
             ChangeAttributeName(doc, "WaitForFolderToExistCommand", "v_FolderName", "v_TargetFolderPath");
 
+            var isCopyMoveFolderCommands = new Func<XElement, bool>(elem =>
+            {
+                switch (GetCommandName(elem))
+                {
+                    case "CopyFolderCommand":
+                    case "MoveFolderCommand":
+                        return true;
+                    default:
+                        return false;
+                }
+            });
             // CopyFolderCommand, MoveFolderCommand v_ResultPath -> v_BeforeFolderPathResult
-            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
-                {
-                    switch (GetCommandName(elem))
-                    {
-                        case "CopyFolderCommand":
-                        case "MoveFolderCommand":
-                            return true;
-                        default:
-                            return false;
-                    }
-                }), "v_ResultPath", "v_BeforeFolderPathResult"
-            );
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_ResultPath", "v_BeforeFolderPathResult");
             // CopyFolderCommand, MoveFolderCommand v_AfterFilePathResult -> v_AfterFolderPathResult
-            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
-                {
-                    switch (GetCommandName(elem))
-                    {
-                        case "CopyFolderCommand":
-                        case "MoveFolderCommand":
-                            return true;
-                        default:
-                            return false;
-                    }
-                }), "v_AfterFilePathResult", "v_AfterFolderPathResult"
-            );
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_AfterFilePathResult", "v_AfterFolderPathResult");
 
             // CreateFolderCommand v_CreatedFolderPath -> v_ResultPath
             ChangeAttributeName(doc, "CreateFolderCommand", "v_CreatedFolderPath", "v_ResultPath");
+
+            // File commands v_WaitTime -> v_WaitTimeForFile
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CheckFileExistsCommand":
+                        case "CopyFileCommand":
+                        case "DeleteFileCommand":
+                        case "GetFileInformationCommand":
+                        case "MoveFileCommand":
+                        case "RenameFileCommand":
+                        case "WaitForFileToExistCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WaitTime", "v_WaitTimeForFile"
+            );
         }
 
         /// <summary>

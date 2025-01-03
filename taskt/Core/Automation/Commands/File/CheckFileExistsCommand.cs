@@ -29,7 +29,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
         [PropertyFirstValue("0")]
         [PropertyIsOptional(true, "0")]
-        public string v_WaitTime { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
