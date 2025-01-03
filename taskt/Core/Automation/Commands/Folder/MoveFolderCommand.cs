@@ -59,7 +59,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        [PropertyDescription("Variable Name to Store Folder Path After Move")]
+        [PropertyDescription("Variable Name to Store Folder Path Before Move")]
         public string v_ResultPath { get; set; }
 
         [XmlAttribute]
