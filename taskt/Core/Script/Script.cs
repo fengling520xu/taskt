@@ -3839,7 +3839,7 @@ namespace taskt.Core.Script
                 }), "v_UserVariableName", "v_Result"
             );
 
-            // Folder commands v_WaitForFolder -> v_WaitTimeForFolder
+            // Folder/GetFilesPathAsListCommand commands v_WaitForFolder -> v_WaitTimeForFolder
             ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
                 {
                     switch(GetCommandName(elem)) 
@@ -3849,6 +3849,7 @@ namespace taskt.Core.Script
                         case "DeleteFolderCommand":
                         case "GetFoldersPathAsListCommand":
                         case "RenameFolderCommand":
+                        case "GetFilesPathAsListCommand":
                             return true;
                         default:
                             return false;
