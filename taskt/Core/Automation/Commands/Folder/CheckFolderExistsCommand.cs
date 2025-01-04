@@ -23,7 +23,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [Remarks("When the Folder Exists, Result is **TRUE**")]
-        public string v_UserVariableName { get; set; }
+        public string v_Result { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
@@ -59,11 +59,11 @@ namespace taskt.Core.Automation.Commands
             FolderPathControls.FolderAction(this, engine,
                 new Action<string>(path =>
                 {
-                    true.StoreInUserVariable(engine, v_UserVariableName);
+                    true.StoreInUserVariable(engine, v_Result);
                 }),
                 new Action<Exception>(ex =>
                 {
-                    false.StoreInUserVariable(engine, v_UserVariableName);
+                    false.StoreInUserVariable(engine, v_Result);
                 })
             );
         }

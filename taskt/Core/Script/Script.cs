@@ -3824,13 +3824,14 @@ namespace taskt.Core.Script
                 }), "v_WaitTime", "v_WaitTimeForFile"
             );
 
-            // CheckFileExistsCommand, GetFileInformationCommand v_UserVariableName -> v_Result
+            // CheckFileExistsCommand, GetFileInformationCommand, CheckFolderExistsCommand v_UserVariableName -> v_Result
             ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
                 {
                     switch (GetCommandName(elem))
                     {
                         case "CheckFileExistsCommand":
                         case "GetFileInformationCommand":
+                        case "CheckFolderExistsCommand":
                             return true;
                         default:
                             return false;
