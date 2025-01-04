@@ -3837,6 +3837,29 @@ namespace taskt.Core.Script
                     }
                 }), "v_UserVariableName", "v_Result"
             );
+
+            // Folder commands v_WaitForFolder -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch(GetCommandName(elem)) 
+                    {
+                        case "CheckFolderExistsCommand":
+                        case "CreateFolderCommand":
+                        case "DeleteFolderCommand":
+                        case "GetFoldersPathAsListCommand":
+                        case "RenameFolderCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WaitForFolder", "v_WaitTimeForFolder"
+            );
+
+            // CopyFolder, MoveFolder v_WaitForTargetFolder -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_WaitForTargetFolder", "v_WaitTimeForFolder");
+
+            // WaitForFolderToExistCommand v_WaitTime -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, "WaitForFolderToExistCommand", "v_WaitTime", "v_WaitTimeForFolder");
         }
 
         /// <summary>

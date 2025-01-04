@@ -24,7 +24,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
         [PropertyIsOptional(true, "60")]
         [PropertyFirstValue("60")]
-        public string v_WaitTime { get; set; }
+        public string v_WaitTimeForFolder { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]

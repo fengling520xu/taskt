@@ -55,7 +55,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
         [PropertyDescription("Wait Time for the Target Folder to Exist (sec)")]
         [PropertyDisplayText(false, "")]
-        public string v_WaitForTargetFolder { get; set; }
+        public string v_WaitTimeForFolder { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
