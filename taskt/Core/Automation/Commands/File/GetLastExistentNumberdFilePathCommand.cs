@@ -133,7 +133,7 @@ namespace taskt.Core.Automation.Commands
                 v_StartValue = "1";
             }
 
-            var invChars = Path.GetInvalidFileNameChars();
+            var invChars = Path.GetInvalidPathChars();
 
             int counter = this.ExpandValueOrUserVariableAsInteger(nameof(v_StartValue), engine);
             int firstValue = counter;
@@ -159,10 +159,12 @@ namespace taskt.Core.Automation.Commands
             
             if (counter == firstValue)
             {
+                // not exist
                 "".StoreInUserVariable(engine, v_Result);
             }
             else
             {
+                counter--;
                 var r = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
                 r.StoreInUserVariable(engine, v_Result);
             }
