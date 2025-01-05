@@ -13,7 +13,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static List<decimal> ExpandUserVariableAsDecimalList(this IListGetMathResultFromListProperties command, Engine.AutomationEngineInstance engine)
         {
-            var notNumeric = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenValueIsNotNumeric), "When Not Numeric", engine);
+            var notNumeric = command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenValueIsNotNumeric), "When Not Numeric", engine);
             return command.ExpandUserVariableAsDecimalList(nameof(command.v_List), (notNumeric == "ignore"), engine);
         }
 

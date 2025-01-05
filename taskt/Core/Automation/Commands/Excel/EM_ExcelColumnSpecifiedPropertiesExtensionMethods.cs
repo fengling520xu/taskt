@@ -16,10 +16,12 @@ namespace taskt.Core.Automation.Commands
         {
             (_, var sheet) = command.ExpandValueOrVariableAsExcelInstanceAndCurrentWorksheet(engine);
 
-            string columnIndexValue = ((ScriptCommand)command).GetRawPropertyValueAsString(nameof(command.v_ColumnIndex), "Column Index");
+            var sc = command.ToScriptCommand();
+
+            string columnIndexValue = sc.GetRawPropertyValueAsString(nameof(command.v_ColumnIndex), "Column Index");
             int columnIndex = 0;
 
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
+            switch (sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
             {
                 case "range":
                     if (string.IsNullOrEmpty(columnIndexValue))

@@ -15,10 +15,12 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static (int, string) ExpandValueOrUserVariableAsDataTableColumn(this ILDataTableColumnPositionProperties command, DataTable table, Engine.AutomationEngineInstance engine)
         {
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
+            var sc = command.ToScriptCommand();
+
+            switch (sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
             {
                 case "column name":
-                    var name = ((ScriptCommand)command).ExpandValueOrUserVariable(nameof(command.v_ColumnIndex), "Column Name", engine);
+                    var name = sc.ExpandValueOrUserVariable(nameof(command.v_ColumnIndex), "Column Name", engine);
                     for (int i = table.Columns.Count - 1; i >= 0; i--)
                     {
                         if (table.Columns[i].ColumnName == name)
@@ -29,7 +31,7 @@ namespace taskt.Core.Automation.Commands
                     throw new Exception($"Strange DataTable Column Name. Value: '{command.v_ColumnIndex}', Expand Value: '{name}'");
 
                 case "index":
-                    var index = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_ColumnIndex), "Column Index", engine);
+                    var index = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_ColumnIndex), "Column Index", engine);
                     if (index < 0)
                     {
                         index += table.Columns.Count;

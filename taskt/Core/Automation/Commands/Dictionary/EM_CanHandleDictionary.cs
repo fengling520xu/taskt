@@ -66,7 +66,7 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception">Value is not Dictionary</exception>
         public static Dictionary<string, string> ExpandUserVariableAsDictionary(this ICanHandleDictionary command, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "Dictionary Variable");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "Dictionary Variable");
             //var v = variableName.GetRawVariable(engine);
             //if (v.VariableValue is Dictionary<string, string> dictionary)
             //{
@@ -95,7 +95,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         public static void StoreDictionaryInUserVariable(this ICanHandleDictionary command, Dictionary<string, string> dic, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "Dictionary Variable");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "Dictionary Variable");
             ExtensionMethods.StoreInUserVariable(variableName, dic, engine);
         }
     }

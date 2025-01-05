@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
         public static (string, JContainer) ExpandValueOrVariableValueAsJSONInJSONValue(this IJSONValueActionProperties command, Engine.AutomationEngineInstance engine)
         {
             (var str, var json, _) = command.ExpandValueOrUserVariableAsJSON(nameof(command.v_Value), engine);
-            var t = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), engine);
+            var t = command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), engine);
             switch (t)
             {
                 case "auto":
@@ -63,10 +63,10 @@ namespace taskt.Core.Automation.Commands
             }
             catch
             {
-                str = ((ScriptCommand)command).ExpandValueOrUserVariable(nameof(command.v_Value), "Value", engine);
+                str = command.ToScriptCommand().ExpandValueOrUserVariable(nameof(command.v_Value), "Value", engine);
             }
 
-            var t = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), engine);
+            var t = command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), engine);
 
             if (json is JArray ary)
             {

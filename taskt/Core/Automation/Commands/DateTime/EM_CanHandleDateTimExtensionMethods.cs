@@ -57,7 +57,7 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static DateTime ExpandValueOrVariableAsDateTime(this ICanHandleDateTime command, string paramterName, AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(paramterName, "DateTime");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(paramterName, "DateTime");
             //var v = variableName.GetRawVariable(engine);
             //if (v.VariableValue is DateTime time)
             //{
@@ -86,7 +86,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         public static void StoreDateTimeInUserVariable(this ICanHandleDateTime command, DateTime c, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "DateTime Variable");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "DateTime Variable");
             ExtensionMethods.StoreInUserVariable(variableName, c, engine);
         }
     }

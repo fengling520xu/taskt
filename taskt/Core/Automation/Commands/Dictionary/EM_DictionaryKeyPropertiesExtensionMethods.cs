@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
         public static (Dictionary<string, string> dic, string key, string value) ExpandValueOrUserVariableAsDictionaryKeyAndValue(this IDictionaryKeyProperties command, Engine.AutomationEngineInstance engine)
         {
             var dic = command.ExpandUserVariableAsDictionary(nameof(command.v_Dictionary), engine);
-            var key = ((ScriptCommand)command).ExpandValueOrUserVariable(nameof(command.v_Key), "Dictionary Key", engine);
+            var key = command.ToScriptCommand().ExpandValueOrUserVariable(nameof(command.v_Key), "Dictionary Key", engine);
             if (dic.ContainsKey(key))
             {
                 return (dic, key, dic[key]);

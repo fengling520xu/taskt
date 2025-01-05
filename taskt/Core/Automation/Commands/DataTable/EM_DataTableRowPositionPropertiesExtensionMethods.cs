@@ -21,7 +21,7 @@ namespace taskt.Core.Automation.Commands
                 command.v_RowIndex = "0";   // TODO: in fact, i'd like to set {DataTable.CurrentRow}
             }
 
-            var index = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_RowIndex), "Row Index", engine);
+            var index = command.ToScriptCommand().ExpandValueOrUserVariableAsInteger(nameof(command.v_RowIndex), "Row Index", engine);
             if (index < 0)
             {
                 index += table.Rows.Count;

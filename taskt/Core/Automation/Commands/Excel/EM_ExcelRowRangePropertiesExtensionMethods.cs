@@ -16,7 +16,9 @@ namespace taskt.Core.Automation.Commands
         {
             (_, var sheet) = command.ExpandValueOrVariableAsExcelInstanceAndCurrentWorksheet(engine);
 
-            var rowIndex = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_RowIndex), "Row Index", engine);
+            var sc = command.ToScriptCommand();
+
+            var rowIndex = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_RowIndex), "Row Index", engine);
 
             var innerLastColumnFunc = new Func<int, int, int>((rowStart, columnStart) =>
             {
@@ -26,7 +28,7 @@ namespace taskt.Core.Automation.Commands
                 }
                 else
                 {
-                    var valueType = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
+                    var valueType = sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
                     return sheet.GetLastColumnIndex(rowStart, columnStart, valueType);
                 }
             });
@@ -34,10 +36,10 @@ namespace taskt.Core.Automation.Commands
             int columnStartIndex = 0;
             int columnEndIndex = 0;
 
-            string columnStartValue = ((ScriptCommand)command).GetRawPropertyValueAsString(nameof(command.v_ColumnStart), "Start Column");
-            string columnEndValue = ((ScriptCommand)command).GetRawPropertyValueAsString(nameof(command.v_ColumnEnd), "End Column");
+            string columnStartValue = sc.GetRawPropertyValueAsString(nameof(command.v_ColumnStart), "Start Column");
+            string columnEndValue = sc.GetRawPropertyValueAsString(nameof(command.v_ColumnEnd), "End Column");
 
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
+            switch (sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
             {
                 case "range":
                     if (string.IsNullOrEmpty(columnStartValue))

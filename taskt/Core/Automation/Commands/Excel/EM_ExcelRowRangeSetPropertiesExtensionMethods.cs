@@ -17,7 +17,7 @@ namespace taskt.Core.Automation.Commands
         {
             (var row, var columnStart, var columnEnd) = ((IExcelRowRangeProperties)command).ExpandValueOrVariableAsExcelRangeIndecies(engine, objectSizeFunc);
 
-            var whenItemNotEnough = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenItemNotEnough), "When Item Not Enough", engine);
+            var whenItemNotEnough = command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenItemNotEnough), "When Item Not Enough", engine);
 
             var range = columnEnd - columnStart + 1;
             var size = objectSizeFunc();

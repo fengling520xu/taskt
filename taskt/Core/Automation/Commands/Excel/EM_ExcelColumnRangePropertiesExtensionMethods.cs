@@ -17,30 +17,32 @@ namespace taskt.Core.Automation.Commands
         {
             (_, var sheet) = command.ExpandValueOrVariableAsExcelInstanceAndCurrentWorksheet(engine);
 
+            var sc = command.ToScriptCommand();
+
             // get column index
             int columnIndex = 0;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
+            switch (sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
             {
                 case "range":
                     columnIndex = sheet.ToColumnIndex(command.v_ColumnIndex.ExpandValueOrUserVariable(engine));
                     break;
                 case "rc":
                     //columnIndex = command.ExpandValueOrUserVariableAsInteger(columnValueName, "Column", engine);
-                    columnIndex = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_ColumnIndex), "Column", engine);
+                    columnIndex = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_ColumnIndex), "Column", engine);
                     break;
             }
 
             //int rowStartIndex = command.ExpandValueOrUserVariableAsInteger(rowStartName, "Start Row", engine);
-            var rowStartIndex = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_RowStart), "Start Row", engine);
+            var rowStartIndex = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_RowStart), "Start Row", engine);
 
             //string rowEndValue = command.GetRawPropertyValueAsString(rowEndName, "End Row");
-            var rowEndValue = ((ScriptCommand)command).GetRawPropertyValueAsString(nameof(command.v_RowEnd), "End Row");
+            var rowEndValue = sc.GetRawPropertyValueAsString(nameof(command.v_RowEnd), "End Row");
             int rowEndIndex;
             if (string.IsNullOrEmpty(rowEndValue))
             {
                 if (objectSizeFunc == null)
                 {
-                    var valueType = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
+                    var valueType = sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
                     rowEndIndex = sheet.LastRowIndex(columnIndex, rowStartIndex, valueType);
                 }
                 else

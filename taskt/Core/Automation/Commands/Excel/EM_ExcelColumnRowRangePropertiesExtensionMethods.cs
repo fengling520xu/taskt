@@ -17,7 +17,9 @@ namespace taskt.Core.Automation.Commands
         {
             (_, var excelSheet) = command.ExpandValueOrVariableAsExcelInstanceAndCurrentWorksheet(engine);
 
-            var valueType = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
+            var sc = command.ToScriptCommand();
+
+            var valueType = sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine);
 
             var rowStartIndex = command.v_RowStart.ExpandValueOrUserVariableAsInteger("Start Row", engine);
 
@@ -35,7 +37,7 @@ namespace taskt.Core.Automation.Commands
 
             int columnStartIndex = 0;
             int columnEndIndex = 0;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
+            switch (sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ColumnType), "Column Type", engine))
             {
                 case "range":
                     columnStartIndex = excelSheet.ToColumnIndex(command.v_ColumnStart.ExpandValueOrUserVariable(engine));

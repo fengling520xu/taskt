@@ -14,7 +14,9 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         private static Func<string, string> GetPreFunction(ITextCompareProperties command, Engine.AutomationEngineInstance engine)
         {
-            var caseSensitive = ((ScriptCommand)command).ExpandValueOrUserVariableAsYesNo(nameof(command.v_CaseSensitive), engine);
+            var sc = command.ToScriptCommand();
+
+            var caseSensitive = sc.ExpandValueOrUserVariableAsYesNo(nameof(command.v_CaseSensitive), engine);
             Func<string, string> caseFunc;
             if (caseSensitive)
             {
@@ -25,7 +27,7 @@ namespace taskt.Core.Automation.Commands
                 caseFunc = new Func<string, string>(str => str.ToLower());
             }
 
-            var trim = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_TrimBeforeCompare), engine);
+            var trim = sc.ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_TrimBeforeCompare), engine);
             Func<string, string> preFunc;
             switch (trim)
             {
@@ -109,7 +111,7 @@ namespace taskt.Core.Automation.Commands
             var preFunc = GetPreFunction(command, engine);
 
             Func<string, string, bool> ret;
-            var compareMethod = ((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_CompareMethod), engine);
+            var compareMethod = command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_CompareMethod), engine);
             switch (compareMethod)
             {
                 case "contains":

@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
         public static (JContainer, JToken, string) ExpandValueOrUserVariableAsJSONByJSONPath(this IJSONJSONPathProperties command, Engine.AutomationEngineInstance engine)
         {
             (_, var json, _) = command.ExpandValueOrUserVariableAsJSON(engine);
-            var path = ((ScriptCommand)command).ExpandValueOrUserVariable(nameof(command.v_JsonExtractor), "JSONPath", engine);
+            var path = command.ToScriptCommand().ExpandValueOrUserVariable(nameof(command.v_JsonExtractor), "JSONPath", engine);
 
             var token = json.SelectToken(path);
             if (token is JObject obj)
@@ -45,8 +45,10 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static (JContainer, JToken, string) ExpandUserVariableAsJSONByJSONPath(this IJSONJSONPathProperties command, Engine.AutomationEngineInstance engine)
         {
+            var sc = command.ToScriptCommand();
+
             // force wrapped json variable
-            var jsonVariable = ((ScriptCommand)command).GetRawPropertyValueAsString(nameof(command.v_Json), "JSON");
+            var jsonVariable = sc.GetRawPropertyValueAsString(nameof(command.v_Json), "JSON");
             if (!VariableNameControls.IsWrappedVariableMarker(jsonVariable, engine))
             {
                 command.v_Json = VariableNameControls.GetWrappedVariableName(jsonVariable, engine);
@@ -57,7 +59,7 @@ namespace taskt.Core.Automation.Commands
             {
                 command.v_JsonExtractor = "$";
             }
-            var path = ((ScriptCommand)command).ExpandValueOrUserVariable(nameof(command.v_JsonExtractor), "JSONPath", engine);
+            var path = sc.ExpandValueOrUserVariable(nameof(command.v_JsonExtractor), "JSONPath", engine);
 
             var token = json.SelectToken(path);
             if (token is JObject obj)
