@@ -385,6 +385,7 @@
     <Compile Include="Core\Automation\Commands\File\IFilePathExistsPathProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathProperties.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\GetSpecialFolderPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />
     <Compile Include="Core\Automation\Commands\TextCompareSelectMethodControls.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\ADataTableBothRowCommands.cs" />
