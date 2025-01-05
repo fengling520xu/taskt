@@ -378,6 +378,7 @@
     <Compile Include="Core\Automation\Commands\File\EM_CanHandleFilePathExtentionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\EM_FilePathExistsPathPropertiesExtentionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\EM_FilePathPropertiesExtensionMethods.cs" />
+    <Compile Include="Core\Automation\Commands\File\GetLastExistentNumberdFilePathCommand.cs" />
     <Compile Include="Core\Automation\Commands\File\GetNonExistentFilePathCommand.cs" />
     <Compile Include="Core\Automation\Commands\File\ICanHandleFilePath.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathBeforeAfterPathResultProperties.cs" />
@@ -669,6 +670,7 @@
     <Compile Include="Core\Automation\Commands\Window\EM_WindowPositionPropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\Window\EM_WindowSizePropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\_General\EM_CommandIDPropertiesExtensionMethods.cs" />
+    <Compile Include="Core\Automation\Commands\_General\EM_ExpandablePropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\_General\EM_TextComparePropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\_General\EM_HaveDataTablePropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\_General\ICommandIDProperties.cs" />
