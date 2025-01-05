@@ -1,6 +1,6 @@
 {
   "RemoteVersion": "3.5.2.16",
-  "RemoteBetaVersion": "3.5.2.17",
+  "RemoteBetaVersion": "3.5.2.18",
   "Beta": false,
   "PackageURL": "https://github.com/rcktrncn/taskt/releases/download/v3.5.2.16/taskt-uob_v3.5.2.16.zip",
   "PackageURL2": "%release_url%/download/v%version%/taskt-uob_v%version%.zip"
