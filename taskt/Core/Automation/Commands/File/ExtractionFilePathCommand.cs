@@ -21,7 +21,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.AllowNoExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport)]
-        public string v_SourceFilePath { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -50,7 +50,7 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var filePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_SourceFilePath), engine);
+            var filePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_TargetFilePath), engine);
             string format = v_Format.ExpandValueOrUserVariable(engine);
 
             string result = FilePathControls.FormatFileFolderPath(filePath, format);

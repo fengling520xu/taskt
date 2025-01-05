@@ -42,7 +42,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns>(jsonText, JContainer, jsonType)</returns>
         public static (string, JContainer, string) ExpandValueOrUserVariableAsJSON(this ICanHandleJContainer command, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var text = ((ScriptCommand)command).ExpandValueOrUserVariable(parameterName, "JSON", engine);
+            var text = command.ToScriptCommand().ExpandValueOrUserVariable(parameterName, "JSON", engine);
             (var jsonText, var jCon, var jsonType) = DetectJSONType(text, engine);
             switch (jsonType)
             {

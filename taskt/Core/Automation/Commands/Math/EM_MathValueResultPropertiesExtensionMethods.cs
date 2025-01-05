@@ -12,7 +12,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static double ExpandValueOrVariableAsValue(this ILMathValueResultProperties command, AutomationEngineInstance engine)
         {
-            return (double)((ScriptCommand)command).ExpandValueOrUserVariableAsDecimal(nameof(command.v_Value), engine);
+            return (double)command.ToScriptCommand().ExpandValueOrUserVariableAsDecimal(nameof(command.v_Value), engine);
         }
     }
 }

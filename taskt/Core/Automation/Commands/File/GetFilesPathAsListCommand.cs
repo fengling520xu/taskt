@@ -30,7 +30,7 @@ namespace taskt.Core.Automation.Commands
         //[PropertyValidationRule("Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
         //[PropertyDisplayText(true, "Folder")]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_SourceFolderPath { get; set; }
+        public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -82,7 +82,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        public string v_WaitForFolder { get; set; }
+        public string v_WaitTimeForFolder { get; set; }
 
         public GetFilesPathAsListCommand()
         {
@@ -95,7 +95,7 @@ namespace taskt.Core.Automation.Commands
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             //apply variable logic
-            var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_SourceFolderPath), nameof(v_WaitForFolder), engine);
+            var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
 
             var searchFile = v_SearchFileName.ExpandValueOrUserVariableAsFileName(engine);
 

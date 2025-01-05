@@ -29,7 +29,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
         [PropertyDescription("Location where you want to Create the Folder")]
-        public string v_DestinationDirectory { get; set; }
+        public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
@@ -39,7 +39,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        public string v_WaitForFolder { get; set; }
+        public string v_WaitTimeForFolder { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
@@ -47,7 +47,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true)]
         [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
-        public string v_CreatedFolderPath { get; set; }
+        public string v_ResultPath { get; set; }
 
         public CreateFolderCommand()
         {
@@ -99,9 +99,9 @@ namespace taskt.Core.Automation.Commands
                         System.IO.Directory.CreateDirectory(finalPath);
                     }
 
-                    if (!string.IsNullOrEmpty(v_CreatedFolderPath))
+                    if (!string.IsNullOrEmpty(v_ResultPath))
                     {
-                        finalPath.StoreInUserVariable(engine, v_CreatedFolderPath);
+                        finalPath.StoreInUserVariable(engine, v_ResultPath);
                     }
                 })
             );

@@ -14,7 +14,7 @@ namespace taskt.Core.Automation.Commands
         public static Func<Worksheet, int, int, string> ExpandValueOrVariableAsGetValueFunction(this IExcelRCValueTypeProperties command, Engine.AutomationEngineInstance engine)
         {
             Func<Worksheet, int, int, string> getFunc = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     getFunc = (sheet, column, row) =>
@@ -64,7 +64,7 @@ namespace taskt.Core.Automation.Commands
         public static Action<string, Worksheet, int, int> ExpandValueOrVaribleAsSetValueAction(this IExcelRCValueTypeProperties command, Engine.AutomationEngineInstance engine)
         {
             Action<string, Worksheet, int, int> setFunc = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     setFunc = (value, sheet, column, row) =>
@@ -116,7 +116,7 @@ namespace taskt.Core.Automation.Commands
         public static Func<Worksheet, int, int, bool> ExpandValueOrVariableAsCheckValueFunction(this IExcelRCValueTypeProperties command, Engine.AutomationEngineInstance engine)
         {
             Func<Worksheet, int, int, bool> func = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     func = (sheet, column, row) =>

@@ -436,6 +436,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_15(doc);
             convertTo3_5_2_16(doc);
             convertTo3_5_2_17(doc);
+            convertTo3_5_2_18(doc);
             return doc;
         }
 
@@ -3699,6 +3700,184 @@ namespace taskt.Core.Script
 
             // SeleniumBrowserSwitchWebBrowserWindowCommand -> SeleniumBrowserSwitchWebBrowserWindowAndTabCommand
             ChangeCommandName(doc, "SeleniumBrowserSwitchWebBrowserWindowCommand", "SeleniumBrowserSwitchWebBrowserWindowAndTabCommand", "Switch Web Browser Window And Tab");
+        }
+
+        private static void convertTo3_5_2_18(XDocument doc)
+        {
+            // SeleniumBrowserGetWebBrowserInformationCommand Handles JSON Array -> SeleniumBrowserGetWindowAndTabHandlesAsJSONCommand
+            ChangeToOtherCommand(doc, new Func<XElement, bool>(elem =>
+                {
+                    if ((GetCommandName(elem) == "SeleniumBrowserGetWebBrowserInformationCommand") &&
+                        (elem.Attribute("v_InfoType").Value.ToLower() == "handles json array"))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }), 
+                "SeleniumBrowserGetWindowAndTabHandlesAsJSONCommand", "Get Window And Tab Handles As JSON",
+                new List<(string, string)>()
+                {
+                    ("v_applyToVariableName", "v_Result"),
+                }
+            );
+
+            // File Commands v_SourceFilePath -> v_TargetFilePath
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFileCommand":
+                        case "DeleteFileCommand":
+                        case "ExtractionFilePathCommand":
+                        case "MoveFileCommand":
+                        case "RenameFileCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_SourceFilePath", "v_TargetFilePath"
+            );
+
+            // File Commands v_TargetFileName -> v_TargetFilePath
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CheckFileExistsCommand":
+                        case "GetFileInformationCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_TargetFileName", "v_TargetFilePath"
+            );
+
+            // WaitForFileToExists v_FileName -> v_TargetFilePath
+            ChangeAttributeName(doc, "WaitForFileToExistCommand", "v_FileName", "v_TargetFilePath");
+
+            // Folder commands and GetFilesPathAsList v_SourceFolderPath -> v_TargetFolderPath
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFolderCommand":
+                        case "DeleteFolderCommand":
+                        case "ExtractionFolderPathCommand":
+                        case "GetFoldersPathAsListCommand":
+                        case "MoveFolderCommand":
+                        case "RenameFolderCommand":
+                        case "GetFilesPathAsListCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_SourceFolderPath", "v_TargetFolderPath"
+            );
+
+            // CheckFolderExistsCommand v_TargetFolderName - > v_TargetFolderPath
+            ChangeAttributeName(doc, "CheckFolderExistsCommand", "v_TargetFolderName", "v_TargetFolderPath");
+
+            // CreateFolderCommand v_DestinationDirectory -> v_TargetFolderPath
+            ChangeAttributeName(doc, "CreateFolderCommand", "v_DestinationDirectory", "v_TargetFolderPath");
+
+            // WaitForFolderToExistCommand v_FolderName -> v_TargetFolderPath
+            ChangeAttributeName(doc, "WaitForFolderToExistCommand", "v_FolderName", "v_TargetFolderPath");
+
+            var isCopyMoveFolderCommands = new Func<XElement, bool>(elem =>
+            {
+                switch (GetCommandName(elem))
+                {
+                    case "CopyFolderCommand":
+                    case "MoveFolderCommand":
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            // CopyFolderCommand, MoveFolderCommand v_ResultPath -> v_BeforeFolderPathResult
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_ResultPath", "v_BeforeFolderPathResult");
+            // CopyFolderCommand, MoveFolderCommand v_AfterFilePathResult -> v_AfterFolderPathResult
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_AfterFilePathResult", "v_AfterFolderPathResult");
+
+            // CreateFolderCommand v_CreatedFolderPath -> v_ResultPath
+            ChangeAttributeName(doc, "CreateFolderCommand", "v_CreatedFolderPath", "v_ResultPath");
+
+            // File commands v_WaitTime -> v_WaitTimeForFile
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CheckFileExistsCommand":
+                        case "CopyFileCommand":
+                        case "DeleteFileCommand":
+                        case "GetFileInformationCommand":
+                        case "MoveFileCommand":
+                        case "RenameFileCommand":
+                        case "WaitForFileToExistCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WaitTime", "v_WaitTimeForFile"
+            );
+
+            // CheckFileExistsCommand, GetFileInformationCommand, CheckFolderExistsCommand v_UserVariableName -> v_Result
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CheckFileExistsCommand":
+                        case "GetFileInformationCommand":
+                        case "CheckFolderExistsCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_UserVariableName", "v_Result"
+            );
+
+            // Folder/GetFilesPathAsListCommand commands v_WaitForFolder -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch(GetCommandName(elem)) 
+                    {
+                        case "CheckFolderExistsCommand":
+                        case "CreateFolderCommand":
+                        case "DeleteFolderCommand":
+                        case "GetFoldersPathAsListCommand":
+                        case "RenameFolderCommand":
+                        case "GetFilesPathAsListCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WaitForFolder", "v_WaitTimeForFolder"
+            );
+
+            // CopyFolder, MoveFolder v_WaitForTargetFolder -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_WaitForTargetFolder", "v_WaitTimeForFolder");
+
+            // WaitForFolderToExistCommand v_WaitTime -> v_WaitTimeForFolder
+            ChangeAttributeName(doc, "WaitForFolderToExistCommand", "v_WaitTime", "v_WaitTimeForFolder");
+
+            // Copy/Move File/FolderCommands v_DestinationDirectory -> v_DestinationFolderPath
+            ChangeAttributeName(doc, new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFileCommand":
+                        case "MoveFileCommand":
+                        case "CopyFolderCommand":
+                        case "MoveFolderCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_DestinationDirectory", "v_DestinationFolderPath"
+            );
         }
 
         /// <summary>

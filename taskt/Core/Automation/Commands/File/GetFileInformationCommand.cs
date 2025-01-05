@@ -20,28 +20,31 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.AllowNoExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport)]
-        public string v_TargetFileName { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("Information Type.")]
-        [PropertyUISelectionOption("File size")]
-        [PropertyUISelectionOption("Readonly file")]
-        [PropertyUISelectionOption("Hidden file")]
-        [PropertyUISelectionOption("Creation time")]
-        [PropertyUISelectionOption("Last write time")]
-        [PropertyUISelectionOption("Last access time")]
+        [PropertyUISelectionOption("File Size")]
+        [PropertyUISelectionOption("File Size (KB)")]
+        [PropertyUISelectionOption("File Size (MB)")]
+        [PropertyUISelectionOption("File Size (GB)")]
+        [PropertyUISelectionOption("Readonly File")]
+        [PropertyUISelectionOption("Hidden File")]
+        [PropertyUISelectionOption("Creation Time")]
+        [PropertyUISelectionOption("Last Write Time")]
+        [PropertyUISelectionOption("Last Access Time")]
         [PropertyValidationRule("Type", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Type")]
         public string v_InfoType { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        public string v_UserVariableName { get; set; }
+        public string v_Result { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitTime { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
@@ -100,6 +103,15 @@ namespace taskt.Core.Automation.Commands
                         case "file size":
                             ret = fileInfo.Length.ToString();
                             break;
+                        case "file size (kb)":
+                            ret = (fileInfo.Length / 1024.0).ToString();
+                            break;
+                        case "file size (mb)":
+                            ret = (fileInfo.Length / 1048576.0).ToString();
+                            break;
+                        case "file size (gb)":
+                            ret = (fileInfo.Length / 1073741824.0).ToString();
+                            break;
                         case "readonly file":
                             ret = fileInfo.IsReadOnly ? "TRUE" : "FALSE";
                             break;
@@ -117,21 +129,21 @@ namespace taskt.Core.Automation.Commands
                             break;
                     }
 
-                    ret.StoreInUserVariable(engine, v_UserVariableName);
+                    ret.StoreInUserVariable(engine, v_Result);
                 })
             );
         }
 
         public override void AddInstance(InstanceCounter counter)
         {
-            string type = (String.IsNullOrEmpty(v_InfoType) ? "" : v_InfoType.ToLower());
+            string type = (string.IsNullOrEmpty(v_InfoType) ? "" : v_InfoType.ToLower());
 
             switch(type)
             {
                 case "readonly file":
                 case "hidden file":
                     var boolType = new Automation.Attributes.PropertyAttributes.PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true);
-                    var ins = (String.IsNullOrEmpty(v_UserVariableName) ? "" : v_UserVariableName);
+                    var ins = (string.IsNullOrEmpty(v_Result) ? "" : v_Result);
                     counter.addInstance(ins, boolType, true);
                     counter.addInstance(ins, boolType, false);
                     break;
@@ -140,14 +152,14 @@ namespace taskt.Core.Automation.Commands
 
         public override void RemoveInstance(InstanceCounter counter)
         {
-            string type = (String.IsNullOrEmpty(v_InfoType) ? "" : v_InfoType.ToLower());
+            string type = (string.IsNullOrEmpty(v_InfoType) ? "" : v_InfoType.ToLower());
 
             switch (type)
             {
                 case "readonly file":
                 case "hidden file":
                     var boolType = new Automation.Attributes.PropertyAttributes.PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true);
-                    var ins = (String.IsNullOrEmpty(v_UserVariableName) ? "" : v_UserVariableName);
+                    var ins = (string.IsNullOrEmpty(v_Result) ? "" : v_Result);
                     counter.removeInstance(ins, boolType, true);
                     counter.removeInstance(ins, boolType, false);
                     break;

@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
         public static Func<Range, bool> ExpandValueOrVariableAsCheckValueFunction(this IExcelCellValueTypeProperties command, Engine.AutomationEngineInstance engine)
         {
             Func<Range, bool> func = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     func = (rg) =>
@@ -50,7 +50,7 @@ namespace taskt.Core.Automation.Commands
         public static Func<Range, string> ExpandValueOrVariableAsGetValueFunction(this IExcelCellValueTypeProperties command, Engine.AutomationEngineInstance engine)
         {
             Func<Range, string> getFunc = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     getFunc = (rg) =>
@@ -108,7 +108,7 @@ namespace taskt.Core.Automation.Commands
             };
 
             Action<Range, string> setFunc = null;
-            switch (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
+            switch (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_ValueType), "Value Type", engine))
             {
                 case "cell":
                     setFunc = (rg, value) =>

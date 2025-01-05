@@ -30,14 +30,14 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Target Folder")]
         [PropertyValidationRule("Target Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Target Folder")]
-        public string v_SourceFolderPath { get; set; }
+        public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
         [PropertyDescription("Destination Folder for Move")]
         [PropertyValidationRule("Destination Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Destination Folder")]
-        public string v_DestinationDirectory { get; set; }
+        public string v_DestinationFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
@@ -55,17 +55,17 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
         [PropertyDescription("Wait Time for the Target Folder to Exist (sec)")]
         [PropertyDisplayText(false, "")]
-        public string v_WaitForTargetFolder { get; set; }
+        public string v_WaitTimeForFolder { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        [PropertyDescription("Variable Name to Store Folder Path After Move")]
-        public string v_ResultPath { get; set; }
+        [PropertyDescription("Variable Name to Store Folder Path Before Move")]
+        public string v_BeforeFolderPathResult { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
         [PropertyDescription("Variable Name to Store Folder Path After Move")]
-        public string v_AfterFilePathResult { get; set; }
+        public string v_AfterFolderPathResult { get; set; }
 
         public MoveFolderCommand()
         {
@@ -115,7 +115,7 @@ namespace taskt.Core.Automation.Commands
             FolderPathControls.FolderAction(this, engine,
                 new Action<string>(path =>
                 {
-                    var destinationFolder = v_DestinationDirectory.ExpandValueOrUserVariableAsFolderPath(engine);
+                    var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
 
                     if (!Directory.Exists(destinationFolder))
                     {
@@ -142,9 +142,9 @@ namespace taskt.Core.Automation.Commands
 
                     Directory.Move(path, finalPath);
 
-                    if (!string.IsNullOrEmpty(v_AfterFilePathResult))
+                    if (!string.IsNullOrEmpty(v_AfterFolderPathResult))
                     {
-                        finalPath.StoreInUserVariable(engine, v_AfterFilePathResult);
+                        finalPath.StoreInUserVariable(engine, v_AfterFolderPathResult);
                     }
                 })
             );

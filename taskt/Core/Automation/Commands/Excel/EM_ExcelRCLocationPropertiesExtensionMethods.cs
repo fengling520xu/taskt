@@ -14,8 +14,10 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static (int, int) ExpandValueOrVariableAsCellRowAndColumnIndex(this IExcelRCLocationProperties command, Engine.AutomationEngineInstance engine)
         {
-            var row = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_CellRow), "Cell Row", engine);
-            var column = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_CellColumn), "Cell Column", engine);
+            var sc = command.ToScriptCommand();
+
+            var row = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_CellRow), "Cell Row", engine);
+            var column = sc.ExpandValueOrUserVariableAsInteger(nameof(command.v_CellColumn), "Cell Column", engine);
 
             var excelInstance = command.ExpandValueOrVariableAsExcelInstance(engine);
             if (excelInstance.RCLocationTryParse(row, column, out _))

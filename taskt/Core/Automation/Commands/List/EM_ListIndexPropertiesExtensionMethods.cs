@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static int ExpandValueOrUserVariableAsListIndex(this IListIndexProperties command, List<string> list, Engine.AutomationEngineInstance engine)
         {
-            var index = ((ScriptCommand)command).ExpandValueOrUserVariableAsInteger(nameof(command.v_Index), engine);
+            var index = command.ToScriptCommand().ExpandValueOrUserVariableAsInteger(nameof(command.v_Index), engine);
             if (index < 0)
             {
                 index += list.Count;

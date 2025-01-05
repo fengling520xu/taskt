@@ -57,7 +57,7 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static Color ExpandUserVariableAsColor(this ICanHandleColor command, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "Color Variable");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "Color Variable");
             //var v = variableName.GetRawVariable(engine);
             //if (v.VariableValue is Color color)
             //{
@@ -86,7 +86,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         public static void StoreColorInUserVariable(this ICanHandleColor command, Color c, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "Color Variable");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "Color Variable");
             ExtensionMethods.StoreInUserVariable(variableName, c, engine);
         }
     }

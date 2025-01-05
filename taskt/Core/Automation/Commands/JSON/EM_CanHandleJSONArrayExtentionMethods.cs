@@ -69,7 +69,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static (string, JArray) ExpandValueOrUserVariableAsJSONArray(this ICanHandleJSONArray command, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var variableName = ((ScriptCommand)command).GetRawPropertyValueAsString(parameterName, "JSON");
+            var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(parameterName, "JSON");
             try
             {
                 return ExpandValueOrUserVariableAsJSONArray(variableName.GetRawVariable(engine), engine);

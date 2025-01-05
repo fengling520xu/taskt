@@ -18,7 +18,7 @@ namespace taskt.Core.Automation.Commands
             //var v = (double)command.ExpandValueOrUserVariableAsDecimal(nameof(command.v_Value), engine);
             var v = command.ExpandValueOrVariableAsValue(engine);
 
-            if (((ScriptCommand)command).ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenValueIsOutOfRange), engine) == "error")
+            if (command.ToScriptCommand().ExpandValueOrUserVariableAsSelectionItem(nameof(command.v_WhenValueIsOutOfRange), engine) == "error")
             {
                 if (!rangeFunc(v))
                 {

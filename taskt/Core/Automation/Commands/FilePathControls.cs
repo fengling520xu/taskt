@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Automation.Engine;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -109,7 +110,7 @@ namespace taskt.Core.Automation.Commands
         public static bool IsFullPath(string path)
         {
             //return (path != Path.GetFileName(path));
-            return !String.IsNullOrEmpty(Path.GetPathRoot(path));
+            return !string.IsNullOrEmpty(Path.GetPathRoot(path));
         }
 
         /// <summary>
@@ -130,9 +131,9 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         private static (string variableName, int index) GetLastFileCounter(string path, Engine.AutomationEngineInstance engine)
         {
-            var f0 = VariableNameControls.GetWrappedVariableName("FileCounter.F0", engine);
-            var f00 = VariableNameControls.GetWrappedVariableName("FileCounter.F00", engine);
-            var f000 = VariableNameControls.GetWrappedVariableName("FileCounter.F000", engine);
+            var f0 = VariableNameControls.GetWrappedVariableName(SystemVariables.FileCounter_F0.VariableName, engine);
+            var f00 = VariableNameControls.GetWrappedVariableName(SystemVariables.FileCounter_F00.VariableName, engine);
+            var f000 = VariableNameControls.GetWrappedVariableName(SystemVariables.FileCounter_F000.VariableName, engine);
 
             var indices = new Dictionary<string, int>()
             {
@@ -185,7 +186,7 @@ namespace taskt.Core.Automation.Commands
             var r = GetLastFileCounter(path, engine);
             if (r.index < 0)
             {
-                throw new Exception("No FileCounter Variables contains. Path: '" + path + "'");
+                throw new Exception($"No FileCounter Variables contains. Path: '{path}'");
             }
             else
             {
