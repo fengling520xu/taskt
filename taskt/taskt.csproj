@@ -375,11 +375,13 @@
     <Compile Include="Core\Automation\Commands\File\AFileExistsFilePathResultCommands.cs" />
     <Compile Include="Core\Automation\Commands\File\AFileFilePathCommands.cs" />
     <Compile Include="Core\Automation\Commands\File\AFileExistsFilePathCommands.cs" />
+    <Compile Include="Core\Automation\Commands\File\EM_CanHandleFilePathExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\EM_CanHandleFilePathExtentionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\EM_FilePathExistsPathPropertiesExtentionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\EM_FilePathPropertiesExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\File\GetLastExistentNumberdFilePathCommand.cs" />
     <Compile Include="Core\Automation\Commands\File\GetNonExistentFilePathCommand.cs" />
+    <Compile Include="Core\Automation\Commands\File\ICanHandleFileName.cs" />
     <Compile Include="Core\Automation\Commands\File\ICanHandleFilePath.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathBeforeAfterPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathExistsPathProperties.cs" />
