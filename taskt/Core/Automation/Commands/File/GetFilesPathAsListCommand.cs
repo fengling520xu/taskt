@@ -97,7 +97,8 @@ namespace taskt.Core.Automation.Commands
             //apply variable logic
             var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
 
-            var searchFile = v_SearchFileName.ExpandValueOrUserVariableAsFileName(engine);
+            //var searchFile = v_SearchFileName.ExpandValueOrUserVariableAsFileName(engine);
+            var searchFile = v_SearchFileName.ExpandValueOrUserVariable(engine);
 
             // get all files
             List<string> fullFilesList;
