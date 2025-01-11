@@ -3798,9 +3798,12 @@ namespace taskt.Core.Script
                 }
             });
             // CopyFolderCommand, MoveFolderCommand v_ResultPath -> v_BeforeFolderPathResult
-            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_ResultPath", "v_BeforeFolderPathResult");
             // CopyFolderCommand, MoveFolderCommand v_AfterFilePathResult -> v_AfterFolderPathResult
-            ChangeAttributeName(doc, isCopyMoveFolderCommands, "v_AfterFilePathResult", "v_AfterFolderPathResult");
+            ChangeMultiAttributeNames(doc, isCopyMoveFolderCommands, new List<(string, string)>
+            {
+                ("v_ResultPath", "v_BeforeFolderPathResult"),
+                ("v_AfterFilePathResult", "v_AfterFolderPathResult"),
+            });
 
             // CreateFolderCommand v_CreatedFolderPath -> v_ResultPath
             ChangeAttributeName(doc, "CreateFolderCommand", "v_CreatedFolderPath", "v_ResultPath");
