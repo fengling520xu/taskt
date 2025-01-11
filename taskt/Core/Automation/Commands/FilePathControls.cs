@@ -496,26 +496,26 @@ namespace taskt.Core.Automation.Commands
             return ExpandValueOrUserVariableAsFilePath(parameterValue, pathSetting, engine);
         }
 
-        /// <summary>
-        /// expand value or user variable as File Name
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception">value is not file name</exception>
-        public static string ExpandValueOrUserVariableAsFileName(this string fileName, Engine.AutomationEngineInstance engine)
-        {
-            var fn = fileName.ExpandValueOrUserVariable(engine);
-            var invs = Path.GetInvalidFileNameChars();
-            if (fn.IndexOfAny(invs) < 0)
-            {
-                return fn;
-            }
-            else
-            {
-                throw new Exception("File Name contains invalid chars. File: '" + fn + "'");
-            }
-        }
+        ///// <summary>
+        ///// expand value or user variable as File Name
+        ///// </summary>
+        ///// <param name="fileName"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        ///// <exception cref="Exception">value is not file name</exception>
+        //public static string ExpandValueOrUserVariableAsFileName(this string fileName, Engine.AutomationEngineInstance engine)
+        //{
+        //    var fn = fileName.ExpandValueOrUserVariable(engine);
+        //    var invs = Path.GetInvalidFileNameChars();
+        //    if (fn.IndexOfAny(invs) < 0)
+        //    {
+        //        return fn;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("File Name contains invalid chars. File: '" + fn + "'");
+        //    }
+        //}
 
         /// <summary>
         /// format file/folder path to specified format
