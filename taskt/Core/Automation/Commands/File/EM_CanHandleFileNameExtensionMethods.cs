@@ -4,9 +4,9 @@ using System.IO;
 namespace taskt.Core.Automation.Commands
 {
     /// <summary>
-    /// Handle FilePath Extension methods
+    /// Handle File Name Extension methods
     /// </summary>
-    public static class EM_CanHandleFilePathExtensionMethods
+    public static class EM_CanHandleFileNameExtensionMethods
     {
         /// <summary>
         /// expand value or User Variable As File name
@@ -16,7 +16,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static string ExpandValueOrUserVariableAsFilePath(this ICanHandleFilePath command, string parameterName, Engine.AutomationEngineInstance engine)
+        public static string ExpandValueOrUserVariableAsFileName(this ICanHandleFileName command, string parameterName, Engine.AutomationEngineInstance engine)
         {
             var prop = command.ToScriptCommand().GetProperty(parameterName);
             string parameterValue = prop.GetValue(command)?.ToString() ?? "";
