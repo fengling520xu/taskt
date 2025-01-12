@@ -72,5 +72,36 @@ namespace taskt.Core.Automation.Commands
                 throw new Exception($"Strange Value returned in WaitForFile. Type: {ret.GetType().FullName}");
             }
         }
+
+        /// <summary>
+        /// general file action.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="engine"></param>
+        /// <param name="actionFunc">process for file</param>
+        /// <param name="postActionFunc">action after process (before-path, after-path)</param>
+        /// <param name="errorFunc">action when error</param>
+        public static void FileAction(this IFileExistsFilePathProperties command, Engine.AutomationEngineInstance engine, Func<string, string> actionFunc, Action<string, string> postActionFunc = null, Action<Exception> errorFunc = null)
+        {
+            try
+            {
+                var beforePath = command.WaitForFile(engine);
+
+                var afterPath = actionFunc(beforePath);
+
+                postActionFunc(beforePath, afterPath);
+            }
+            catch (Exception ex)
+            {
+                if (errorFunc != null)
+                {
+                    errorFunc(ex);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }
