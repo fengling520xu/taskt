@@ -56,9 +56,10 @@ namespace taskt.Core.Automation.Commands
             //);
 
             this.FileAction(engine,
-                new Action<string>(path =>
+                new Func<string, string>(path =>
                 {
                     // nothing to do
+                    return path;
                 })
             );
         }

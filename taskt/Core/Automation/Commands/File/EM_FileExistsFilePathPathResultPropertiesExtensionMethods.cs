@@ -12,9 +12,9 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         /// <param name="command"></param>
         /// <param name="engine"></param>
-        /// <param name="actionFunc"></param>
+        /// <param name="actionFunc">return process file path</param>
         /// <param name="errorFunc"></param>
-        public static void FileAction(this IFileExistsFilePathPathResultProperties command, Engine.AutomationEngineInstance engine, Action<string> actionFunc, Action<Exception> errorFunc = null)
+        public static void FileAction(this IFileExistsFilePathPathResultProperties command, Engine.AutomationEngineInstance engine, Func<string, string> actionFunc, Action<Exception> errorFunc = null)
         {
             try
             {

@@ -66,9 +66,10 @@ namespace taskt.Core.Automation.Commands
             //    })
             //);
             this.FileAction(engine,
-                new Action<string>(path =>
+                new Func<string, string>(path =>
                 {
                     true.StoreInUserVariable(engine, v_Result);
+                    return path;
                 }),
                 new Action<Exception>(ex =>
                 {

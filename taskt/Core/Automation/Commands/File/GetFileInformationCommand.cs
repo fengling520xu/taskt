@@ -135,7 +135,7 @@ namespace taskt.Core.Automation.Commands
             //);
 
             this.FileAction(engine, 
-                new Action<string>(path =>
+                new Func<string, string>(path =>
                 {
                     var fileInfo = new FileInfo(path);
 
@@ -172,6 +172,8 @@ namespace taskt.Core.Automation.Commands
                     }
 
                     ret.StoreInUserVariable(engine, v_Result);
+
+                    return path;
                 })
             );
         }
