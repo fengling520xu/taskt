@@ -14,7 +14,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <param name="actionFunc"></param>
         /// <param name="errorFunc"></param>
-        public static void FileAction(this IFilePathPathResultProperties command, Engine.AutomationEngineInstance engine, Action<string> actionFunc, Action<Exception> errorFunc = null)
+        public static void FileAction(this IFileExistsFilePathPathResultProperties command, Engine.AutomationEngineInstance engine, Action<string> actionFunc, Action<Exception> errorFunc = null)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="command"></param>
         /// <param name="path"></param>
         /// <param name="engine"></param>
-        public static void StoreResultFilePathInUserVariable(this IFilePathPathResultProperties command, string path, Engine.AutomationEngineInstance engine)
+        public static void StoreResultFilePathInUserVariable(this IFileExistsFilePathPathResultProperties command, string path, Engine.AutomationEngineInstance engine)
         {
             var variableName = command.ToScriptCommand().GetRawPropertyValueAsString(nameof(command.v_ResultPath), "Result Path");
             if (!string.IsNullOrEmpty(variableName))

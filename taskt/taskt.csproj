@@ -384,9 +384,9 @@
     <Compile Include="Core\Automation\Commands\File\GetNonExistentFilePathCommand.cs" />
     <Compile Include="Core\Automation\Commands\File\ICanHandleFileName.cs" />
     <Compile Include="Core\Automation\Commands\File\ICanHandleFilePath.cs" />
-    <Compile Include="Core\Automation\Commands\File\IFilePathBeforeAfterPathResultProperties.cs" />
+    <Compile Include="Core\Automation\Commands\File\IFileExistsPathBeforeAfterPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathExistsPathProperties.cs" />
-    <Compile Include="Core\Automation\Commands\File\IFilePathPathResultProperties.cs" />
+    <Compile Include="Core\Automation\Commands\File\IFileExistsFilePathPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathProperties.cs" />
     <Compile Include="Core\Automation\Commands\Folder\GetSpecialFolderPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />

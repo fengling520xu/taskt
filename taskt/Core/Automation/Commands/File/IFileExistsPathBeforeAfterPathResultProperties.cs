@@ -3,7 +3,7 @@
     /// <summary>
     /// for exists file path and get before/after file path properties
     /// </summary>
-    public interface IFilePathBeforeAfterPathResultProperties : IFilePathExistsPathProperties
+    public interface IFileExistsPathBeforeAfterPathResultProperties : IFilePathExistsPathProperties
     {
         /// <summary>
         /// variable name to store file path before command process

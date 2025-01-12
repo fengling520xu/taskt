@@ -3,7 +3,7 @@
     /// <summary>
     /// for exists file path and get path result properties
     /// </summary>
-    public interface IFilePathPathResultProperties : IFilePathExistsPathProperties
+    public interface IFileExistsFilePathPathResultProperties : IFilePathExistsPathProperties
     {
         /// <summary>
         /// variable name to store exists file path
