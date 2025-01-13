@@ -48,7 +48,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static bool IsValidPathString(string path)
+        public static bool IsValidPathString(string path)
         {
             var invs = Path.GetInvalidPathChars();
             return (path.IndexOfAny(invs) < 0);
@@ -60,7 +60,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="path">don't convert variable</param>
         /// <param name="engine"></param>
         /// <returns></returns>
-        public static bool ContainsFileCounterVariable(string path, Engine.AutomationEngineInstance engine)
+        public static bool ContainsFileCounterVariable(string path, AutomationEngineInstance engine)
         {
             path = path ?? "";
             (_, var index) = GetLastFileCounter(path, engine);
@@ -74,7 +74,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="path">don't convert variable</param>
         /// <param name="engine"></param>
         /// <returns></returns>
-        private static (string variableName, int index) GetLastFileCounter(string path, Engine.AutomationEngineInstance engine)
+        private static (string variableName, int index) GetLastFileCounter(string path, AutomationEngineInstance engine)
         {
             var f0 = VariableNameControls.GetWrappedVariableName(SystemVariables.FileCounter_F0.VariableName, engine);
             var f00 = VariableNameControls.GetWrappedVariableName(SystemVariables.FileCounter_F00.VariableName, engine);
@@ -98,7 +98,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static (string beforeCounter, string counterVariable, string afterCounter) ParseFileCounterContainPath(string path, Engine.AutomationEngineInstance engine)
+        private static (string beforeCounter, string counterVariable, string afterCounter) ParseFileCounterContainPath(string path, AutomationEngineInstance engine)
         {
             var r = GetLastFileCounter(path, engine);
             if (r.index < 0)
@@ -119,7 +119,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static string ExpandValueOrUserVariableAsFilePath_SupportFileCounter(string parameterValue, PropertyFilePathSetting setting, Engine.AutomationEngineInstance engine)
+        private static string ExpandValueOrUserVariableAsFilePath_SupportFileCounter(string parameterValue, PropertyFilePathSetting setting, AutomationEngineInstance engine)
         {
             // check contains FileCounter
             if (!ContainsFileCounterVariable(parameterValue, engine))
@@ -225,7 +225,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static string ExpandValueOrUserVariableAsFilePath_NoSupportFileCounter(string parameterValue, PropertyFilePathSetting setting, Engine.AutomationEngineInstance engine)
+        private static string ExpandValueOrUserVariableAsFilePath_NoSupportFileCounter(string parameterValue, PropertyFilePathSetting setting, AutomationEngineInstance engine)
         {
             var path = parameterValue.ExpandValueOrUserVariable(engine);
 
