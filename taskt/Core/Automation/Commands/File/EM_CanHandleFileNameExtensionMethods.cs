@@ -22,8 +22,9 @@ namespace taskt.Core.Automation.Commands
             string parameterValue = prop.GetValue(command)?.ToString() ?? "";
 
             var fn = parameterValue.ExpandValueOrUserVariable(engine);
-            var invs = Path.GetInvalidFileNameChars();
-            if (fn.IndexOfAny(invs) < 0)
+            //var invs = Path.GetInvalidFileNameChars();
+            //if (fn.IndexOfAny(invs) < 0)
+            if (IsValidFileName(fn))
             {
                 return fn;
             }
@@ -31,6 +32,17 @@ namespace taskt.Core.Automation.Commands
             {
                 throw new Exception($"File Name contains invalid chars. File Name: '{fn}'");
             }
+        }
+
+        /// <summary>
+        /// check valid filename
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool IsValidFileName(string fileName)
+        {
+            var invs = Path.GetInvalidFileNameChars();
+            return (fileName.IndexOfAny(invs) < 0);
         }
     }
 }
