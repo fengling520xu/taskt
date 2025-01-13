@@ -3918,6 +3918,26 @@ namespace taskt.Core.Script
                     ("v_WaitForFile", "v_WaitTimeForFile"),
                 }
             );
+
+            // LoadScriptFile/RunScriptFile v_tasktFile -> v_TargetFilePath, v_WaitForFile -> v_WaitTimeForFile
+            ChangeMultiAttributeNames(doc,
+                new Func<XElement, bool>(el =>
+                {
+                    switch (GetCommandName(el))
+                    {
+                        case "LoadScriptFileCommand":
+                        case "RunScriptFileCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }),
+                new List<(string, string)>
+                {
+                    ("v_taskPath", "v_TargetFilePath"),
+                    ("v_WaitForFile", "v_WaitTimeForFile"),
+                }
+            );
         }
 
         /// <summary>

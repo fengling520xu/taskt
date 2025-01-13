@@ -27,7 +27,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**C:\\temp\\myscript.xml**", PropertyDetailSampleUsage.ValueType.Value, "Script File")]
         [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Script File")]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "xml")]
-        public string v_taskPath { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -56,7 +56,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         public RunScriptFileCommand()
         {
@@ -84,7 +84,7 @@ namespace taskt.Core.Automation.Commands
         {
             //var startFile = v_taskPath.ConvertToUserVariable(sender);
             //string startFile = FilePathControls.FormatFilePath_NoFileCounter(v_taskPath, engine, "xml", true);
-            var startFile = FilePathControls.WaitForFile(this, nameof(v_taskPath), nameof(v_WaitForFile), engine);
+            var startFile = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
 
             //create variable list
             var variableList = new List<Script.ScriptVariable>();
@@ -173,7 +173,7 @@ namespace taskt.Core.Automation.Commands
 
             //var startFile = v_taskPath.ConvertToUserVariable(engine);
             //var startFile = FilePathControls.FormatFilePath_NoFileCounter(v_taskPath, engine, "xml", true);
-            var startFile = this.ExpandValueOrUserVariableAsFilePath(nameof(v_taskPath), engine);
+            var startFile = this.ExpandValueOrUserVariableAsFilePath(nameof(v_TargetFilePath), engine);
 
             // check file exists
             if (!System.IO.File.Exists(startFile))
