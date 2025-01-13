@@ -371,6 +371,7 @@
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByExcelSerialCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\FormatDateTimeByTextCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\IDateTimeResultProperties.cs" />
+    <Compile Include="Core\Automation\Commands\File\AFileCopyMoveFileCommands.cs" />
     <Compile Include="Core\Automation\Commands\File\AFileExistsFilePathBeforeAfterResultCommands.cs" />
     <Compile Include="Core\Automation\Commands\File\AFileExistsFilePathPathResultCommands.cs" />
     <Compile Include="Core\Automation\Commands\File\AFileFilePathCommands.cs" />

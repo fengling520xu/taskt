@@ -15,7 +15,7 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
     // TODO: change to file action command
-    public sealed class MoveFileCommand : AFileExistsFilePathBeforeAfterResultCommands
+    public sealed class MoveFileCommand : AFileCopyMoveFileCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -33,31 +33,31 @@ namespace taskt.Core.Automation.Commands
         //public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
         [PropertyDescription("Destination Folder Path to Move")]
-        [PropertyDisplayText(true, "Folder")]
-        [PropertyParameterOrder(6000)]
-        public string v_DestinationFolderPath { get; set; }
+        //[PropertyDisplayText(true, "Folder")]
+        //[PropertyParameterOrder(6000)]
+        public override string v_DestinationFolderPath { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
-        [PropertyDescription("Create Folder When Destination Folder does not Exist")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
-        [Remarks("Specify whether the directory should be created if it does not already exist.")]
-        [PropertyIsOptional(true, "No")]
-        [PropertyParameterOrder(7000)]
-        public string v_CreateDirectory { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        //[PropertyDescription("Create Folder When Destination Folder does not Exist")]
+        //[PropertyUISelectionOption("Yes")]
+        //[PropertyUISelectionOption("No")]
+        //[Remarks("Specify whether the directory should be created if it does not already exist.")]
+        //[PropertyIsOptional(true, "No")]
+        //[PropertyParameterOrder(7000)]
+        //public string v_CreateDirectory { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
-        [PropertyDescription("Delete File if it already Exists")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
-        [Remarks("Specify whether the file should be deleted first if it is already found to exist.")]
-        [PropertyIsOptional(true, "No")]
-        [PropertyParameterOrder(8000)]
-        public string v_DeleteExisting { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        //[PropertyDescription("Delete File if it already Exists")]
+        //[PropertyUISelectionOption("Yes")]
+        //[PropertyUISelectionOption("No")]
+        //[Remarks("Specify whether the file should be deleted first if it is already found to exist.")]
+        //[PropertyIsOptional(true, "No")]
+        //[PropertyParameterOrder(8000)]
+        //public string v_DeleteExisting { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
@@ -168,41 +168,42 @@ namespace taskt.Core.Automation.Commands
             //);
 
             this.FileAction(engine,
-                new Func<string, string>(path =>
-                {
-                    // todo: use folderAction
-                    var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
+                //new Func<string, string>(path =>
+                //{
+                //    // todo: use folderAction
+                //    var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
 
-                    if (!Directory.Exists(destinationFolder))
-                    {
-                        if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_CreateDirectory), engine))
-                        {
-                            Directory.CreateDirectory(destinationFolder);
-                        }
-                        else
-                        {
-                            throw new Exception("destination folder does not exists: " + destinationFolder);
-                        }
-                    }
+                //    if (!Directory.Exists(destinationFolder))
+                //    {
+                //        if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_CreateDirectory), engine))
+                //        {
+                //            Directory.CreateDirectory(destinationFolder);
+                //        }
+                //        else
+                //        {
+                //            throw new Exception("destination folder does not exists: " + destinationFolder);
+                //        }
+                //    }
 
-                    //get source file name and info
-                    FileInfo sourceFileInfo = new FileInfo(path);
+                //    //get source file name and info
+                //    FileInfo sourceFileInfo = new FileInfo(path);
 
-                    //create destination
-                    var destinationPath = Path.Combine(destinationFolder, sourceFileInfo.Name);
+                //    //create destination
+                //    var destinationPath = Path.Combine(destinationFolder, sourceFileInfo.Name);
 
-                    // todo: check folder is same
+                //    // todo: check folder is same
 
-                    //delete if it already exists per user
-                    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
-                    {
-                        File.Delete(destinationPath);
-                    }
+                //    //delete if it already exists per user
+                //    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+                //    {
+                //        File.Delete(destinationPath);
+                //    }
 
-                    File.Move(path, destinationPath);
+                //    File.Move(path, destinationPath);
 
-                    return destinationPath;
-                })
+                //    return destinationPath;
+                //})
+                this.CreateActionFunc(File.Move, engine)
             );
         }
     }
