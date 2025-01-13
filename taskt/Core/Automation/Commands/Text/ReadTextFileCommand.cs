@@ -20,7 +20,7 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
         [PropertyFilePathSetting(true, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "txt,log,json")]
-        public string v_FilePath { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -37,7 +37,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         public ReadTextFileCommand()
         {
@@ -74,14 +74,14 @@ namespace taskt.Core.Automation.Commands
             //    result = webClient.DownloadString(v_FilePath.ConvertToUserVariable(engine));
             //}
 
-            var filePath = FilePathControls.WaitForFile(this, nameof(v_FilePath), nameof(v_WaitForFile), engine);
+            var filePath = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
             string result;
             if (FilePathControls.IsURL(filePath))
             {
                 WebClient webClient = new WebClient();
                 webClient.Encoding = System.Text.Encoding.UTF8;
                 webClient.Headers.Add("user-agent", "request");
-                result = webClient.DownloadString(v_FilePath.ExpandValueOrUserVariable(engine));
+                result = webClient.DownloadString(v_TargetFilePath.ExpandValueOrUserVariable(engine));
             }
             else
             {

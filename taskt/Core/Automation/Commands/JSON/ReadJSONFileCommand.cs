@@ -33,7 +33,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**http://example.com/api/**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Path")]
         [PropertyDetailSampleUsage("**{{{vURL}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Path")]
         [PropertyFilePathSetting(true, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "json,txt")]
-        public string v_FilePath { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_OutputJSONName))]
@@ -41,7 +41,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         public ReadJSONFileCommand()
         {
@@ -62,11 +62,11 @@ namespace taskt.Core.Automation.Commands
             //{
             //    filePath = v_FilePath.ConvertToUserVariable(engine);
             //}
-            string filePath = FilePathControls.WaitForFile(this, nameof(v_FilePath), nameof(v_WaitForFile), engine);
+            string filePath = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
 
             ScriptCommand readFile = new ReadTextFileCommand
             {
-                v_FilePath = filePath,
+                v_TargetFilePath = filePath,
                 v_userVariableName = this.v_Result
             };
             readFile.RunCommand(engine);

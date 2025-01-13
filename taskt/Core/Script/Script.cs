@@ -3893,6 +3893,31 @@ namespace taskt.Core.Script
                 ("v_NewExtention", "v_NewExtension"),
                 ("v_NewName", "v_NewFileName"),
             });
+
+            // many commands v_FilePath -> v_TargetFilePath, v_WaitForFile -> v_WaitTimeForFile
+            ChangeMultiAttributeNames(doc,
+                new Func<XElement, bool>(el =>
+                {
+                    switch (GetCommandName(el))
+                    {
+                        case "MailKitLoadEMailCommand": // EMail
+                        case "ExcelOpenWorkbookCommand":    // Excel
+                        case "ExecuteOCRCommand":       // Image
+                        case "ExecuteTesseractOCRCommand":
+                        case "ReadJSONFileCommand":     // JSON
+                        case "ReadTextFileCommand":     // Text
+                        case "WordOpenDocumentCommand": // Word
+                            return true;
+                        default:
+                            return false;
+                    }
+                }),
+                new List<(string, string)>()
+                {
+                    ("v_FilePath", "v_TargetFilePath"),
+                    ("v_WaitForFile", "v_WaitTimeForFile"),
+                }
+            );
         }
 
         /// <summary>

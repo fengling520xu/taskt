@@ -26,7 +26,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "png,bmp,gif,jpg,jpeg")]
         [PropertyIsOptional(true, "")]
         [PropertyValidationRule("File Path", PropertyValidationRule.ValidationRuleFlags.None)]
-        public string v_FilePath { get; set; }
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyDescription("Image variable")]
@@ -38,7 +38,6 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Result Text")]
         [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
         public string v_Result { get; set; }
-
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
@@ -52,7 +51,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        public string v_WaitTimeForFile { get; set; }
 
         public ExecuteTesseractOCRCommand()
         {
@@ -69,9 +68,9 @@ namespace taskt.Core.Automation.Commands
                 {
                     Pix img;
 
-                    if (v_FilePath != string.Empty)
+                    if (v_TargetFilePath != string.Empty)
                     {
-                        var imagePath = FilePathControls.WaitForFile(this, nameof(v_FilePath), nameof(v_WaitForFile), engine);
+                        var imagePath = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
                         img = Pix.LoadFromFile(imagePath);
                     }
                     else if (v_ImageVar != string.Empty)

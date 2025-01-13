@@ -120,7 +120,7 @@ namespace taskt.Core.Automation.Commands
             var openFile = new ExcelOpenWorkbookCommand()
             {
                 v_InstanceName = instanceName,
-                v_FilePath = this.v_FilePath,
+                v_TargetFilePath = this.v_FilePath,
             };
             openFile.RunCommand(engine);
 
