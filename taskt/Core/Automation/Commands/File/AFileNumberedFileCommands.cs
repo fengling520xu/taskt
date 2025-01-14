@@ -95,6 +95,14 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         protected void SearchNonExistentFileAction(PropertyFilePathSetting setting, Engine.AutomationEngineInstance engine)
         {
+            if (string.IsNullOrEmpty(v_TargetFolderPath))
+            {
+                v_TargetFolderPath = Path.GetDirectoryName(engine.FileName);
+            }
+            if (!EM_CanHandleFilePathExtentionMethods.IsFullPath(v_TargetFolderPath))
+            {
+                v_TargetFolderPath = Path.Combine(Path.GetDirectoryName(engine.FileName), v_TargetFolderPath);
+            }
             var targetFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
 
             string preCounter = (string.IsNullOrEmpty(v_BeforeFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_BeforeFileCounter), "Before File Counter", engine);
