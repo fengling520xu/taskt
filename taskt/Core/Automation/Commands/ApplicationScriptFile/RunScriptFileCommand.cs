@@ -29,10 +29,8 @@ namespace taskt.Core.Automation.Commands
         public override string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("I want to assign Variables on Startup")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
         [PropertySelectionChangeEvent(nameof(cmbAssignVariables_SelectedItemChanged))]

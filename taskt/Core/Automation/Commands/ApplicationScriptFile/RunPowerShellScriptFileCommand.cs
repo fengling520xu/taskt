@@ -44,10 +44,8 @@ namespace taskt.Core.Automation.Commands
         public string v_PowerShellArgs { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Convert Variables before Execution")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
         [PropertyParameterOrder(7000)]

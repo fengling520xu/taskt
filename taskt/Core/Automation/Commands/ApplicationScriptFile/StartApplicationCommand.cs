@@ -43,10 +43,8 @@ namespace taskt.Core.Automation.Commands
         public string v_ProgramArgs { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Wait for the Application to Complete")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
         [PropertyDisplayText(false, "")]
         public string v_WaitForExit { get; set; }
