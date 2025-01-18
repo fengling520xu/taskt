@@ -40,7 +40,6 @@ namespace taskt.Core.Automation.Commands
         //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
         //public string v_WaitTimeForFile { get; set; }
 
-
         public UnloadScriptFileCommand()
         {
             //this.CommandName = "UnloadTaskCommand";

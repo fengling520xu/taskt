@@ -5,7 +5,6 @@ using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
-
     [Serializable]
     [Attributes.ClassAttributes.Group("Application/Script")]
     [Attributes.ClassAttributes.SubGruop("Windows Script File")]
