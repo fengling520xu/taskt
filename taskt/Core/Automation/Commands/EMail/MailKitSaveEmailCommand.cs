@@ -14,7 +14,7 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class MailKitSaveEMailCommand : ScriptCommand
+    public sealed class MailKitSaveEMailCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(EMailControls), nameof(EMailControls.v_InputEMailName))]
@@ -56,6 +56,7 @@ namespace taskt.Core.Automation.Commands
             //{
             //    path = FilePathControls.FormatFilePath_NoFileCounter(v_SavePath, engine, "eml");
             //}
+            //var path = this.ExpandValueOrUserVariableAsFilePath(nameof(v_SavePath), engine);
             var path = this.ExpandValueOrUserVariableAsFilePath(nameof(v_SavePath), engine);
 
             mail.WriteTo(path);

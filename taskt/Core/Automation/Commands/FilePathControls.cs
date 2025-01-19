@@ -478,23 +478,23 @@ namespace taskt.Core.Automation.Commands
             }
         }
 
-        /// <summary>
-        /// expand value or user variable to FilePath. this method use PropertyFilePathSetting
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        public static string ExpandValueOrUserVariableAsFilePath(this ScriptCommand command, string parameterName, Engine.AutomationEngineInstance engine)
-        {
-            var prop = command.GetProperty(parameterName);
-            var vProp = prop.GetVirtualProperty();
-            string parameterValue = prop.GetValue(command)?.ToString() ?? "";
+        ///// <summary>
+        ///// expand value or user variable to FilePath. this method use PropertyFilePathSetting
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="parameterName"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        //public static string ExpandValueOrUserVariableAsFilePath(this ScriptCommand command, string parameterName, Engine.AutomationEngineInstance engine)
+        //{
+        //    var prop = command.GetProperty(parameterName);
+        //    var vProp = prop.GetVirtualProperty();
+        //    string parameterValue = prop.GetValue(command)?.ToString() ?? "";
 
-            var pathSetting = PropertyControls.GetCustomAttributeWithVirtual<PropertyFilePathSetting>(prop, vProp) ?? new PropertyFilePathSetting();
+        //    var pathSetting = PropertyControls.GetCustomAttributeWithVirtual<PropertyFilePathSetting>(prop, vProp) ?? new PropertyFilePathSetting();
 
-            return ExpandValueOrUserVariableAsFilePath(parameterValue, pathSetting, engine);
-        }
+        //    return ExpandValueOrUserVariableAsFilePath(parameterValue, pathSetting, engine);
+        //}
 
         ///// <summary>
         ///// expand value or user variable as File Name
