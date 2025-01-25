@@ -393,6 +393,10 @@
     <Compile Include="Core\Automation\Commands\File\IFileExistsFilePathProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFileExistsFilePathPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\File\IFilePathProperties.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\AFileFilePathCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\AFolderExistsFolderBeforeAfterResultCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\AFolderExistsFolderPathCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\AFolderExistsFolderPathPathResultCommands.cs" />
     <Compile Include="Core\Automation\Commands\Folder\GetSpecialFolderPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\Folder\ICanHandleFolderPath.cs" />
     <Compile Include="Core\Automation\Commands\Folder\IFolderExistsFolderPathBeforeAfterPathResultProperties.cs" />
