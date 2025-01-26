@@ -50,8 +50,9 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsValidPathString(string path)
         {
-            var invs = Path.GetInvalidPathChars();
-            return (path.IndexOfAny(invs) < 0);
+            //var invs = Path.GetInvalidPathChars();
+            //return (path.IndexOfAny(invs) < 0);
+            return EM_CanHandleFileOrFolderPathExtensionMethods.IsValidPathString(path);
         }
 
         /// <summary>
