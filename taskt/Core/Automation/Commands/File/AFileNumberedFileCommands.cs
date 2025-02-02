@@ -6,13 +6,13 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    public abstract class AFileNumberedFileCommands : ScriptCommand, ICanHandleFileName
+    public abstract class AFileNumberedFileCommands : AFolderExistsFolderPathCommands, ICanHandleFileName
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
         [PropertyIsOptional(true, "Script File Folder")]
         [PropertyValidationRule("Folder", PropertyValidationRule.ValidationRuleFlags.None)]
-        public string v_TargetFolderPath { get; set; }
+        public override string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -24,7 +24,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vPreFix}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Name Before Counter")]
         [PropertyValidationRule("Before", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Before")]
-        public string v_BeforeFileCounter { get; set; }
+        [PropertyParameterOrder(6000)]
+        public virtual string v_BeforeFileCounter { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -37,7 +38,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vDigits}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Counter")]
         [PropertyValidationRule("Digits", PropertyValidationRule.ValidationRuleFlags.LessThanZero | PropertyValidationRule.ValidationRuleFlags.EqualsZero)]
         [PropertyDisplayText(true, "Digits")]
-        public string v_Digits { get; set; }
+        [PropertyParameterOrder(6100)]
+        public virtual string v_Digits { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -49,7 +51,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vPostFix}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Name After Counter")]
         [PropertyValidationRule("After", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "After")]
-        public string v_AfterFileCounter { get; set; }
+        [PropertyParameterOrder(6200)]
+        public virtual string v_AfterFileCounter { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -61,11 +64,13 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vExtension}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Name After Counter")]
         [PropertyValidationRule("Extension", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Extension")]
-        public string v_Extension { get; set; }
+        [PropertyParameterOrder(6300)]
+        public virtual string v_Extension { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        public string v_Result { get; set; }
+        [PropertyParameterOrder(6400)]
+        public virtual string v_Result { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -78,12 +83,13 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vStart}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Start Value")]
         [PropertyValidationRule("Start", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "Start Value")]
-        public string v_StartValue { get; set; }
+        [PropertyParameterOrder(6500)]
+        public virtual string v_StartValue { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        [PropertyFirstValue("0")]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //[PropertyFirstValue("10")]
+        //public override string v_WaitTimeForFolder { get; set; }
 
         public AFileNumberedFileCommands()
         {
@@ -97,95 +103,102 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         protected void SearchNonExistentFileAction(PropertyFilePathSetting setting, Engine.AutomationEngineInstance engine)
         {
-            if (string.IsNullOrEmpty(v_TargetFolderPath))
-            {
-                v_TargetFolderPath = Path.GetDirectoryName(engine.FileName);
-            }
-            if (!EM_CanHandleFilePathExtentionMethods.IsFullPath(v_TargetFolderPath))
-            {
-                v_TargetFolderPath = Path.Combine(Path.GetDirectoryName(engine.FileName), v_TargetFolderPath);
-            }
-            var targetFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
+            //if (string.IsNullOrEmpty(v_TargetFolderPath))
+            //{
+            //    v_TargetFolderPath = Path.GetDirectoryName(engine.FileName);
+            //}
+            //if (!EM_CanHandleFilePathExtentionMethods.IsFullPath(v_TargetFolderPath))
+            //{
+            //    v_TargetFolderPath = Path.Combine(Path.GetDirectoryName(engine.FileName), v_TargetFolderPath);
+            //}
+            //var targetFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
 
-            string preCounter = (string.IsNullOrEmpty(v_BeforeFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_BeforeFileCounter), "Before File Counter", engine);
-            string postCoutner = (string.IsNullOrEmpty(v_AfterFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_AfterFileCounter), "After File Counter", engine);
-            string extension = (string.IsNullOrEmpty(v_Extension)) ? "" : this.ExpandValueOrUserVariable(nameof(v_Extension), "Extension", engine);
-            if (!string.IsNullOrEmpty(extension) && !extension.StartsWith("."))
-            {
-                extension = $".{extension}";
-            }
-
-            if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(preCounter))
-            {
-                throw new Exception($"Before File Counter has Invalid Charactor. Value: '{v_BeforeFileCounter}', Expand Value: '{preCounter}'");
-            }
-            if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(postCoutner))
-            {
-                throw new Exception($"After File Counter has Invalid Charactor. Value: '{v_AfterFileCounter}', Expand Value: '{postCoutner}'");
-            }
-            if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(extension))
-            {
-                throw new Exception($"Extension has Invalid Charactor. Value: '{v_Extension}', Expand Value: '{extension}'");
-            }
-
-            int digits = this.ExpandValueOrUserVariableAsInteger(nameof(v_Digits), engine);
-            string counterFormat = "{0:";
-            for (int i = 0; i < digits; i++)
-            {
-                counterFormat += "0";
-            }
-            counterFormat += "}";
-
-            if (string.IsNullOrEmpty(v_StartValue))
-            {
-                v_StartValue = "1";
-            }
-
-            int counter = this.ExpandValueOrUserVariableAsInteger(nameof(v_StartValue), engine);
-            int firstValue = counter;
-            string path;
-            while (true)
-            {
-                path = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
-
-                if (!EM_CanHandleFilePathExtentionMethods.IsValidPathString(path))
+            this.FolderAction(engine,
+                new Func<string, string>(targetFolder =>
                 {
-                    throw new Exception($"Contains Invalid File Path Charactor. Path: '{path}'");
-                }
-
-                if (File.Exists(path))
-                {
-                    counter++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            string res;
-            switch (setting.supportFileCounter)
-            {
-                case PropertyFilePathSetting.FileCounterBehavior.LastExists:
-                    if (counter == firstValue)
+                    string preCounter = (string.IsNullOrEmpty(v_BeforeFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_BeforeFileCounter), "Before File Counter", engine);
+                    string postCoutner = (string.IsNullOrEmpty(v_AfterFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_AfterFileCounter), "After File Counter", engine);
+                    string extension = (string.IsNullOrEmpty(v_Extension)) ? "" : this.ExpandValueOrUserVariable(nameof(v_Extension), "Extension", engine);
+                    if (!string.IsNullOrEmpty(extension) && !extension.StartsWith("."))
                     {
-                        // not exist
-                        res = "";
+                        extension = $".{extension}";
                     }
-                    else
+
+                    if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(preCounter))
                     {
-                        counter--;
-                        res = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
+                        throw new Exception($"Before File Counter has Invalid Charactor. Value: '{v_BeforeFileCounter}', Expand Value: '{preCounter}'");
                     }
-                    break;
+                    if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(postCoutner))
+                    {
+                        throw new Exception($"After File Counter has Invalid Charactor. Value: '{v_AfterFileCounter}', Expand Value: '{postCoutner}'");
+                    }
+                    if (!EM_CanHandleFileNameExtensionMethods.IsValidFileName(extension))
+                    {
+                        throw new Exception($"Extension has Invalid Charactor. Value: '{v_Extension}', Expand Value: '{extension}'");
+                    }
 
-                case PropertyFilePathSetting.FileCounterBehavior.FirstNotExists:
-                default:
-                    res = path;
-                    break;
-            }
+                    int digits = this.ExpandValueOrUserVariableAsInteger(nameof(v_Digits), engine);
+                    string counterFormat = "{0:";
+                    for (int i = 0; i < digits; i++)
+                    {
+                        counterFormat += "0";
+                    }
+                    counterFormat += "}";
 
-            res.StoreInUserVariable(engine, v_Result);
+                    if (string.IsNullOrEmpty(v_StartValue))
+                    {
+                        v_StartValue = "1";
+                    }
+
+                    int counter = this.ExpandValueOrUserVariableAsInteger(nameof(v_StartValue), engine);
+                    int firstValue = counter;
+                    string path;
+                    while (true)
+                    {
+                        path = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
+
+                        if (!EM_CanHandleFilePathExtentionMethods.IsValidPathString(path))
+                        {
+                            throw new Exception($"Contains Invalid File Path Charactor. Path: '{path}'");
+                        }
+
+                        if (File.Exists(path))
+                        {
+                            counter++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    string res;
+                    switch (setting.supportFileCounter)
+                    {
+                        case PropertyFilePathSetting.FileCounterBehavior.LastExists:
+                            if (counter == firstValue)
+                            {
+                                // not exist
+                                res = "";
+                            }
+                            else
+                            {
+                                counter--;
+                                res = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
+                            }
+                            break;
+
+                        case PropertyFilePathSetting.FileCounterBehavior.FirstNotExists:
+                        default:
+                            res = path;
+                            break;
+                    }
+
+                    res.StoreInUserVariable(engine, v_Result);
+
+                    return targetFolder;
+                })
+            );
         }
     }
 }
