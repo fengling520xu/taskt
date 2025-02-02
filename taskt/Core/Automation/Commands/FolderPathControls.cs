@@ -96,19 +96,19 @@ namespace taskt.Core.Automation.Commands
             }
         }
 
-        /// <summary>
-        /// wait for folder
-        /// </summary>
-        /// <param name="pathValue">NOT use PropertyFilePathSetting</param>
-        /// <param name="waitTimeValue"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        public static string WaitForFolder(string pathValue, string waitTimeValue, Engine.AutomationEngineInstance engine)
-        {
-            var path = pathValue.ExpandValueOrUserVariableAsFolderPath(engine);
-            var waitTime = waitTimeValue.ExpandValueOrUserVariableAsInteger("Wait Time", engine);
-            return WaitForFolder(path, waitTime, engine);
-        }
+        ///// <summary>
+        ///// wait for folder
+        ///// </summary>
+        ///// <param name="pathValue">NOT use PropertyFilePathSetting</param>
+        ///// <param name="waitTimeValue"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        //public static string WaitForFolder(string pathValue, string waitTimeValue, Engine.AutomationEngineInstance engine)
+        //{
+        //    var path = pathValue.ExpandValueOrUserVariableAsFolderPath(engine);
+        //    var waitTime = waitTimeValue.ExpandValueOrUserVariableAsInteger("Wait Time", engine);
+        //    return WaitForFolder(path, waitTime, engine);
+        //}
 
         /// <summary>
         /// wait for folder
