@@ -55,7 +55,6 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
         [PropertyDescription("Wait Time For Destination Folder")]
-        [PropertyFirstValue("0")]
         [PropertyParameterOrder(30000)]
         public virtual string v_WaitTimeForFolder { get; set; }
 
