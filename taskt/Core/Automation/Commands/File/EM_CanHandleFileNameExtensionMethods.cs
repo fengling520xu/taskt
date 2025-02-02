@@ -22,8 +22,6 @@ namespace taskt.Core.Automation.Commands
             string parameterValue = prop.GetValue(command)?.ToString() ?? "";
 
             var fn = parameterValue.ExpandValueOrUserVariable(engine);
-            //var invs = Path.GetInvalidFileNameChars();
-            //if (fn.IndexOfAny(invs) < 0)
             if (IsValidFileName(fn))
             {
                 return fn;

@@ -96,78 +96,8 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //var targetFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
-
-            //string preCounter = (string.IsNullOrEmpty(v_BeforeFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_BeforeFileCounter), "Before File Counter", engine);
-            //string postCoutner = (string.IsNullOrEmpty(v_AfterFileCounter)) ? "" : this.ExpandValueOrUserVariable(nameof(v_AfterFileCounter), "After File Counter", engine);
-            //string extension = (string.IsNullOrEmpty(v_Extension)) ? "" : this.ExpandValueOrUserVariable(nameof(v_Extension), "Extension", engine);
-            //if (!string.IsNullOrEmpty(extension) && !extension.StartsWith("."))
-            //{
-            //    extension = $".{extension}";
-            //}
-
-            //if (HasInvalidFileNameChar(preCounter))
-            //{
-            //    throw new Exception($"Before File Counter has Invalid Charactor. Value: '{v_BeforeFileCounter}', Expand Value: '{preCounter}'");
-            //}
-            //if (HasInvalidFileNameChar(postCoutner))
-            //{
-            //    throw new Exception($"After File Counter has Invalid Charactor. Value: '{v_AfterFileCounter}', Expand Value: '{postCoutner}'");
-            //}
-            //if (HasInvalidFileNameChar(extension))
-            //{
-            //    throw new Exception($"Extension has Invalid Charactor. Value: '{v_Extension}', Expand Value: '{extension}'");
-            //}
-
-            //int digits = this.ExpandValueOrUserVariableAsInteger(nameof(v_Digits), engine);
-            //string counterFormat = "{0:";
-            //for (int i = 0; i < digits; i++) 
-            //{
-            //    counterFormat += "0";
-            //}
-            //counterFormat += "}";
-
-            //if (string.IsNullOrEmpty(v_StartValue))
-            //{
-            //    v_StartValue = "1";
-            //}
-
-            //var invChars = Path.GetInvalidPathChars();
-
-            //int counter = this.ExpandValueOrUserVariableAsInteger(nameof(v_StartValue), engine);
-            //string path;
-            //while (true)
-            //{
-            //    path = Path.Combine(targetFolder, $"{preCounter}{string.Format(counterFormat, counter)}{postCoutner}{extension}");
-
-            //    if (path.IndexOfAny(invChars) > 0)
-            //    {
-            //        throw new Exception($"Contains Invalid File Path Charactor. Path: '{path}'");
-            //    }
-
-            //    if (File.Exists(path))
-            //    {
-            //        counter++;
-            //    }
-            //    else
-            //    {
-            //        break;
-            //    }
-            //}
-            //path.StoreInUserVariable(engine, v_Result);
-
             var attr = new PropertyFilePathSetting(true, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.FirstNotExists);
             this.SearchNonExistentFileAction(attr, engine);
         }
-
-        ///// <summary>
-        ///// check string has invalid file name chars
-        ///// </summary>
-        ///// <param name="fn"></param>
-        ///// <returns></returns>
-        //private static bool HasInvalidFileNameChar(string fn)
-        //{
-        //    return (fn.IndexOfAny(new char[] { '\\', '/' }) > 0);
-        //}
     }
 }

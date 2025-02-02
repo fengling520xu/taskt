@@ -53,87 +53,10 @@ namespace taskt.Core.Automation.Commands
 
         public GetFileInformationCommand()
         {
-            //this.CommandName = "GetFileInfoCommand";
-            //this.SelectionName = "Get File Info";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //var targetFile = FilePathControls.WaitForFile(this, nameof(v_TargetFileName), nameof(v_WaitTime), engine);
-            //var fileInfo = new System.IO.FileInfo(targetFile);
-
-            //var infoType = this.GetUISelectionValue(nameof(v_InfoType), engine);
-            //string ret = "";
-            //switch (infoType)
-            //{
-            //    case "file size":
-            //        ret = fileInfo.Length.ToString();
-            //        break;
-            //    case "readonly file":
-            //        ret = fileInfo.IsReadOnly ? "TRUE" : "FALSE";
-            //        break;
-            //    case "hidden file":
-            //        ret = (((System.IO.FileAttributes)fileInfo.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden) ? "TRUE": "FALSE";
-            //        break;
-            //    case "creation time":
-            //        ret = fileInfo.CreationTime.ToString();
-            //        break;
-            //    case "last write time":
-            //        ret = fileInfo.LastWriteTime.ToString();
-            //        break;
-            //    case "last access time":
-            //        ret = fileInfo.LastAccessTime.ToString();
-            //        break;
-            //    //default:
-            //    //    throw new Exception(infoType + " is not support.");
-            //}
-
-            //ret.StoreInUserVariable(engine, v_UserVariableName);
-
-            //FilePathControls.FileAction(this, engine,
-            //    new Action<string>(path =>
-            //    {
-            //        var fileInfo = new System.IO.FileInfo(path);
-
-            //        var infoType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_InfoType), engine);
-            //        string ret = "";
-            //        switch (infoType)
-            //        {
-            //            case "file size":
-            //                ret = fileInfo.Length.ToString();
-            //                break;
-            //            case "file size (kb)":
-            //                ret = (fileInfo.Length / 1024.0).ToString();
-            //                break;
-            //            case "file size (mb)":
-            //                ret = (fileInfo.Length / 1048576.0).ToString();
-            //                break;
-            //            case "file size (gb)":
-            //                ret = (fileInfo.Length / 1073741824.0).ToString();
-            //                break;
-            //            case "readonly file":
-            //                ret = fileInfo.IsReadOnly ? "TRUE" : "FALSE";
-            //                break;
-            //            case "hidden file":
-            //                ret = ((fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) ? "TRUE" : "FALSE";
-            //                break;
-            //            case "creation time":
-            //                ret = fileInfo.CreationTime.ToString();
-            //                break;
-            //            case "last write time":
-            //                ret = fileInfo.LastWriteTime.ToString();
-            //                break;
-            //            case "last access time":
-            //                ret = fileInfo.LastAccessTime.ToString();
-            //                break;
-            //        }
-
-            //        ret.StoreInUserVariable(engine, v_Result);
-            //    })
-            //);
-
             this.FileAction(engine, 
                 new Func<string, string>(path =>
                 {

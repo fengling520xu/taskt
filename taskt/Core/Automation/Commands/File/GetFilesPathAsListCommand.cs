@@ -86,10 +86,6 @@ namespace taskt.Core.Automation.Commands
 
         public GetFilesPathAsListCommand()
         {
-            //this.CommandName = "GetFilesCommand";
-            //this.SelectionName = "Get Files";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
@@ -103,26 +99,6 @@ namespace taskt.Core.Automation.Commands
             // get all files
             List<string> fullFilesList;
             fullFilesList = Directory.GetFiles(sourceFolder).ToList();
-
-            //if (!string.IsNullOrEmpty(searchFile))
-            //{
-            //    var searchMethod = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine);
-            //    switch (searchMethod)
-            //    {
-            //        case "contains":
-            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Contains(searchFile)).ToList();
-            //            break;
-            //        case "starts with":
-            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).StartsWith(searchFile)).ToList();
-            //            break;
-            //        case "ends with":
-            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).EndsWith(searchFile)).ToList();
-            //            break;
-            //        case "exact match":
-            //            filesList = filesList.Where(t => System.IO.Path.GetFileNameWithoutExtension(t).Equals(searchFile)).ToList();
-            //            break;
-            //    }
-            //}
 
             var compareFunc = this.GetCompareFunction(engine);
             var comparedFilesList = new List<string>();
@@ -146,8 +122,6 @@ namespace taskt.Core.Automation.Commands
                 extFilterdList = comparedFilesList;
             }
 
-            //filesList.StoreInUserVariable(engine, v_UserVariableName);
-            //this.StoreListInUserVariable(fullFilesList, nameof(v_Result), engine);
             this.StoreListInUserVariable(extFilterdList, engine);
         }
     }
