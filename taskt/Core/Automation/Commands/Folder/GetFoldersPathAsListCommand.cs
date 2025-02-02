@@ -16,11 +16,11 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class GetFoldersPathAsListCommand : ScriptCommand, ITextCompareProperties, IListResultProperties
+    public sealed class GetFoldersPathAsListCommand : AFolderExistsFolderPathCommands, ITextCompareProperties, IListResultProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_TargetFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -32,6 +32,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true, " Empty and searched All Folders")]
         [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Filter")]
+        [PropertyParameterOrder(6000)]
         public string v_SearchFolderName { get; set; }
 
         [XmlAttribute]
@@ -44,23 +45,27 @@ namespace taskt.Core.Automation.Commands
         //[PropertyIsOptional(true, "Contains")]
         [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CompareMethod))]
         [PropertyDescription("Folder Name Compare Method")]
+        [PropertyParameterOrder(6100)]
         public string v_CompareMethod { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CaseSensitive))]
+        [PropertyParameterOrder(6200)]
         public string v_CaseSensitive { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_TrimBeforeCompare))]
+        [PropertyParameterOrder(6300)]
         public string v_TrimBeforeCompare { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_OutputListName))]
+        [PropertyParameterOrder(6400)]
         public string v_Result { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //public string v_WaitTimeForFolder { get; set; }
 
         public GetFoldersPathAsListCommand()
         {
@@ -72,45 +77,32 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
+            //var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
 
-            // get folder list
-            var directoriesList = Directory.GetDirectories(sourceFolder).ToList();
-
-            var searchFolder = v_SearchFolderName.ExpandValueOrUserVariableAsFolderName(engine);
-            //if (!string.IsNullOrEmpty(searchFolder))
-            //{
-            //    switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CompareMethod), engine))
-            //    {
-            //        case "contains":
-            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Contains(searchFolder)).ToList();
-            //            break;
-            //        case "starts with":
-            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).StartsWith(searchFolder)).ToList();
-            //            break;
-            //        case "ends with":
-            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).EndsWith(searchFolder)).ToList();
-            //            break;
-            //        case "exact match":
-            //            directoriesList = directoriesList.Where(t => System.IO.Path.GetFileName(t).Equals(searchFolder)).ToList();
-            //            break;
-            //    }
-            //}
-
-            var compareFunc = this.GetCompareFunction(engine);
-
-            var filteredDirectory = new List<string>();
-            foreach (var f in directoriesList) 
-            {
-                if (compareFunc(Path.GetFileName(f), searchFolder))
+            this.FolderAction(engine,
+                new Func<string, string>(sourceFolder =>
                 {
-                    filteredDirectory.Add(f);
-                }
-            }
+                    // get folder list
+                    var directoriesList = Directory.GetDirectories(sourceFolder).ToList();
 
-            //directoriesList.StoreInUserVariable(engine, v_UserVariableName);
-            //this.StoreListInUserVariable(directoriesList, nameof(v_Result), engine);
-            this.StoreListInUserVariable(filteredDirectory, engine);
+                    var searchFolder = v_SearchFolderName.ExpandValueOrUserVariableAsFolderName(engine);
+
+                    var compareFunc = this.GetCompareFunction(engine);
+
+                    var filteredDirectory = new List<string>();
+                    foreach (var f in directoriesList)
+                    {
+                        if (compareFunc(Path.GetFileName(f), searchFolder))
+                        {
+                            filteredDirectory.Add(f);
+                        }
+                    }
+
+                    this.StoreListInUserVariable(filteredDirectory, engine);
+
+                    return sourceFolder;
+                })
+            );   
         }
     }
 }

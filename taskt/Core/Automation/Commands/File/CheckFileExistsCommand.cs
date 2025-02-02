@@ -38,33 +38,10 @@ namespace taskt.Core.Automation.Commands
 
         public CheckFileExistsCommand()
         {
-            //this.CommandName = "CheckFileExistsCommand";
-            //this.SelectionName = "Check File Exists";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //try
-            //{
-            //    FilePathControls.WaitForFile(this, nameof(v_TargetFileName), nameof(v_WaitTime), engine);
-            //    true.StoreInUserVariable(engine, v_UserVariableName);
-            //}
-            //catch
-            //{
-            //    false.StoreInUserVariable(engine, v_UserVariableName);
-            //}
-            //FilePathControls.FileAction(this, engine,
-            //    new Action<string>(path =>
-            //    {
-            //        true.StoreInUserVariable(engine, v_Result);
-            //    }),
-            //    new Action<Exception>(ex =>
-            //    {
-            //        false.StoreInUserVariable(engine, v_Result);
-            //    })
-            //);
             this.FileAction(engine,
                 new Func<string, string>(path =>
                 {

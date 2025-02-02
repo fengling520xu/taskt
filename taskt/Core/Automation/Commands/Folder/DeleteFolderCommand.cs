@@ -14,25 +14,26 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class DeleteFolderCommand : ScriptCommand
+    public sealed class DeleteFolderCommand : AFolderExistsFolderPathPathResultCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_TargetFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Folder Move to the Recycle Bin")]
         [PropertyIsOptional(true, "No")]
+        [PropertyParameterOrder(6000)]
         public string v_MoveToRecycleBin { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //public string v_WaitTimeForFolder { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        public string v_ResultPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
+        //public string v_ResultPath { get; set; }
 
         public DeleteFolderCommand()
         {
@@ -57,8 +58,23 @@ namespace taskt.Core.Automation.Commands
             //    System.IO.Directory.Delete(sourceFolder, true);
             //}
 
-            FolderPathControls.FolderAction(this, engine,
-                new Action<string>(path =>
+            //FolderPathControls.FolderAction(this, engine,
+            //    new Action<string>(path =>
+            //    {
+            //        //delete folder
+            //        if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_MoveToRecycleBin), engine))
+            //        {
+            //            Shell32.MoveToRecycleBin(path);
+            //        }
+            //        else
+            //        {
+            //            System.IO.Directory.Delete(path, true);
+            //        }
+            //    })
+            //);
+
+            this.FolderAction(engine,
+                new Func<string, string>(path =>
                 {
                     //delete folder
                     if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_MoveToRecycleBin), engine))
@@ -69,6 +85,7 @@ namespace taskt.Core.Automation.Commands
                     {
                         System.IO.Directory.Delete(path, true);
                     }
+                    return path;
                 })
             );
         }

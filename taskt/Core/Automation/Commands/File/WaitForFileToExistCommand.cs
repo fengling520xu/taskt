@@ -31,30 +31,10 @@ namespace taskt.Core.Automation.Commands
 
         public WaitForFileToExistCommand()
         {
-            //this.CommandName = "WaitForFileToExistCommand";
-            //this.SelectionName = "Wait For File";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            ////convert items to variables
-            //var fileName = v_FileName.ConvertToUserVariable(sender);
-
-            //var fileCheckFunc = new Func<(bool, object)>(() =>
-            //{
-            //    return (System.IO.File.Exists(fileName), null);
-            //});
-            //this.WaitProcess(nameof(v_WaitTime), "File", fileCheckFunc, engine);
-
-            //FilePathControls.FileAction(this, engine,
-            //    new Action<string>(path =>
-            //    {
-            //        // nothing to do
-            //    })
-            //);
-
             this.FileAction(engine,
                 new Func<string, string>(path =>
                 {

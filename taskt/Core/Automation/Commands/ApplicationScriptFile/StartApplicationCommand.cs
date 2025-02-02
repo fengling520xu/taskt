@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -14,20 +15,20 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_script))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class StartApplicationCommand : ScriptCommand
+    public sealed class StartApplicationCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
-        [PropertyDescription("Path to the Application or Application Name")]
-        [InputSpecification("Path", true)]
+        [PropertyDescription("Application Path or Application Name")]
+        [InputSpecification("Application Path or Name", true)]
         [PropertyDetailSampleUsage("**notepad**", "Run Notepad")]
         [PropertyDetailSampleUsage("**C:\\Apps\\myapp.exe**", PropertyDetailSampleUsage.ValueType.Value, "Path")]
         [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Path")]
         [Remarks("Provide a valid program name or enter a full path to the script/executable including the extension.\nIf file does not contain folder path, this command do not supplement folder path.")]
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
-        [PropertyValidationRule("Path", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Path")]
-        public string v_ProgramName { get; set; }
+        [PropertyValidationRule("Application", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Application")]
+        public string v_ApplicationPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -40,7 +41,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Arguments", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Arguments")]
-        public string v_ProgramArgs { get; set; }
+        public string v_Arguments { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
@@ -86,6 +87,11 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(false, "")]
         public string v_WaitTimeBeforeNext { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
+        [PropertyDescription("Wait Time for the Appliaction to Exist (sec)")]
+        public string v_WaitTimeForApplication { get; set; }
+
         public StartApplicationCommand()
         {
             //this.CommandName = "StartProcessCommand";
@@ -96,17 +102,53 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var vProgramName = v_ProgramName.ExpandValueOrUserVariable(engine);
-            var vProgramArgs = v_ProgramArgs.ExpandValueOrUserVariable(engine);
+            // local start process func
+            System.Diagnostics.Process StartProcess(string name, string arguments)
+            {
+                if (string.IsNullOrEmpty(arguments))
+                {
+                    return System.Diagnostics.Process.Start(name);
+                }
+                else
+                {
+                    return System.Diagnostics.Process.Start(name, arguments);
+                }
+            }
+
+            var args = v_Arguments.ExpandValueOrUserVariable(engine);
 
             System.Diagnostics.Process p;
-            if (string.IsNullOrEmpty(vProgramArgs))
+            try
             {
-                p = System.Diagnostics.Process.Start(vProgramName);
+                // consider the application name is specified
+                var appName = v_ApplicationPath.ExpandValueOrUserVariable(engine);
+                
+                //if (string.IsNullOrEmpty(args))
+                //{
+                //    p = System.Diagnostics.Process.Start(appName);
+                //}
+                //else
+                //{
+                //    p = System.Diagnostics.Process.Start(appName, args);
+                //}
+                p = StartProcess(appName, args);
             }
-            else
+            catch
             {
-                p = System.Diagnostics.Process.Start(vProgramName, vProgramArgs);
+                // consider the application path is specified
+                var filePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_ApplicationPath),
+                                new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "exe"), engine);
+                using (var v = new InnerScriptVariable(engine))
+                {
+                    var fileExists = new WaitForFileToExistCommand()
+                    {
+                        v_TargetFilePath = filePath,
+                        v_WaitTimeForFile = this.v_WaitTimeForApplication,
+                        v_ResultPath = v.VariableName,
+                    };
+                    fileExists.RunCommand(engine);
+                }
+                p = StartProcess(filePath, args);
             }
 
             var waitTimeUntil = this.ExpandValueOrUserVariableAsInteger(nameof(v_WaitTimeForExecute), engine);
@@ -128,9 +170,13 @@ namespace taskt.Core.Automation.Commands
                 p.MainWindowHandle.StoreInUserVariable(engine, v_WindowHandle);
             }
 
-            var waitForExit = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WaitForExit), engine);
+            //var waitForExit = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WaitForExit), engine);
+            //if (waitForExit == "yes")
+            //{
+            //    p.WaitForExit();
+            //}
 
-            if (waitForExit == "yes")
+            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_WaitForExit), engine))
             {
                 p.WaitForExit();
             }

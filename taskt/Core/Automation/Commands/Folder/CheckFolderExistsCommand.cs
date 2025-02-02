@@ -14,26 +14,27 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class CheckFolderExistsCommand : ScriptCommand
+    public sealed class CheckFolderExistsCommand : AFolderExistsFolderPathPathResultCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_TargetFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [Remarks("When the Folder Exists, Result is **TRUE**")]
+        [PropertyParameterOrder(6000)]
         public string v_Result { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        [PropertyIsOptional(true, "0")]
-        [PropertyFirstValue("0")]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //[PropertyIsOptional(true, "0")]
+        //[PropertyFirstValue("0")]
+        //public string v_WaitTimeForFolder { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        public string v_ResultPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
+        //public string v_ResultPath { get; set; }
 
         public CheckFolderExistsCommand()
         {
@@ -56,10 +57,22 @@ namespace taskt.Core.Automation.Commands
             //    false.StoreInUserVariable(engine, v_UserVariableName);
             //}
 
-            FolderPathControls.FolderAction(this, engine,
-                new Action<string>(path =>
+            //FolderPathControls.FolderAction(this, engine,
+            //    new Action<string>(path =>
+            //    {
+            //        true.StoreInUserVariable(engine, v_Result);
+            //    }),
+            //    new Action<Exception>(ex =>
+            //    {
+            //        false.StoreInUserVariable(engine, v_Result);
+            //    })
+            //);
+
+            this.FolderAction(engine,
+                new Func<string, string>(path =>
                 {
                     true.StoreInUserVariable(engine, v_Result);
+                    return path;
                 }),
                 new Action<Exception>(ex =>
                 {

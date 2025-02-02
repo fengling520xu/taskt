@@ -20,7 +20,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsFullPath(string path)
         {
-            return EM_CanHandleFileOrFolderPathPropertiesExtensionMethods.IsFullPath(path);
+            return EM_CanHandleFileOrFolderPathExtensionMethods.IsFullPath(path);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsURL(string path)
         {
-            return EM_CanHandleFileOrFolderPathPropertiesExtensionMethods.IsURL(path);
+            return EM_CanHandleFileOrFolderPathExtensionMethods.IsURL(path);
         }
 
         /// <summary>
@@ -50,8 +50,9 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsValidPathString(string path)
         {
-            var invs = Path.GetInvalidPathChars();
-            return (path.IndexOfAny(invs) < 0);
+            //var invs = Path.GetInvalidPathChars();
+            //return (path.IndexOfAny(invs) < 0);
+            return EM_CanHandleFileOrFolderPathExtensionMethods.IsValidPathString(path);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace taskt.Core.Automation.Commands
 
             // URL Check
             var checkPath = $"{beforeVariable}0{afterVariable}";
-            if (EM_CanHandleFileOrFolderPathPropertiesExtensionMethods.IsURL(checkPath))
+            if (EM_CanHandleFileOrFolderPathExtensionMethods.IsURL(checkPath))
             {
                 // path is URL, FileCounter, supportExtension does not work
                 if (!settings.allowURL)
@@ -229,7 +230,7 @@ namespace taskt.Core.Automation.Commands
         {
             var path = parameterValue.ExpandValueOrUserVariable(engine);
 
-            if (EM_CanHandleFileOrFolderPathPropertiesExtensionMethods.IsURL(path))
+            if (EM_CanHandleFileOrFolderPathExtensionMethods.IsURL(path))
             {
                 // path is URL
                 if (!settings.allowURL)
@@ -245,7 +246,7 @@ namespace taskt.Core.Automation.Commands
             {
                 // path is not URL
                 // when folder path not contains
-                if (!EM_CanHandleFileOrFolderPathPropertiesExtensionMethods.IsFullPath(path))
+                if (!EM_CanHandleFileOrFolderPathExtensionMethods.IsFullPath(path))
                 {
                     path = Path.Combine(Path.GetDirectoryName(engine.FileName), path);
                 }

@@ -1,9 +1,9 @@
 ﻿namespace taskt.Core.Automation.Commands
 {
     /// <summary>
-    /// for handle FilePath properties
+    /// for file or folder path
     /// </summary>
-    public interface ICanHandleFilePath : ICanHandleFileOrFolderPath
+    public interface ICanHandleFileOrFolderPath : ILExpandableProperties
     {
         // nothing
     }

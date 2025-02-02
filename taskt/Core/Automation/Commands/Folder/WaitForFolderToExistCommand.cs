@@ -13,22 +13,22 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class WaitForFolderToExistCommand : ScriptCommand
+    public sealed class WaitForFolderToExistCommand : AFolderExistsFolderPathPathResultCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_TargetFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        [PropertyIsOptional(true, "60")]
-        [PropertyFirstValue("60")]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //[PropertyIsOptional(true, "60")]
+        //[PropertyFirstValue("60")]
+        //public string v_WaitTimeForFolder { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        public string v_ResultPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
+        //public string v_ResultPath { get; set; }
 
         public WaitForFolderToExistCommand()
         {
@@ -48,10 +48,18 @@ namespace taskt.Core.Automation.Commands
             //{
             //    throw new Exception("Folder was Not Found in time!");
             //}
-            FolderPathControls.FolderAction(this, engine,
-                new Action<string>(path =>
+            //FolderPathControls.FolderAction(this, engine,
+            //    new Action<string>(path =>
+            //    {
+            //        // nothing to do
+            //    })
+            //);
+
+            this.FolderAction(engine,
+                new Func<string, string>(path =>
                 {
                     // nothing to do
+                    return path;
                 })
             );
         }

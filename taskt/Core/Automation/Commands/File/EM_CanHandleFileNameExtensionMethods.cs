@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -18,20 +17,20 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static string ExpandValueOrUserVariableAsFileName(this ICanHandleFileName command, string parameterName, Engine.AutomationEngineInstance engine)
         {
-            var prop = command.ToScriptCommand().GetProperty(parameterName);
-            string parameterValue = prop.GetValue(command)?.ToString() ?? "";
+            //var prop = command.ToScriptCommand().GetProperty(parameterName);
+            //string parameterValue = prop.GetValue(command)?.ToString() ?? "";
 
-            var fn = parameterValue.ExpandValueOrUserVariable(engine);
-            //var invs = Path.GetInvalidFileNameChars();
-            //if (fn.IndexOfAny(invs) < 0)
-            if (IsValidFileName(fn))
-            {
-                return fn;
-            }
-            else
-            {
-                throw new Exception($"File Name contains invalid chars. File Name: '{fn}'");
-            }
+            //var fn = parameterValue.ExpandValueOrUserVariable(engine);
+            //if (IsValidFileName(fn))
+            //{
+            //    return fn;
+            //}
+            //else
+            //{
+            //    throw new Exception($"File Name contains invalid chars. File Name: '{fn}'");
+            //}
+
+            return command.ExpandValueOrUserVariableAsFileOrFolderName(parameterName, engine, EM_CanHandleFileOrFolderName.ExpandValueType.File);
         }
 
         /// <summary>
@@ -41,8 +40,10 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsValidFileName(string fileName)
         {
-            var invs = Path.GetInvalidFileNameChars();
-            return (fileName.IndexOfAny(invs) < 0);
+            //var invs = Path.GetInvalidFileNameChars();
+            //return (fileName.IndexOfAny(invs) < 0);
+
+            return EM_CanHandleFileOrFolderName.IsValidFileOrFolderName(fileName);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace taskt.Core.Automation.Commands
             command.FileAction(engine, actionFunc,
                 new Action<string, string>((before, after) =>
                 {
-                    command.StoreResultFilePathInUserVariable(before, engine);
+                    command.StoreResultFilePathInUserVariable(after, engine);
                 }),
                 errorFunc
             );
