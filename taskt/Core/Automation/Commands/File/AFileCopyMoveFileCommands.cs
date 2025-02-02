@@ -69,7 +69,6 @@ namespace taskt.Core.Automation.Commands
         {
             return new Func<string, string>(path =>
             {
-                //// todo: use folderAction
                 //var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
 
                 //if (!Directory.Exists(destinationFolder))
