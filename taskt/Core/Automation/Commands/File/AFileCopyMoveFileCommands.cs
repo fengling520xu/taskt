@@ -83,8 +83,8 @@ namespace taskt.Core.Automation.Commands
                 //    }
                 //}
 
-                // TODO: fix to call extension methods
-                var destinationFolder = EM_CanHandleFolderPathExtensionMethods.ExpandValueOrUserVariableAsFolderPath(this, nameof(v_DestinationFolderPath), engine);
+                //var destinationFolder = EM_CanHandleFolderPathExtensionMethods.ExpandValueOrUserVariableAsFolderPath(this, nameof(v_DestinationFolderPath), engine);
+                var destinationFolder = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_DestinationFolderPath), engine);
                 using (var folderResult = new InnerScriptVariable(engine))
                 {
                     var checkFolder = new CheckFolderExistsCommand()
