@@ -76,7 +76,7 @@ namespace taskt.Core.Automation.Commands
             this.FolderAction(engine,
                 new Func<string, string>(path =>
                 {
-                    //delete folder
+                    // delete folder
                     if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_MoveToRecycleBin), engine))
                     {
                         Shell32.MoveToRecycleBin(path);
