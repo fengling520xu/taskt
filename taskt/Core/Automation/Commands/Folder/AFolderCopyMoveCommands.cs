@@ -118,7 +118,8 @@ namespace taskt.Core.Automation.Commands
                 // create final path
                 var newFolderPath = Path.Combine(destinationFolder, sourceFolderInfo.Name);
 
-                if (EM_CanHandleFileOrFolderPathExtensionMethods.IsSamePath(path, newFolderPath))
+                if (EM_CanHandleFileOrFolderPathExtensionMethods.IsSamePath(path, newFolderPath) ||
+                    EM_CanHandleFileOrFolderPathExtensionMethods.IsSubItem(newFolderPath, path))
                 {
                     switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenDestinationIsSame), engine))
                     {

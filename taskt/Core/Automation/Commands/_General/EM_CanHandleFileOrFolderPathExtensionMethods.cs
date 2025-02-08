@@ -62,5 +62,28 @@ namespace taskt.Core.Automation.Commands
 
             return p1.Equals(p2, (ignoreCase) ? System.StringComparison.Ordinal : System.StringComparison.OrdinalIgnoreCase);
         }
+
+        /// <summary>
+        /// check path is sub item
+        /// </summary>
+        /// <param name="targetPath"></param>
+        /// <param name="checkedPath"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns>if targetPath is 'C:\foo\bar' and checkedPath is 'C:\foo', result is true</returns>
+        public static bool IsSubItem(string targetPath, string checkedPath, bool ignoreCase = false)
+        {
+            if (!ignoreCase)
+            {
+                targetPath = targetPath.ToLower();
+                checkedPath = checkedPath.ToLower();
+            }
+
+            if (checkedPath.EndsWith("\\"))
+            {
+                checkedPath += "\\";
+            }
+
+            return targetPath.StartsWith(checkedPath);
+        }
     }
 }
