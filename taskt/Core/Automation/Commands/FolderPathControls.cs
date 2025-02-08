@@ -64,37 +64,37 @@ namespace taskt.Core.Automation.Commands
         public static string v_FolderPathResult { get; }
         #endregion
 
-        /// <summary>
-        /// Wait For Folder
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="waitTime"></param>
-        /// <param name="engine"></param>
-        /// <returns>file path</returns>
-        /// <exception cref="Exception"></exception>
-        public static string WaitForFolder(string path, int waitTime, Engine.AutomationEngineInstance engine)
-        {
-            var ret = WaitControls.WaitProcess(waitTime, "Folder Path", new Func<(bool, object)>(() =>
-            {
-                if (Directory.Exists(path))
-                {
-                    return (true, path);
-                }
-                else
-                {
-                    return (false, null);
-                }
-            }), engine);
+        ///// <summary>
+        ///// Wait For Folder
+        ///// </summary>
+        ///// <param name="path"></param>
+        ///// <param name="waitTime"></param>
+        ///// <param name="engine"></param>
+        ///// <returns>file path</returns>
+        ///// <exception cref="Exception"></exception>
+        //public static string WaitForFolder(string path, int waitTime, Engine.AutomationEngineInstance engine)
+        //{
+        //    var ret = WaitControls.WaitProcess(waitTime, "Folder Path", new Func<(bool, object)>(() =>
+        //    {
+        //        if (Directory.Exists(path))
+        //        {
+        //            return (true, path);
+        //        }
+        //        else
+        //        {
+        //            return (false, null);
+        //        }
+        //    }), engine);
 
-            if (ret is string returnPath)
-            {
-                return returnPath;
-            }
-            else
-            {
-                throw new Exception("Strange Value returned in WaitForFile. Type: " + ret.GetType().FullName);
-            }
-        }
+        //    if (ret is string returnPath)
+        //    {
+        //        return returnPath;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Strange Value returned in WaitForFile. Type: " + ret.GetType().FullName);
+        //    }
+        //}
 
         ///// <summary>
         ///// wait for folder
@@ -110,77 +110,77 @@ namespace taskt.Core.Automation.Commands
         //    return WaitForFolder(path, waitTime, engine);
         //}
 
-        /// <summary>
-        /// wait for folder
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="pathName">use PropertyFilePathSetting</param>
-        /// <param name="waitTimeName"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        public static string WaitForFolder(ScriptCommand command, string pathName, string waitTimeName, Engine.AutomationEngineInstance engine)
-        {
-            var path = command.ExpandValueOrUserVariableAsFolderPath(pathName, engine);
-            var waitTime = command.ExpandValueOrUserVariableAsInteger(waitTimeName, "Wait Time", engine);
-            return WaitForFolder(path, waitTime, engine);
-        }
+        ///// <summary>
+        ///// wait for folder
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="pathName">use PropertyFilePathSetting</param>
+        ///// <param name="waitTimeName"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        //public static string WaitForFolder(ScriptCommand command, string pathName, string waitTimeName, Engine.AutomationEngineInstance engine)
+        //{
+        //    var path = command.ExpandValueOrUserVariableAsFolderPath(pathName, engine);
+        //    var waitTime = command.ExpandValueOrUserVariableAsInteger(waitTimeName, "Wait Time", engine);
+        //    return WaitForFolder(path, waitTime, engine);
+        //}
 
-        /// <summary>
-        /// general folder action. This method search target folder before execute actionFunc, and try store Found Folder Path after execute actionFunc. 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="pathName"></param>
-        /// <param name="waitTimeName"></param>
-        /// <param name="engine"></param>
-        /// <param name="actionFunc"></param>
-        /// <param name="pathResultName"></param>
-        /// <param name="errorFunc"></param>
-        public static void FolderAction(ScriptCommand command, string pathName, string waitTimeName, Engine.AutomationEngineInstance engine, Action<string> actionFunc, string pathResultName = "", Action<Exception> errorFunc = null)
-        {
-            try
-            {
-                var path = WaitForFolder(command, pathName, waitTimeName, engine);
-                actionFunc(path);
+        ///// <summary>
+        ///// general folder action. This method search target folder before execute actionFunc, and try store Found Folder Path after execute actionFunc. 
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="pathName"></param>
+        ///// <param name="waitTimeName"></param>
+        ///// <param name="engine"></param>
+        ///// <param name="actionFunc"></param>
+        ///// <param name="pathResultName"></param>
+        ///// <param name="errorFunc"></param>
+        //public static void FolderAction(ScriptCommand command, string pathName, string waitTimeName, Engine.AutomationEngineInstance engine, Action<string> actionFunc, string pathResultName = "", Action<Exception> errorFunc = null)
+        //{
+        //    try
+        //    {
+        //        var path = WaitForFolder(command, pathName, waitTimeName, engine);
+        //        actionFunc(path);
 
-                if (!string.IsNullOrEmpty(pathResultName))
-                {
-                    var pathResult = command.GetRawPropertyValueAsString(pathResultName, "Folder Path Result");
-                    if (!string.IsNullOrEmpty(pathResult))
-                    {
-                        path.StoreInUserVariable(engine, pathResult);
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                if (errorFunc != null)
-                {
-                    errorFunc(ex);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-        }
+        //        if (!string.IsNullOrEmpty(pathResultName))
+        //        {
+        //            var pathResult = command.GetRawPropertyValueAsString(pathResultName, "Folder Path Result");
+        //            if (!string.IsNullOrEmpty(pathResult))
+        //            {
+        //                path.StoreInUserVariable(engine, pathResult);
+        //            }
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        if (errorFunc != null)
+        //        {
+        //            errorFunc(ex);
+        //        }
+        //        else
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+        //}
 
-        /// <summary>
-        /// general folder action. This method search target folder before execute actionFunc, and try store Found Folder Path after execute actionFunc. This method specifies the parameter from the value of PropertyVirtualProperty.
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="engine"></param>
-        /// <param name="actionFunc"></param>
-        /// <param name="errorFunc"></param>
-        public static void FolderAction(ScriptCommand command, Engine.AutomationEngineInstance engine, Action<string> actionFunc,  Action<Exception> errorFunc = null)
-        {
-            var props = command.GetParameterProperties();
+        ///// <summary>
+        ///// general folder action. This method search target folder before execute actionFunc, and try store Found Folder Path after execute actionFunc. This method specifies the parameter from the value of PropertyVirtualProperty.
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="engine"></param>
+        ///// <param name="actionFunc"></param>
+        ///// <param name="errorFunc"></param>
+        //public static void FolderAction(ScriptCommand command, Engine.AutomationEngineInstance engine, Action<string> actionFunc,  Action<Exception> errorFunc = null)
+        //{
+        //    var props = command.GetParameterProperties();
 
-            var folderPath = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_FolderPath)))?.Name ?? "";
-            var waitTime = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_WaitTime)))?.Name ?? "";
-            var folderResult = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_FolderPathResult)))?.Name ?? "";
+        //    var folderPath = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_FolderPath)))?.Name ?? "";
+        //    var waitTime = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_WaitTime)))?.Name ?? "";
+        //    var folderResult = props.GetProperty(new PropertyVirtualProperty(nameof(FolderPathControls), nameof(v_FolderPathResult)))?.Name ?? "";
 
-            FolderAction(command, folderPath, waitTime, engine, actionFunc, folderResult, errorFunc);
-        }
+        //    FolderAction(command, folderPath, waitTime, engine, actionFunc, folderResult, errorFunc);
+        //}
 
         /// <summary>
         /// Convert to FullPath specified path
@@ -233,25 +233,25 @@ namespace taskt.Core.Automation.Commands
             return command.ExpandValueOrUserVariable(parameterValue, "Folder Path", engine).ExpandValueOrUserVariableAsFolderPath(engine);
         }
 
-        /// <summary>
-        /// expand value or User variable as Folder Name
-        /// </summary>
-        /// <param name="folderName"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception">value is not folder name</exception>
-        public static string ExpandValueOrUserVariableAsFolderName(this string folderName, Engine.AutomationEngineInstance engine)
-        {
-            var fn = folderName.ExpandValueOrUserVariable(engine);
-            var invs = Path.GetInvalidFileNameChars();
-            if (fn.IndexOfAny(invs) < 0)
-            {
-                return fn;
-            }
-            else
-            {
-                throw new Exception("Folder Name contains invalid chars. Folder: '" + fn + "'");
-            }
-        }
+        ///// <summary>
+        ///// expand value or User variable as Folder Name
+        ///// </summary>
+        ///// <param name="folderName"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        ///// <exception cref="Exception">value is not folder name</exception>
+        //public static string ExpandValueOrUserVariableAsFolderName(this string folderName, Engine.AutomationEngineInstance engine)
+        //{
+        //    var fn = folderName.ExpandValueOrUserVariable(engine);
+        //    var invs = Path.GetInvalidFileNameChars();
+        //    if (fn.IndexOfAny(invs) < 0)
+        //    {
+        //        return fn;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Folder Name contains invalid chars. Folder: '" + fn + "'");
+        //    }
+        //}
     }
 }
