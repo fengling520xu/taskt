@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using System.IO;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Automation.Commands.Folder;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -14,11 +15,11 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public sealed class RenameFolderCommand : ScriptCommand
+    public sealed class RenameFolderCommand : AFolderExistsFolderBeforeAfterResultCommands, ICanHandleFolderName
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_TargetFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -29,6 +30,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vNewFolder}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "New Folder")]
         [PropertyValidationRule("New Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "New Folder")]
+        [PropertyParameterOrder(5100)]
         public string v_NewFolderName { get; set; }
 
         [XmlAttribute]
@@ -39,24 +41,25 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
         [PropertyDetailSampleUsage("**Error**", "Rise a Error")]
         [PropertyIsOptional(true, "Ignore")]
+        [PropertyParameterOrder(5200)]
         public string v_IfFolderNameSame { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        public string v_WaitTimeForFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //public string v_WaitTimeForFolder { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        [PropertyDescription("Variable Name to Store Folder Path Before Rename")]
-        public string v_BeforeFolderPathResult { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
+        //[PropertyDescription("Variable Name to Store Folder Path Before Rename")]
+        //public string v_BeforeFolderPathResult { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Store Folder Path After Rename")]
-        [PropertyIsOptional(true)]
-        [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "")]
-        public string v_AfterFolderPathResult { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        //[PropertyDescription("Variable Name to Store Folder Path After Rename")]
+        //[PropertyIsOptional(true)]
+        //[PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
+        //[PropertyDisplayText(false, "")]
+        //public string v_AfterFolderPathResult { get; set; }
 
         public RenameFolderCommand()
         {
@@ -96,12 +99,49 @@ namespace taskt.Core.Automation.Commands
             ////rename folder
             //Directory.Move(sourceFolder, destinationPath);
 
-            FolderPathControls.FolderAction(this, engine,
-                new Action<string>(path =>
+            //FolderPathControls.FolderAction(this, engine,
+            //    new Action<string>(path =>
+            //    {
+            //        var currentFolderName = Path.GetFileName(path);
+
+            //        var newFolderName = v_NewFolderName.ExpandValueOrUserVariableAsFolderName(engine);
+
+            //        // get source folder name and info
+            //        DirectoryInfo sourceFolderInfo = new DirectoryInfo(path);
+
+            //        // create destination
+            //        var destinationPath = Path.Combine(sourceFolderInfo.Parent.FullName, newFolderName);
+
+            //        var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine);
+            //        if (currentFolderName == newFolderName)
+            //        {
+            //            switch (whenSame)
+            //            {
+            //                case "ignore":
+            //                    return;
+
+            //                case "error":
+            //                    throw new Exception("Folder Name before and after the changes is same. Name '" + newFolderName + "'");
+            //            }
+            //        }
+
+            //        // rename folder
+            //        Directory.Move(path, destinationPath);
+
+            //        if (!string.IsNullOrEmpty(v_AfterFolderPathResult))
+            //        {
+            //            destinationPath.StoreInUserVariable(engine, v_AfterFolderPathResult);
+            //        }
+            //    })
+            //);
+
+            this.FolderAction(engine,
+                new Func<string, string>(path =>
                 {
                     var currentFolderName = Path.GetFileName(path);
 
-                    var newFolderName = v_NewFolderName.ExpandValueOrUserVariableAsFolderName(engine);
+                    //var newFolderName = v_NewFolderName.ExpandValueOrUserVariableAsFolderName(engine);
+                    var newFolderName = this.ExpandValueOrUserVariableAsFolderName(nameof(v_NewFolderName), engine);
 
                     // get source folder name and info
                     DirectoryInfo sourceFolderInfo = new DirectoryInfo(path);
@@ -109,26 +149,23 @@ namespace taskt.Core.Automation.Commands
                     // create destination
                     var destinationPath = Path.Combine(sourceFolderInfo.Parent.FullName, newFolderName);
 
-                    var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine);
+                    //var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine);
                     if (currentFolderName == newFolderName)
                     {
-                        switch (whenSame)
+                        switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine))
                         {
                             case "ignore":
-                                return;
+                                return path;
 
                             case "error":
-                                throw new Exception("Folder Name before and after the changes is same. Name '" + newFolderName + "'");
+                                throw new Exception($"Folder Name before and after the changes is same. Name '{newFolderName}'");
                         }
                     }
 
                     // rename folder
                     Directory.Move(path, destinationPath);
 
-                    if (!string.IsNullOrEmpty(v_AfterFolderPathResult))
-                    {
-                        destinationPath.StoreInUserVariable(engine, v_AfterFolderPathResult);
-                    }
+                    return destinationPath;
                 })
             );
         }
