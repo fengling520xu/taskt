@@ -398,6 +398,7 @@
     <Compile Include="Core\Automation\Commands\Folder\AFolderExistsFolderPathCommands.cs" />
     <Compile Include="Core\Automation\Commands\Folder\AFolderExistsFolderPathPathResultCommands.cs" />
     <Compile Include="Core\Automation\Commands\Folder\AFolderCopyMoveCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\CreateFolderByPathCommand.cs" />
     <Compile Include="Core\Automation\Commands\Folder\EM_CanHandleFolderNameExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\Folder\EM_CanHandleFolderPathExtensionMethods.cs" />
     <Compile Include="Core\Automation\Commands\Folder\EM_FolderExistsFolderPathBeforeAfterPathResultPropertiesExtentionMethods.cs" />
