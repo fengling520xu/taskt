@@ -182,56 +182,56 @@ namespace taskt.Core.Automation.Commands
         //    FolderAction(command, folderPath, waitTime, engine, actionFunc, folderResult, errorFunc);
         //}
 
-        /// <summary>
-        /// Convert to FullPath specified path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        private static string ConvertToFullPath(string path, Engine.AutomationEngineInstance engine)
-        {
-            if (EM_CanHandleFileOrFolderPathExtensionMethods.IsFullPath(path))
-            {
-                return path;
-            }
-            else
-            {
-                return Path.Combine(Path.GetDirectoryName(engine.FileName), path);
-            }
-        }
+        ///// <summary>
+        ///// Convert to FullPath specified path
+        ///// </summary>
+        ///// <param name="path"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        //private static string ConvertToFullPath(string path, Engine.AutomationEngineInstance engine)
+        //{
+        //    if (EM_CanHandleFileOrFolderPathExtensionMethods.IsFullPath(path))
+        //    {
+        //        return path;
+        //    }
+        //    else
+        //    {
+        //        return Path.Combine(Path.GetDirectoryName(engine.FileName), path);
+        //    }
+        //}
 
-        /// <summary>
-        /// expand value or User variable as Folder Path
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        /// <exception cref="">value is not Folder Path</exception>
-        public static string ExpandValueOrUserVariableAsFolderPath(this string value, Engine.AutomationEngineInstance engine)
-        {
-            var p = ConvertToFullPath(value.ExpandValueOrUserVariable(engine), engine);
-            var invs = Path.GetInvalidPathChars();
-            if (p.IndexOfAny(invs) < 0)
-            {
-                return p;
-            }
-            else
-            {
-                throw new Exception("Folder Path contains Invalid chars. Path: '" + p + "'");
-            }
-        }
+        ///// <summary>
+        ///// expand value or User variable as Folder Path
+        ///// </summary>
+        ///// <param name="value"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        ///// <exception cref="">value is not Folder Path</exception>
+        //public static string ExpandValueOrUserVariableAsFolderPath(this string value, Engine.AutomationEngineInstance engine)
+        //{
+        //    var p = ConvertToFullPath(value.ExpandValueOrUserVariable(engine), engine);
+        //    var invs = Path.GetInvalidPathChars();
+        //    if (p.IndexOfAny(invs) < 0)
+        //    {
+        //        return p;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Folder Path contains Invalid chars. Path: '" + p + "'");
+        //    }
+        //}
 
-        /// <summary>
-        /// Expand value or user variable as Folder Path
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="parameterValue"></param>
-        /// <param name="engine"></param>
-        /// <returns></returns>
-        public static string ExpandValueOrUserVariableAsFolderPath(this ScriptCommand command, string parameterValue, Engine.AutomationEngineInstance engine)
-        {
-            return command.ExpandValueOrUserVariable(parameterValue, "Folder Path", engine).ExpandValueOrUserVariableAsFolderPath(engine);
-        }
+        ///// <summary>
+        ///// Expand value or user variable as Folder Path
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="parameterValue"></param>
+        ///// <param name="engine"></param>
+        ///// <returns></returns>
+        //public static string ExpandValueOrUserVariableAsFolderPath(this ScriptCommand command, string parameterValue, Engine.AutomationEngineInstance engine)
+        //{
+        //    return command.ExpandValueOrUserVariable(parameterValue, "Folder Path", engine).ExpandValueOrUserVariableAsFolderPath(engine);
+        //}
 
         ///// <summary>
         ///// expand value or User variable as Folder Name
