@@ -83,17 +83,17 @@ namespace taskt.Core.Automation.Commands
             var filter = v_Filter.ExpandValueOrUserVariable(engine);
             if (!checkFileterProperty(filter))
             {
-                throw new Exception("Strange Filter Property. Value: '" + filter + "'");
+                throw new Exception($"Strange Filter Property. Value: '{filter}'");
             }
 
             var index = this.ExpandValueOrUserVariableAsInteger(nameof(v_FilterIndex), engine);
             if (index < 1)
             {
-                throw new Exception("Strange FilterIndex Property: Value: " + index);
+                throw new Exception($"Strange FilterIndex Property: Value: {index}");
             }
 
             string directory;
-            if (String.IsNullOrEmpty(v_InitialDirectory))
+            if (string.IsNullOrEmpty(v_InitialDirectory))
             {
                 directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             }
@@ -106,53 +106,9 @@ namespace taskt.Core.Automation.Commands
             switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_DialogType), engine))
             {
                 case "open":
-                    //engine.tasktEngineUI.Invoke(new Action(() =>
-                    //{
-                    //    result = engine.tasktEngineUI.ShowOpenFileDialog(filter, index, directory);
-                    //}
-                    //));
-                    //engine.tasktEngineUI.Invoke(new Action(() =>
-                    //{
-                    //    using (var dialog = new OpenFileDialog())
-                    //    {
-                    //        dialog.Filter = filter;
-                    //        dialog.FilterIndex = index;
-                    //        dialog.InitialDirectory = directory;
-                    //        if (dialog.ShowDialog() == DialogResult.OK)
-                    //        {
-                    //            result = dialog.FileName;
-                    //        }
-                    //        else
-                    //        {
-                    //            result = "";
-                    //        }
-                    //    }
-                    //}));
                     tp = typeof(OpenFileDialog);
                     break;
                 case "save":
-                    //engine.tasktEngineUI.Invoke(new Action(() =>
-                    //{
-                    //    result = engine.tasktEngineUI.ShowSaveFileDialog(filter, index, directory);
-                    //}
-                    //));
-                    //engine.tasktEngineUI.Invoke(new Action(() =>
-                    //{
-                    //    using (var dialog = new SaveFileDialog())
-                    //    {
-                    //        dialog.Filter = filter;
-                    //        dialog.FilterIndex = index;
-                    //        dialog.InitialDirectory = directory;
-                    //        if (dialog.ShowDialog() == DialogResult.OK)
-                    //        {
-                    //            result = dialog.FileName;
-                    //        }
-                    //        else
-                    //        {
-                    //            result = "";
-                    //        }
-                    //    }
-                    //}));
                     tp = typeof(SaveFileDialog);
                     break;
             }
@@ -175,12 +131,7 @@ namespace taskt.Core.Automation.Commands
                         result = "";
                     }
 
-                    //result = result.Replace("\\", "\\\\");
-
                     result.StoreInUserVariable(engine, v_applyToVariableName);
-                    //DBG
-                    //Console.WriteLine("####" + result);
-                    //Console.WriteLine("####" + v_applyToVariableName.GetRawVariable(engine).VariableValue.ToString());
                 }
             }));
         }
