@@ -66,6 +66,20 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(9000)]
         public virtual string v_WhenFileNameSame { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("When New File Is Exists")]
+        [PropertyUISelectionOption("Error")]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyUISelectionOption("Delete")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
+        [PropertyDetailSampleUsage("**Error**", "Rise a Error")]
+        [PropertyDetailSampleUsage("**Delete**", "Delete File")]
+        [PropertyIsOptional(true, "Error")]
+        [PropertyDisplayText(false, "")]
+        [PropertyParameterOrder(9000)]
+        public virtual string v_WhenNewFileExists { get; set; }
+
         //[XmlAttribute]
         //public string v_WaitTimeForFile { get; set; }
 
@@ -138,6 +152,21 @@ namespace taskt.Core.Automation.Commands
 
                         case "error":
                             throw new Exception($"File Name before and after the changes is same. Name '{newFileName}'");
+                    }
+                }
+
+                // check new file exists
+                if (File.Exists(destinationPath))
+                {
+                    switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenNewFileExists), engine))
+                    {
+                        case "error":
+                            throw new Exception($"File is already Exists. Path: '{destinationPath}'");
+                        case "ignore":
+                            return destinationPath;
+                        case "delete":
+                            File.Delete(destinationPath);
+                            break;
                     }
                 }
 
