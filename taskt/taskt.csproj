@@ -416,6 +416,8 @@
     <Compile Include="Core\Automation\Commands\Folder\IFolderExistsFolderPathPathResultProperties.cs" />
     <Compile Include="Core\Automation\Commands\Folder\IFolderExistsFolderPathProperties.cs" />
     <Compile Include="Core\Automation\Commands\Folder\IFolderPathProperties.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\AFolderCopySameRenameFolderCommands.cs" />
+    <Compile Include="Core\Automation\Commands\Folder\CopyFolderInSamePathCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />
     <Compile Include="Core\Automation\Commands\TextCompareSelectMethodControls.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\ADataTableBothRowCommands.cs" />
