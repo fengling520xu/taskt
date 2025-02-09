@@ -3999,8 +3999,14 @@ namespace taskt.Core.Script
 
         private static void convertTo3_5_2_21(XDocument doc)
         {
-            // RenameFolderCommand v_NewName -> v_NewFolderName
-            ChangeAttributeName(doc, "RenameFolderCommand", "v_NewName", "v_NewFolderName");
+            // RenameFolderCommand v_NewName -> v_NewFolderName, v_IfFolderNameSame -> v_WhenFolderNameSame
+            ChangeMultiAttributeNames(doc, "RenameFolderCommand",
+                new List<(string, string)>()
+                {
+                    ("v_NewName", "v_NewFolderName"),
+                    ("v_IfFolderNameSame", "v_WhenFolderNameSame"),
+                }
+            );
 
             // RenameFileCommand v_IfFileNameSame -> v_WhenFileNameSame
             ChangeAttributeName(doc, "RenameFileCommand", "v_IfFileNameSame", "v_WhenFileNameSame");

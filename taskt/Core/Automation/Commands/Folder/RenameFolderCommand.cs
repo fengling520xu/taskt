@@ -40,8 +40,9 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
         [PropertyDetailSampleUsage("**Error**", "Rise a Error")]
         [PropertyIsOptional(true, "Ignore")]
+        [PropertyDisplayText(false, "")]
         [PropertyParameterOrder(5200)]
-        public string v_IfFolderNameSame { get; set; }
+        public string v_WhenFolderNameSame { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
@@ -151,7 +152,7 @@ namespace taskt.Core.Automation.Commands
                     //var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine);
                     if (sourceFolderInfo.Name == newFolderName)
                     {
-                        switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine))
+                        switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenFolderNameSame), engine))
                         {
                             case "ignore":
                                 return path;
