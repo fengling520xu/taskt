@@ -150,7 +150,8 @@ namespace taskt.Core.Automation.Commands
                     var destinationPath = Path.Combine(sourceFolderInfo.Parent.FullName, newFolderName);
 
                     //var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFolderNameSame), engine);
-                    if (sourceFolderInfo.Name == newFolderName)
+                    //if (sourceFolderInfo.Name == newFolderName)
+                    if (EM_CanHandleFileOrFolderPathExtensionMethods.IsSamePath(path, destinationPath))
                     {
                         switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenFolderNameSame), engine))
                         {
