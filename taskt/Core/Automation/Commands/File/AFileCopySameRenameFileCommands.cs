@@ -72,9 +72,11 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Error")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyUISelectionOption("Delete")]
+        [PropertyUISelectionOption("Delete To Recycle Bin")]
         [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
         [PropertyDetailSampleUsage("**Error**", "Rise a Error")]
         [PropertyDetailSampleUsage("**Delete**", "Delete File")]
+        [PropertyDetailSampleUsage("**Delete To Recycle Bin**", "Delete the File to Recycle Bin and Copy")]
         [PropertyIsOptional(true, "Error")]
         [PropertyDisplayText(false, "")]
         [PropertyParameterOrder(9000)]
@@ -158,6 +160,16 @@ namespace taskt.Core.Automation.Commands
                 // check new file exists
                 if (File.Exists(destinationPath))
                 {
+                    void RunDeleteFile(bool recycleBin)
+                    {
+                        var delFile = new DeleteFileCommand()
+                        {
+                            v_TargetFilePath = destinationPath,
+                            v_MoveToRecycleBin = (recycleBin) ? "Yes" : "No",
+                        };
+                        delFile.RunCommand(engine);
+                    }
+
                     switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenNewFileExists), engine))
                     {
                         case "error":
@@ -165,7 +177,10 @@ namespace taskt.Core.Automation.Commands
                         case "ignore":
                             return destinationPath;
                         case "delete":
-                            File.Delete(destinationPath);
+                            RunDeleteFile(false);
+                            break;
+                        case "delete to recycle bin":
+                            RunDeleteFile(true);
                             break;
                     }
                 }
