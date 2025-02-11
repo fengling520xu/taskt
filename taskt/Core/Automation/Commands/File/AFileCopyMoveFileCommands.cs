@@ -31,12 +31,12 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("When Description File Path is Same as Target File Path")]
-        [PropertyUISelectionOption("Rise An Error")]
+        [PropertyUISelectionOption("Error")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyShowSampleUsageInDescription(false)]
-        [PropertyDetailSampleUsage("**Rise An Error**", "Rise an Error")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
         [PropertyDetailSampleUsage("**Ignore**", "Do Nothing and move to Next Process")]
-        [PropertyIsOptional(true, "Rise An Error")]
+        [PropertyIsOptional(true, "Error")]
         [PropertyValidationRule("When Path Is Same", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
         [PropertyParameterOrder(6200)]
@@ -110,7 +110,7 @@ namespace taskt.Core.Automation.Commands
                 {
                     switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenDestinationIsSame), engine))
                     {
-                        case "rise an error":
+                        case "error":
                             throw new Exception($"Target File Path and Destination Path are Same. Path: '{path}'");
 
                         default:

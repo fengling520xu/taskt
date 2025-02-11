@@ -4053,6 +4053,30 @@ namespace taskt.Core.Script
                     }
                 }
             }
+
+            // CopyFile, MoveFile v_WhenDestinationIsSame, Rise an Error -> Error
+            ChangeAttributeValue(doc,
+                new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFileCommand":
+                        case "MoveFileCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WhenDestinationIsSame",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "rise an error":
+                            attr.SetValue("Error");
+                            break;
+                    }
+                })
+            );
         }
 
 
