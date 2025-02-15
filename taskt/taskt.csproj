@@ -419,6 +419,7 @@
     <Compile Include="Core\Automation\Commands\Folder\AFolderCopySameRenameFolderCommands.cs" />
     <Compile Include="Core\Automation\Commands\Folder\CopyFolderInSameLocationCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />
+    <Compile Include="Core\Automation\Commands\Numerical\CompareNumberCommand.cs" />
     <Compile Include="Core\Automation\Commands\TextCompareSelectMethodControls.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\ADataTableBothRowCommands.cs" />
     <Compile Include="Core\Automation\Commands\DataTable\ADataTableBothColumnCommands.cs" />
