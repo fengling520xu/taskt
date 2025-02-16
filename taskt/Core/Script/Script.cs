@@ -438,6 +438,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_19(doc);
             convertTo3_5_2_20(doc);
             convertTo3_5_2_21(doc);
+            convertTo3_5_2_22(doc);
             return doc;
         }
 
@@ -4011,6 +4012,75 @@ namespace taskt.Core.Script
             // RenameFileCommand v_IfFileNameSame -> v_WhenFileNameSame
             ChangeAttributeName(doc, "RenameFileCommand", "v_IfFileNameSame", "v_WhenFileNameSame");
         }
+        private static void convertTo3_5_2_22(XDocument doc)
+        {
+            // CopyFile, MoveFile, CopyFolder, MoveFolder v_DeleteExisting -> v_WhenDestinationExists, and change values
+            var copyMove = GetCommands(doc,
+                new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFileCommand":
+                        case "MoveFileCommand":
+                        case "CopyFolderCommand":
+                        case "MoveFolderCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                })
+            );
+            foreach (var cmd in copyMove) 
+            {
+                var attrDel = cmd.Attribute("v_DeleteExisting");
+                if (attrDel != null)
+                {
+                    string newValue = "";
+                    switch (attrDel.Value.ToString().ToLower())
+                    {
+                        case "yes":
+                            newValue = "Delete";
+                            break;
+                        case "no":
+                        default:
+                            newValue = "Error";
+                            break;
+                    }
+                    attrDel.Remove();
+
+                    var attrExists = cmd.Attribute("v_WhenDestinationExists");
+                    if (attrExists == null)
+                    {
+                        cmd.SetAttributeValue("v_WhenDestinationExists", newValue);
+                    }
+                }
+            }
+
+            // CopyFile, MoveFile v_WhenDestinationIsSame, Rise an Error -> Error
+            ChangeAttributeValue(doc,
+                new Func<XElement, bool>(elem =>
+                {
+                    switch (GetCommandName(elem))
+                    {
+                        case "CopyFileCommand":
+                        case "MoveFileCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_WhenDestinationIsSame",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "rise an error":
+                            attr.SetValue("Error");
+                            break;
+                    }
+                })
+            );
+        }
+
 
         /// <summary>
         /// get old, new current window keyword

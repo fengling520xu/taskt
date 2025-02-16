@@ -141,33 +141,10 @@ namespace taskt.Core.Automation.Commands
         {
             base.Render(editor);
 
-            //IfGridViewHelper = new DataGridView();
-            //IfGridViewHelper.AllowUserToAddRows = true;
-            //IfGridViewHelper.AllowUserToDeleteRows = true;
-            //IfGridViewHelper.Size = new Size(400, 250);
-            //IfGridViewHelper.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //IfGridViewHelper.DataBindings.Add("DataSource", this, "v_IfActionParameterTable", false, DataSourceUpdateMode.OnPropertyChanged);
-            //IfGridViewHelper.AllowUserToAddRows = false;
-            //IfGridViewHelper.AllowUserToDeleteRows = false;
             IfGridViewHelper = CommandControls.CreateDefaultDataGridViewFor("v_IfActionParameterTable", this, false, false, false, 400, 200);
             IfGridViewHelper.MouseEnter += (sender, e) => IfGridViewHelper_MouseEnter(sender,e, editor);
-            //IfGridViewHelper.CellClick += IfGridViewHelper_CellClick;
-            //IfGridViewHelper.CellBeginEdit += IfGridViewHelper_CellBeginEdit;
             IfGridViewHelper.CellClick += DataTableControls.FirstColumnReadonlySubsequentEditableDataGridView_CellClick;
             IfGridViewHelper.CellBeginEdit += DataTableControls.FirstColumnReadonlySubsequentEditableDataGridView_CellBeginEdit;
-
-            //var helperTheme = editor.Theme.UIHelper;
-            //RecorderControl = new taskt.UI.CustomControls.CommandItemControl();
-            //RecorderControl.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            ////RecorderControl.ForeColor = Color.AliceBlue;
-            //RecorderControl.Font = new Font(helperTheme.Font, helperTheme.FontSize, helperTheme.Style);
-            //RecorderControl.ForeColor = helperTheme.FontColor;
-            //RecorderControl.BackColor = helperTheme.BackColor;
-            //RecorderControl.Name = "guirecorder_helper";
-            //RecorderControl.CommandImage = UI.Images.GetUIImage("ClipboardGetTextCommand");
-            //RecorderControl.CommandDisplay = "Element Recorder";
-            //RecorderControl.Click += ShowIfElementRecorder;
-            //RecorderControl.Hide();
 
             ActionDropdown = (ComboBox)CommandControls.CreateDefaultDropdownFor("v_IfActionType", this);
             RenderedControls.Add(CommandControls.CreateDefaultLabelFor("v_IfActionType", this));
@@ -176,9 +153,10 @@ namespace taskt.Core.Automation.Commands
 
             RenderedControls.Add(ActionDropdown);
 
-            ParameterControls = new List<Control>();
-            ParameterControls.Add(CommandControls.CreateDefaultLabelFor("v_IfActionParameterTable", this));
-            //ParameterControls.Add(RecorderControl);
+            ParameterControls = new List<Control>
+            {
+                CommandControls.CreateDefaultLabelFor("v_IfActionParameterTable", this)
+            };
 
             var helpers = CommandControls.CreateDefaultUIHelpersFor("v_IfActionParameterTable", this, IfGridViewHelper, editor);
 
@@ -186,7 +164,6 @@ namespace taskt.Core.Automation.Commands
             lnkBrowserInstanceSelector.Name = "v_IfActionParameterTable_helper_WebBrowser";
             lnkBrowserInstanceSelector.CommandDisplay = "Select WebBrowser Instance";
             lnkBrowserInstanceSelector.Click += (sender, e) => linkWebBrowserInstanceSelector_Click(sender, e, editor);
-            //RenderedControls.Add(lnkBrowserInstance);
             helpers.Add(lnkBrowserInstanceSelector);
 
             lnkWindowNameSelector = CommandControls.CreateSimpleUIHelper(nameof(v_IfActionParameterTable) + "_customhelper_1", IfGridViewHelper);
@@ -228,14 +205,13 @@ namespace taskt.Core.Automation.Commands
 
         private void linkWindowNameSelector_Click(object sender, EventArgs e, UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
-            List<string> windowNames = new List<string>
+            var windowNames = new List<string>
             {
-                //editor.appSettings.EngineSettings.CurrentWindowKeyword
                 VariableNameControls.GetWrappedVariableName(Engine.SystemVariables.Window_CurrentWindowName.VariableName, editor.appSettings),
             };
 
-            System.Diagnostics.Process[] processlist = System.Diagnostics.Process.GetProcesses();
-            //pull the main window title for each
+            var processlist = System.Diagnostics.Process.GetProcesses();
+            // pull the main window title for each
             foreach (var process in processlist)
             {
                 if (!string.IsNullOrEmpty(process.MainWindowTitle))
@@ -292,11 +268,11 @@ namespace taskt.Core.Automation.Commands
 
         private void ifAction_SelectionChangeCommitted(object sender, EventArgs e, UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
-            ComboBox ifAction = (ComboBox)ActionDropdown;
-            DataGridView ifActionParameterBox = (DataGridView)IfGridViewHelper;
+            var ifAction = (ComboBox)ActionDropdown;
+            var ifActionParameterBox = (DataGridView)IfGridViewHelper;
 
-            BeginIfCommand cmd = (BeginIfCommand)this;
-            DataTable actionParameters = cmd.v_IfActionParameterTable;
+            var cmd = (BeginIfCommand)this;
+            var actionParameters = cmd.v_IfActionParameterTable;
 
             //sender is null when command is updating
             if (sender != null)
@@ -310,13 +286,11 @@ namespace taskt.Core.Automation.Commands
 
             switch (ifAction.SelectedItem)
             {
-                //case "Value":
                 case "Numeric Compare":
                 case "Date Compare":
                     ConditionControls.RenderNumericCompare(sender, ifActionParameterBox, actionParameters);
                     break;
 
-                //case "Variable Compare":
                 case "Text Compare":
                     ConditionControls.RenderTextCompare(sender, ifActionParameterBox, actionParameters);
                     break;
@@ -392,7 +366,7 @@ namespace taskt.Core.Automation.Commands
         {
             base.IsValidate(editor);
 
-            if (String.IsNullOrEmpty(this.v_IfActionType))
+            if (string.IsNullOrEmpty(this.v_IfActionType))
             {
                 this.validationResult += "Type is empty.";
                 this.IsValid = false;
@@ -403,10 +377,8 @@ namespace taskt.Core.Automation.Commands
                 bool res = true;
                 switch (this.v_IfActionType)
                 {
-                    //case "Value":
                     case "Numeric Compare":
                     case "Date Compare":
-                    //case "Variable Compare":
                     case "Text Compare":
                         res = ConditionControls.ValueValidate(v_IfActionParameterTable, out message);
                         break;
@@ -482,8 +454,10 @@ namespace taskt.Core.Automation.Commands
         {
             if (this.v_IfActionType == "GUI Element Exists")
             {
-                var cnv = new Dictionary<string, string>();
-                cnv.Add("v_IfActionParameterTable", "convertToIntermediateWindowName");
+                var cnv = new Dictionary<string, string>
+                {
+                    { "v_IfActionParameterTable", "convertToIntermediateWindowName" }
+                };
                 ConvertToIntermediate(settings, cnv, variables);
             }
             else
@@ -496,8 +470,10 @@ namespace taskt.Core.Automation.Commands
         {
             if (this.v_IfActionType == "GUI Element Exists")
             {
-                var cnv = new Dictionary<string, string>();
-                cnv.Add("v_IfActionParameterTable", "convertToRawWindowName");
+                var cnv = new Dictionary<string, string>
+                {
+                    { "v_IfActionParameterTable", "convertToRawWindowName" }
+                };
                 ConvertToRaw(settings, cnv);
             }
             else
@@ -510,7 +486,6 @@ namespace taskt.Core.Automation.Commands
         {
             base.BeforeValidate();
 
-            //var dgv = FormUIControls.GetPropertyControl<DataGridView>(ControlsList, nameof(v_IfActionParameterTable));
             DataTableControls.BeforeValidate_NoRowAdding(IfGridViewHelper, v_IfActionParameterTable);
         }
     }

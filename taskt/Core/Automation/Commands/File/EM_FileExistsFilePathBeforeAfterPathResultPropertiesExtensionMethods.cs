@@ -16,25 +16,6 @@ namespace taskt.Core.Automation.Commands
         /// <param name="errorFunc"></param>
         public static void FileAction(this IFileExistsFilePathBeforeAfterPathResultProperties command, Engine.AutomationEngineInstance engine, Func<string, string> actionFunc, Action<Exception> errorFunc = null)
         {
-            //try
-            //{
-            //    var beforePath = command.WaitForFile(engine);
-
-            //    var afterPath = actionFunc(beforePath);
-
-            //    command.StoreBeforeAfterFilePathsResultInUserVariables(beforePath, afterPath, engine);
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (errorFunc != null)
-            //    {
-            //        errorFunc(ex);
-            //    }
-            //    else
-            //    {
-            //        throw ex;
-            //    }
-            //}
             command.FileAction(engine, actionFunc,
                 new Action<string, string>((before, after) =>
                 {

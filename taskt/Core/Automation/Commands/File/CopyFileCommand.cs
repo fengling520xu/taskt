@@ -44,7 +44,7 @@ namespace taskt.Core.Automation.Commands
         //[Remarks("Specify whether the file should be deleted first if it is already found to exist.")]
         //[PropertyIsOptional(true, "No")]
         //[PropertyParameterOrder(8000)]
-        //public string v_DeleteExisting { get; set; }
+        //public string v_WhenDestinationExists { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]

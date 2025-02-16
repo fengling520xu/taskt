@@ -50,9 +50,6 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //var listA = v_ListA.ExpandUserVariableAsList(engine);
-            //var listB = v_ListB.ExpandUserVariableAsList(engine);
-
             var listA = this.ExpandUserVariableAsList(nameof(v_ListA), engine);
             var listB = this.ExpandUserVariableAsList(nameof(v_ListB), engine);
 
@@ -60,7 +57,6 @@ namespace taskt.Core.Automation.Commands
             newList.AddRange(listA);
             newList.AddRange(listB);
 
-            //newList.StoreInUserVariable(engine, v_NewList);
             this.StoreListInUserVariable(newList, nameof(v_NewList), engine);
         }
     }

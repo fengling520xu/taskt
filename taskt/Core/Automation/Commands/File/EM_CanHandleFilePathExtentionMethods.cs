@@ -50,8 +50,6 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static bool IsValidPathString(string path)
         {
-            //var invs = Path.GetInvalidPathChars();
-            //return (path.IndexOfAny(invs) < 0);
             return EM_CanHandleFileOrFolderPathExtensionMethods.IsValidPathString(path);
         }
 
@@ -357,26 +355,6 @@ namespace taskt.Core.Automation.Commands
             string parameterValue = prop.GetValue(command)?.ToString() ?? "";
 
             var pathSetting = PropertyControls.GetCustomAttributeWithVirtual<PropertyFilePathSetting>(prop, vProp) ?? new PropertyFilePathSetting();
-
-            //string p;
-            //if ((pathSetting.supportFileCounter != PropertyFilePathSetting.FileCounterBehavior.NoSupport) &&
-            //    (pathSetting.supportExtension != PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists))
-            //{
-            //    p = ExpandValueOrUserVariableAsFilePath_SupportFileCounter(parameterValue, pathSetting, engine);
-            //}
-            //else
-            //{
-            //    p = ExpandValueOrUserVariableAsFilePath_NoSupportFileCounter(parameterValue, pathSetting, engine);
-            //}
-
-            //if (IsValidPathString(p))
-            //{
-            //    return p;
-            //}
-            //else
-            //{
-            //    throw new Exception($"File Path contains Invalid chars. Path: '{p}'");
-            //}
 
             return ExpandValueOrUserVarialbeAsFilePath_Controller(parameterValue, pathSetting, engine);
         }

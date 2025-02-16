@@ -48,11 +48,19 @@ namespace taskt.Core.Automation.Commands
         public virtual string v_WhenDestinationIsSame { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
-        [PropertyDescription("Delete Folder when it already Exists")]
-        [PropertyIsOptional(true, "No")]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("When Destination Folder Is Already Exists")]
+        [PropertyUISelectionOption("Error")]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyUISelectionOption("Delete")]
+        [PropertyUISelectionOption("Delete To Recycle Bin")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
+        [PropertyDetailSampleUsage("**Delete**", "Delete the Folder")]
+        [PropertyDetailSampleUsage("**Delete To Recycle Bin**", "Delete the Folder to Recycle Bin")]
+        [PropertyIsOptional(true, "Error")]
         [PropertyParameterOrder(5400)]
-        public virtual string v_DeleteExisting { get; set; }
+        public virtual string v_WhenDestinationExists { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
@@ -81,16 +89,6 @@ namespace taskt.Core.Automation.Commands
         {
             return new Func<string, string>(path =>
             {
-                //var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
-                //var destinationFolder = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_DestinationFolderPath), engine);
-                //if (!Directory.Exists(destinationFolder))
-                //{
-                //    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_CreateDirectory), engine))
-                //    {
-                //        Directory.CreateDirectory(destinationFolder);
-                //    }
-                //}
-
                 var destinationFolder = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_DestinationFolderPath), engine);
                 using (var checkExists = new InnerScriptVariable(engine))
                 {
@@ -133,12 +131,35 @@ namespace taskt.Core.Automation.Commands
                     }
                 }
 
-                // delete if it already exists
+                // if it already exists
                 if (Directory.Exists(newFolderPath))
                 {
-                    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+                    void RunDeleteFolder(bool recycleBin)
                     {
-                        Directory.Delete(newFolderPath, true);
+                        var delFile = new DeleteFolderCommand()
+                        {
+                            v_TargetFolderPath = newFolderPath,
+                            v_MoveToRecycleBin = (recycleBin) ? "Yes" : "No",
+                        };
+                        delFile.RunCommand(engine);
+                    }
+
+                    switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenDestinationExists), engine))
+                    {
+                        case "error":
+                            throw new Exception($"Destination Folder is Already Exists. Path: '{newFolderPath}'");
+
+                        case "ignore":
+                            // nothing todo
+                            return newFolderPath;
+
+                        case "delete":
+                            RunDeleteFolder(false);
+                            break;
+
+                        case "delete to recycle bin":
+                            RunDeleteFolder(true);
+                            break;
                     }
                 }
 

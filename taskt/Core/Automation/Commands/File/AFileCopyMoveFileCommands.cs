@@ -31,12 +31,12 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("When Description File Path is Same as Target File Path")]
-        [PropertyUISelectionOption("Rise An Error")]
+        [PropertyUISelectionOption("Error")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyShowSampleUsageInDescription(false)]
-        [PropertyDetailSampleUsage("**Rise An Error**", "Rise an Error")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
         [PropertyDetailSampleUsage("**Ignore**", "Do Nothing and move to Next Process")]
-        [PropertyIsOptional(true, "Rise An Error")]
+        [PropertyIsOptional(true, "Error")]
         [PropertyValidationRule("When Path Is Same", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
         [PropertyParameterOrder(6200)]
@@ -44,13 +44,19 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
-        [PropertyDescription("Delete File if it already Exists")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
-        [Remarks("Specify whether the file should be deleted first if it is already found to exist.")]
-        [PropertyIsOptional(true, "No")]
+        [PropertyDescription("When Destination File Is Already Exists")]
+        [PropertyUISelectionOption("Error")]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyUISelectionOption("Delete")]
+        [PropertyUISelectionOption("Delete To Recycle Bin")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
+        [PropertyDetailSampleUsage("**Delete**", "Delete the File")]
+        [PropertyDetailSampleUsage("**Delete To Recycle Bin**", "Delete the File to Recycle Bin")]
+        [Remarks("")]
+        [PropertyIsOptional(true, "Error")]
         [PropertyParameterOrder(6300)]
-        public virtual string v_DeleteExisting { get; set; }
+        public virtual string v_WhenDestinationExists { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
@@ -69,21 +75,6 @@ namespace taskt.Core.Automation.Commands
         {
             return new Func<string, string>(path =>
             {
-                //var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
-
-                //if (!Directory.Exists(destinationFolder))
-                //{
-                //    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_CreateDirectory), engine))
-                //    {
-                //        Directory.CreateDirectory(destinationFolder);
-                //    }
-                //    else
-                //    {
-                //        throw new Exception("destination folder does not exists: " + destinationFolder);
-                //    }
-                //}
-
-                //var destinationFolder = EM_CanHandleFolderPathExtensionMethods.ExpandValueOrUserVariableAsFolderPath(this, nameof(v_DestinationFolderPath), engine);
                 var destinationFolder = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_DestinationFolderPath), engine);
                 using (var folderResult = new InnerScriptVariable(engine))
                 {
@@ -115,12 +106,11 @@ namespace taskt.Core.Automation.Commands
                 var destinationFilePath = Path.Combine(destinationFolder, sourceFileInfo.Name);
 
                 // check folder is same
-                //if (path.Equals(destinationFilePath, StringComparison.OrdinalIgnoreCase))
                 if (EM_CanHandleFileOrFolderPathExtensionMethods.IsSamePath(path, destinationFilePath))
                 {
                     switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenDestinationIsSame), engine))
                     {
-                        case "rise an error":
+                        case "error":
                             throw new Exception($"Target File Path and Destination Path are Same. Path: '{path}'");
 
                         default:
@@ -129,12 +119,42 @@ namespace taskt.Core.Automation.Commands
                     }
                 }
 
-                //delete if it already exists per user
-                if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+                // if it already exists per user
+                //if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_WhenDestinationExists), engine))
+                //{
+                //    File.Delete(destinationFilePath);
+                //}
+                if (File.Exists(destinationFilePath))
                 {
-                    File.Delete(destinationFilePath);
-                }
+                    void RunDeleteFile(bool recycleBin)
+                    {
+                        var delFile = new DeleteFileCommand()
+                        {
+                            v_TargetFilePath = destinationFilePath,
+                            v_MoveToRecycleBin = (recycleBin) ? "Yes" : "No",
+                        };
+                        delFile.RunCommand(engine);
+                    }
 
+                    switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenDestinationExists), engine))
+                    {
+                        case "error":
+                            throw new Exception($"Destination File is Already Exists. Path: '{destinationFilePath}'");
+
+                        case "ignore":
+                            // nothing todo
+                            return destinationFilePath;
+
+                        case "delete":
+                            RunDeleteFile(false);
+                            break;
+
+                        case "delete to recycle bin":
+                            RunDeleteFile(true);
+                            break;
+                    }
+                }
+                
                 processFunc(path, destinationFilePath);
 
                 return destinationFilePath;

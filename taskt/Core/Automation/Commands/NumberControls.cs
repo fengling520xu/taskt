@@ -77,6 +77,42 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(true, "Value")]
         [PropertyParameterOrder(5000)]
         public static string v_Value { get; }
+
+        /// <summary>
+        /// number check method
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Check Method")]
+        [PropertyUISelectionOption("Is Number")]
+        [PropertyUISelectionOption("Is Not Number")]
+        [PropertyUISelectionOption("Is Odd Number")]
+        [PropertyUISelectionOption("Is Even Number")]
+        [PropertyUISelectionOption("Is Zero")]
+        [PropertyUISelectionOption("Is Not Zero")]
+        [PropertyUISelectionOption("Is Positive Value")]
+        [PropertyUISelectionOption("Is Negative Value")]
+        [PropertyUISelectionOption("Is Integer")]
+        [PropertyUISelectionOption("Is Not Integer")]
+        [PropertyValidationRule("Check Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Method")]
+        public static string v_CheckMethod { get; }
+
+        /// <summary>
+        /// number compare method
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Compare Method")]
+        [PropertyUISelectionOption("Is Equal To")]
+        [PropertyUISelectionOption("Is Not Equal To")]
+        [PropertyUISelectionOption("Is Greater Than")]
+        [PropertyUISelectionOption("Is Greater Than Or Equal To")]
+        [PropertyUISelectionOption("Is Less Than")]
+        [PropertyUISelectionOption("Is Less Than Or Equal To")]
+        [PropertyUISelectionOption("Is Between")]
+        [PropertyUISelectionOption("Is Not Between")]
+        [PropertyValidationRule("Compare Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Method")]
+        public static string v_CompareMethod { get; }
         #endregion
 
         ///// <summary>

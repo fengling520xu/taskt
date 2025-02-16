@@ -96,80 +96,9 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //this.FileAction(engine,
-            //    new Func<string, string>(path =>
-            //    {
-            //        var currentFileName = Path.GetFileName(path);
-            //        var newFileName = this.ExpandValueOrUserVariableAsFileName(nameof(v_NewFileName), engine);
-
-            //        var newExtension = v_NewExtension.ExpandValueOrUserVariable(engine);
-            //        if (!newExtension.StartsWith("."))
-            //        {
-            //            newExtension = "." + newExtension;
-            //        }
-
-            //        var newFileOption = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ExtensionOption), engine);
-            //        switch (newFileOption)
-            //        {
-            //            case "auto":
-            //                if (!Path.HasExtension(newFileName))
-            //                {
-            //                    if (newExtension == ".")
-            //                    {
-            //                        newFileName += Path.GetExtension(currentFileName);
-            //                    }
-            //                    else
-            //                    {
-            //                        newFileName += newExtension;
-            //                    }
-            //                }
-            //                break;
-            //            case "force combine new extension":
-            //                newFileName += newExtension;
-            //                break;
-            //            case "contains new file name":
-            //                // nothing to do
-            //                break;
-            //            case "use before rename path":
-            //                newFileName += Path.GetExtension(currentFileName);
-            //                break;
-            //        }
-
-            //        // get source file name and info
-            //        var sourceFileInfo = new FileInfo(path);
-
-            //        // create destination
-            //        var destinationPath = Path.Combine(sourceFileInfo.DirectoryName, newFileName);
-
-            //        var whenSame = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfFileNameSame), engine);
-            //        if (EM_CanHandleFileOrFolderPathExtensionMethods.IsSamePath(path, destinationPath))
-            //        {
-            //            switch (whenSame)
-            //            {
-            //                case "ignore":
-            //                    return destinationPath;
-
-            //                case "error":
-            //                    throw new Exception($"File Name before and after the changes is same. Name '{newFileName}'");
-            //            }
-            //        }
-
-            //        // copy file
-            //        File.Copy(path, destinationPath);
-
-            //        return destinationPath;
-            //    })
-            //);
-
             this.FileAction(engine,
                 this.CreateActionFunc(File.Copy, engine)
             );
         }
-
-        //private void cmbExtensionOption_SelectionChange(object sender, EventArgs e)
-        //{
-        //    var cmb = (System.Windows.Forms.ComboBox)sender;
-        //    ControlsList.SecondLabelProcess(nameof(v_ExtensionOption), nameof(v_ExtensionOption), cmb.SelectedItem.ToString());
-        //}
     }
 }

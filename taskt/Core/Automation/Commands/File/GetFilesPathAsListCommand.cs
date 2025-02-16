@@ -97,15 +97,12 @@ namespace taskt.Core.Automation.Commands
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             // apply variable logic
-            //var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_TargetFolderPath), nameof(v_WaitTimeForFolder), engine);
             this.FolderAction(engine,
                 new Func<string, string>(sourceFolder =>
                 {
                     var searchFile = v_SearchFileName.ExpandValueOrUserVariable(engine);
 
                     // get all files
-                    //List<string> fullFilesList;
-                    //fullFilesList = Directory.GetFiles(sourceFolder).ToList();
                     var fullFilesList = Directory.GetFiles(sourceFolder).ToList();
 
                     var compareFunc = this.GetCompareFunction(engine);

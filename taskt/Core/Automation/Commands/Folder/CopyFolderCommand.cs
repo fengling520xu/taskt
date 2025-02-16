@@ -48,7 +48,7 @@ namespace taskt.Core.Automation.Commands
         //[PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         //[PropertyDescription("Delete Folder when it already Exists")]
         //[PropertyIsOptional(true, "No")]
-        //public string v_DeleteExisting { get; set; }
+        //public string v_WhenDestinationExists { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
