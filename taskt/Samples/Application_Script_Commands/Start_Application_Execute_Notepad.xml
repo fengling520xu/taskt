@@ -8,7 +8,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="02c82b18-41bd-4354-b434-68dda3d14eeb" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Execute Notepad" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="f15f4cd2-9874-4608-a632-eaa0158b1a70" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" CommandEnabled="true" v_ProgramName="notepad" />
+      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="f15f4cd2-9874-4608-a632-eaa0158b1a70" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" CommandEnabled="true" v_ApplicationPath="notepad" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="PauseScriptCommand" CommandID="9e565947-0d23-4817-890c-852baceca0e4" CommandName="PauseScriptCommand" IsCommented="false" SelectionName="Pause Script" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" v_Comment="wait" CommandEnabled="true" v_PauseLength="2000" />
@@ -36,11 +36,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.4</TasktVersion>
+    <TasktVersion>3.5.2.22</TasktVersion>
     <Author />
     <LastRunTime>2021-09-07T23:52:42.137668+09:00</LastRunTime>
     <RunTimes>3</RunTimes>
-    <Revision>3</Revision>
+    <Revision>4</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>
