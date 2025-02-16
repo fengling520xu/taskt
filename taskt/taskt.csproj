@@ -419,8 +419,10 @@
     <Compile Include="Core\Automation\Commands\Folder\AFolderCopySameRenameFolderCommands.cs" />
     <Compile Include="Core\Automation\Commands\Folder\CopyFolderInSameLocationCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\GetCommonValuesOfListsCommand.cs" />
+    <Compile Include="Core\Automation\Commands\List\CheckValidListIndexCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\RemoveListItemCommand.cs" />
     <Compile Include="Core\Automation\Commands\List\GetListWithDuplicateItemsRemovedCommand.cs" />
+    <Compile Include="Core\Automation\Commands\List\SliceListCommand.cs" />
     <Compile Include="Core\Automation\Commands\Numerical\CheckNumberCommand.cs" />
     <Compile Include="Core\Automation\Commands\Numerical\CompareNumberCommand.cs" />
     <Compile Include="Core\Automation\Commands\TextCompareSelectMethodControls.cs" />
