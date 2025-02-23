@@ -33,11 +33,20 @@ namespace taskt.Core.Automation.Commands
         //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
-        [PropertyDescription("Delete Folder When it already Exists")]
-        [PropertyIsOptional(true, "No")]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("When Folder Exists")]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyUISelectionOption("Delete")]
+        [PropertyUISelectionOption("Delete To Recycle Bin")]
+        [PropertyUISelectionOption("Error")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
+        [PropertyDetailSampleUsage("**Delete**", "Delete Folder and Create Folder")]
+        [PropertyDetailSampleUsage("**Delete To Recycle Bin**", "Delete Folder to Recycle Bin and Create Folder")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        [PropertyIsOptional(true, "Error")]
+        [PropertyValidationRule("When Folder Exists", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyParameterOrder(5100)]
-        public string v_DeleteExisting { get; set; }
+        public string v_WhenFolderExists { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
@@ -111,15 +120,41 @@ namespace taskt.Core.Automation.Commands
             this.FolderAction(engine,
                 new Func<string, string>(path =>
                 {
-                    var newFolder = this.ExpandValueOrUserVariableAsFolderName(nameof(v_NewFolderName), engine);
+                    var newFolderName = this.ExpandValueOrUserVariableAsFolderName(nameof(v_NewFolderName), engine);
 
                     // create folder path
-                    var createdFolderPath = System.IO.Path.Combine(path, newFolder);
-                    if (System.IO.Directory.Exists(createdFolderPath)) { }
+                    var createdFolderPath = System.IO.Path.Combine(path, newFolderName);
+                    if (System.IO.Directory.Exists(createdFolderPath))
                     {
-                        if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+                        //if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+                        //{
+                        //    System.IO.Directory.Delete(createdFolderPath, true);
+                        //}
+                        void DeleteFolderProcess(string fPath, bool isRecycleBin)
                         {
-                            System.IO.Directory.Delete(createdFolderPath, true);
+                            var delFolder = new DeleteFolderCommand()
+                            {
+                                v_TargetFolderPath = fPath,
+                                v_MoveToRecycleBin = (isRecycleBin) ? "Yes" : "No",
+                            };
+                            delFolder.RunCommand(engine);
+                        }
+
+                        switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenFolderExists), engine))
+                        {
+                            case "error":
+                                throw new Exception($"Specified Folder is Already Exists. Path: '{createdFolderPath}'");
+
+                            case "ignore":
+                                break;
+
+                            case "delete":
+                                DeleteFolderProcess(createdFolderPath, false);
+                                break;
+
+                            case "delete to recycle bin":
+                                DeleteFolderProcess(createdFolderPath, true);
+                                break;
                         }
                     }
 

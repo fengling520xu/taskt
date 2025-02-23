@@ -439,6 +439,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_20(doc);
             convertTo3_5_2_21(doc);
             convertTo3_5_2_22(doc);
+            convertTo3_5_2_23(doc);
             return doc;
         }
 
@@ -4079,6 +4080,45 @@ namespace taskt.Core.Script
                     }
                 })
             );
+        }
+
+        private static void convertTo3_5_2_23(XDocument doc)
+        {
+            // CreateFolderByPathCommand v_WhenFolderExists Delete And Create -> Delete
+            ChangeAttributeValue(doc, "CreateFolderByPathCommand", "v_WhenFolderExists",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "delete and create":
+                            attr.SetValue("Delete");
+                            break;
+                    }
+                })
+            );
+
+            // CreateFolderCommand v_DeleteExisting  -> v_WhenFolderExists
+            var cmds = GetCommands(doc, "CreateFolderCommand");
+            foreach (var cmd in cmds)
+            {
+                var attrDelete = cmd.Attribute("v_DeleteExisting");
+                if (attrDelete != null)
+                {
+                    string attrValue = "";
+                    switch (attrDelete.Value.ToLower())
+                    {
+                        case "yes":
+                            attrValue = "Delete";
+                            break;
+                        case "no":
+                            attrValue = "Ignore";
+                            break;
+                    }
+
+                    attrDelete.Remove();
+                    cmd.SetAttributeValue("v_WhenFolderExists", attrValue);
+                }
+            }
         }
 
 
