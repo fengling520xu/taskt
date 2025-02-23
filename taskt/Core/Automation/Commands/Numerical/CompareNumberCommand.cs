@@ -21,7 +21,7 @@ namespace taskt.Core.Automation.Commands
         public string v_TargetValue { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(CheckNumberCommand), nameof(NumberControls.v_CompareMethod))]
+        [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_CompareMethod))]
         [PropertySelectionChangeEvent(nameof(cmbCompareMethod_SelectionChangeCommitted))]
         public string v_CompareMethod { get; set; }
 

@@ -22,10 +22,12 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("When Folder Exists")]
         [PropertyUISelectionOption("Ignore")]
-        [PropertyUISelectionOption("Delete And Create")]
+        [PropertyUISelectionOption("Delete")]
+        [PropertyUISelectionOption("Delete To Recycle Bin")]
         [PropertyUISelectionOption("Error")]
         [PropertyDetailSampleUsage("**Ignore**", "Nothing to do")]
-        [PropertyDetailSampleUsage("**Delete And Create**", "Delete Folder and Create Folder")]
+        [PropertyDetailSampleUsage("**Delete**", "Delete Folder and Create Folder")]
+        [PropertyDetailSampleUsage("**Delete To Recycle Bin**", "Delete Folder to Recycle Bin and Create Folder")]
         [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
         [PropertyIsOptional(true, "Error")]
         [PropertyValidationRule("When Folder Exists", PropertyValidationRule.ValidationRuleFlags.None)]
@@ -42,6 +44,16 @@ namespace taskt.Core.Automation.Commands
 
             if (Directory.Exists(folderPath)) 
             {
+                void DeleteFolderProcess(string path, bool isRecycleBin)
+                {
+                    var delFolder = new DeleteFolderCommand()
+                    {
+                        v_TargetFolderPath = folderPath,
+                        v_MoveToRecycleBin = (isRecycleBin) ? "Yes" : "No",
+                    };
+                    delFolder.RunCommand(engine);
+                }
+
                 switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenFolderExists), engine))
                 {
                     case "error":
@@ -50,8 +62,13 @@ namespace taskt.Core.Automation.Commands
                     case "ignore":
                         return;
 
-                    case "delete and create":
-                        Directory.Delete(folderPath, true);
+                    case "delete":
+                        //Directory.Delete(folderPath, true);
+                        DeleteFolderProcess(folderPath, false);
+                        break;
+
+                    case "delete to recycle bin":
+                        DeleteFolderProcess(folderPath, true);
                         break;
                 }
             }

@@ -8,7 +8,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="46d759f0-096c-456d-bdd1-4bef343edcf8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="Notepad start normaly" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="2a047182-69bd-40a8-9e48-5d615e9d25f0" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" CommandEnabled="true" v_ProgramName="notepad" />
+      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="2a047182-69bd-40a8-9e48-5d615e9d25f0" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" CommandEnabled="true" v_ApplicationPath="notepad" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="46d759f0-096c-456d-bdd1-4bef343edcf8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" v_Comment="After Notepad start, this message is shown soon." CommandEnabled="true" />
@@ -20,7 +20,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="46d759f0-096c-456d-bdd1-4bef343edcf8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" v_Comment="Start Calc" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="2a047182-69bd-40a8-9e48-5d615e9d25f0" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="7" PauseBeforeExeucution="false" CommandEnabled="true" v_ProgramName="calc" v_WaitForExit="Yes" />
+      <ScriptCommand xsi:type="StartApplicationCommand" CommandID="2a047182-69bd-40a8-9e48-5d615e9d25f0" CommandName="StartApplicationCommand" IsCommented="false" SelectionName="Start Application" DefaultPause="0" LineNumber="7" PauseBeforeExeucution="false" CommandEnabled="true" v_ApplicationPath="calc" v_WaitForExit="Yes" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="46d759f0-096c-456d-bdd1-4bef343edcf8" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" v_Comment="After Calc closed, this message will show." CommandEnabled="true" />
@@ -30,11 +30,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.4</TasktVersion>
+    <TasktVersion>3.5.2.22</TasktVersion>
     <Author />
     <LastRunTime>2024-09-14T22:03:12.2433823+09:00</LastRunTime>
     <RunTimes>4</RunTimes>
-    <Revision>3</Revision>
+    <Revision>4</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

@@ -14,7 +14,7 @@
       <ScriptCommand xsi:type="CommentCommand" CommandID="07cbeffb-71d7-4b62-a9e2-bcee62b6302c" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" v_Comment="Open and Read text file, &quot;mytext.txt&quot;" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="ReadTextFileCommand" CommandID="6ee5485e-4729-471e-a453-a31a26eb48e2" CommandName="ReadTextFileCommand" IsCommented="false" SelectionName="Read Text File" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_FilePath="⦃Folder.Desktop⦄\mytext.txt" v_ReadOption="Content" v_userVariableName="vReadText" />
+      <ScriptCommand xsi:type="ReadTextFileCommand" CommandID="6ee5485e-4729-471e-a453-a31a26eb48e2" CommandName="ReadTextFileCommand" IsCommented="false" SelectionName="Read Text File" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" CommandEnabled="true" v_TargetFilePath="⦃Folder.Desktop⦄\mytext.txt" v_ReadOption="Content" v_userVariableName="vReadText" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="CommentCommand" CommandID="07cbeffb-71d7-4b62-a9e2-bcee62b6302c" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" v_Comment="Show text content" CommandEnabled="true" />
@@ -27,11 +27,11 @@
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.2.4</TasktVersion>
+    <TasktVersion>3.5.2.22</TasktVersion>
     <Author />
     <LastRunTime>2021-09-10T12:01:55.0397841+09:00</LastRunTime>
     <RunTimes>1</RunTimes>
-    <Revision>1</Revision>
+    <Revision>2</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

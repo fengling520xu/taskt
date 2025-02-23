@@ -81,7 +81,6 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// number check method
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("Check Method")]
         [PropertyUISelectionOption("Is Number")]
         [PropertyUISelectionOption("Is Not Number")]
@@ -93,6 +92,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Is Negative Value")]
         [PropertyUISelectionOption("Is Integer")]
         [PropertyUISelectionOption("Is Not Integer")]
+        [Remarks("")]
+        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyValidationRule("Check Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Method")]
         public static string v_CheckMethod { get; }
@@ -100,7 +101,6 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// number compare method
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("Compare Method")]
         [PropertyUISelectionOption("Is Equal To")]
         [PropertyUISelectionOption("Is Not Equal To")]
@@ -110,6 +110,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Is Less Than Or Equal To")]
         [PropertyUISelectionOption("Is Between")]
         [PropertyUISelectionOption("Is Not Between")]
+        [Remarks("")]
+        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyValidationRule("Compare Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Method")]
         public static string v_CompareMethod { get; }

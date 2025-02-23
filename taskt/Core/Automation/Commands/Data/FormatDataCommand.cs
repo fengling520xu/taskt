@@ -3,7 +3,6 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using taskt.UI.CustomControls;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
-using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -98,23 +97,32 @@ namespace taskt.Core.Automation.Commands
                     //};
                     //formatDateTime.RunCommand(engine);
 
-                    using(var myVar = new InnerScriptVariable(engine))
-                    {
-                        var dateTimeFromText = new CreateDateTimeFromTextCommand()
-                        {
-                            v_Text = v_InputValue,
-                            v_DateTime = myVar.VariableName,
-                        };
-                        dateTimeFromText.RunCommand(engine);
+                    //using(var myVar = new InnerScriptVariable(engine))
+                    //{
+                    //    var dateTimeFromText = new CreateDateTimeFromTextCommand()
+                    //    {
+                    //        v_Text = v_InputValue,
+                    //        v_DateTime = myVar.VariableName,
+                    //    };
+                    //    dateTimeFromText.RunCommand(engine);
 
-                        var formatDateTime = new FormatDateTimeCommand()
-                        {
-                            v_DateTime = myVar.VariableName,
-                            v_Format = v_ToStringFormat,
-                            v_Result = v_applyToVariableName
-                        };
-                        formatDateTime.RunCommand(engine);
-                    }
+                    //    var formatDateTime = new FormatDateTimeCommand()
+                    //    {
+                    //        v_DateTime = myVar.VariableName,
+                    //        v_Format = v_ToStringFormat,
+                    //        v_Result = v_applyToVariableName
+                    //    };
+                    //    formatDateTime.RunCommand(engine);
+                    //}
+
+                    var formatDateTime = new FormatDateTimeByTextCommand()
+                    {
+                        v_DateTime = this.v_InputValue,
+                        v_Format = this.v_ToStringFormat,
+                        v_Result = this.v_applyToVariableName,
+                    };
+                    formatDateTime.RunCommand(engine);
+
                     break;
 
                 case "Number":
@@ -128,10 +136,17 @@ namespace taskt.Core.Automation.Commands
                     break;
 
                 case "Path":
-                    var variableString = v_InputValue.ExpandValueOrUserVariable(engine);
-                    var formatting = v_ToStringFormat.ExpandValueOrUserVariable(engine);
-                    var formattedString = FilePathControls.FormatFileFolderPath(variableString, formatting);
-                    formattedString.StoreInUserVariable(engine, v_applyToVariableName);
+                    //var variableString = v_InputValue.ExpandValueOrUserVariable(engine);
+                    //var formatting = v_ToStringFormat.ExpandValueOrUserVariable(engine);
+                    //var formattedString = FilePathControls.FormatFileFolderPath(variableString, formatting);
+                    //formattedString.StoreInUserVariable(engine, v_applyToVariableName);
+                    var formatPath = new ExtractionFilePathCommand()
+                    {
+                        v_TargetFilePath = this.v_InputValue,
+                        v_Format = this.v_ToStringFormat,
+                        v_Result = this.v_applyToVariableName,
+                    };
+                    formatPath.RunCommand(engine);
                     break;
                     
                 default:

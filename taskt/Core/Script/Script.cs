@@ -439,6 +439,7 @@ namespace taskt.Core.Script
             convertTo3_5_2_20(doc);
             convertTo3_5_2_21(doc);
             convertTo3_5_2_22(doc);
+            convertTo3_5_2_23(doc);
             return doc;
         }
 
@@ -4078,6 +4079,123 @@ namespace taskt.Core.Script
                             break;
                     }
                 })
+            );
+        }
+
+        private static void convertTo3_5_2_23(XDocument doc)
+        {
+            // CreateFolderByPathCommand v_WhenFolderExists Delete And Create -> Delete
+            ChangeAttributeValue(doc, "CreateFolderByPathCommand", "v_WhenFolderExists",
+                new Action<XAttribute>(attr =>
+                {
+                    switch (attr.Value.ToLower())
+                    {
+                        case "delete and create":
+                            attr.SetValue("Delete");
+                            break;
+                    }
+                })
+            );
+
+            // CreateFolderCommand v_DeleteExisting  -> v_WhenFolderExists
+            var cmds = GetCommands(doc, "CreateFolderCommand");
+            foreach (var cmd in cmds)
+            {
+                var attrDelete = cmd.Attribute("v_DeleteExisting");
+                if (attrDelete != null)
+                {
+                    string attrValue = "";
+                    switch (attrDelete.Value.ToLower())
+                    {
+                        case "yes":
+                            attrValue = "Delete";
+                            break;
+                        case "no":
+                            attrValue = "Ignore";
+                            break;
+                    }
+
+                    attrDelete.Remove();
+                    cmd.SetAttributeValue("v_WhenFolderExists", attrValue);
+                }
+            }
+
+            // FormatDataCommand -> FormatDateTimeByTextCommand, FormatNumberCommand, ExtractionFilePathCommand
+            var fmts = GetCommands(doc, "FormatDataCommand");
+            var dateCmds = new List<XElement>();
+            var numCmds = new List<XElement>();
+            var pathCmds = new List<XElement>();
+
+            void AddCommentProcess(XElement cmd)
+            {
+                var attrCom = cmd.Attribute("v_Comment");
+                if (attrCom != null)
+                {
+                    cmd.SetAttributeValue("v_Comment", $"Command conversion failed because Type is not specified. {attrCom.Value}");
+                }
+                else
+                {
+                    cmd.SetAttributeValue("v_Comment", "Command conversion failed because Type is not specified");
+                }
+            }
+
+            foreach(var cmd in fmts)
+            {
+                var attrType = cmd.Attribute("v_FormatType");
+                if (attrType != null)
+                {
+                    switch (attrType.Value.ToLower())
+                    {
+                        case "date":
+                            dateCmds.Add(cmd);
+                            break;
+                        case "number":
+                            numCmds.Add(cmd);
+                            break;
+                        case "path":
+                            pathCmds.Add(cmd);
+                            break;
+                        default:
+                            AddCommentProcess(cmd);
+                            break;
+                    }
+                }
+                else
+                {
+                    AddCommentProcess(cmd);
+                }
+            }
+            // datetime
+            ChangeCommandNameProcess(dateCmds, "FormatDateTimeByTextCommand", "Format DateTime By Text");
+            ChangeMultiAttributeNamesProcess(dateCmds,
+                new List<(string, string)>()
+                {
+                    ("v_InputValue", "v_DateTime"),
+                    ("v_ToStringFormat", "v_Format"),
+                    ("v_applyToVariableName", "v_Result"),
+                }
+            );
+
+            // number
+            ChangeCommandNameProcess(numCmds, "FormatNumberCommand", "Format Number");
+            ChangeMultiAttributeNamesProcess(numCmds,
+                new List<(string, string)>()
+                {
+                    ("v_InputValue", "v_Number"),
+                    ("v_ToStringFormat", "v_Format"),
+                    ("v_applyToVariableName", "v_Result"),
+                }
+            );
+
+            // path
+            ChangeCommandNameProcess(pathCmds, "ExtractionFilePathCommand", "Extraction File Path");
+            ChangeMultiAttributeNamesProcess(pathCmds,
+                new List<(string, string)>()
+                {
+                    ("v_InputValue", "v_TargetFilePath"),
+                    ("v_ToStringFormat", "v_Format"),
+                    ("v_applyToVariableName", "v_Result"),
+                }
             );
         }
 
