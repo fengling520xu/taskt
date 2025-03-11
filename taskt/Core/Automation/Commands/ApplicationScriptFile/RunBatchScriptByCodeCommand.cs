@@ -9,8 +9,8 @@ namespace taskt.Core.Automation.Commands
     [Attributes.ClassAttributes.Group("Application/Script")]
     [Attributes.ClassAttributes.SubGruop("Windows Script File")]
     [Attributes.ClassAttributes.CommandSettings("Run Batch Script By Code")]
-    [Attributes.ClassAttributes.Description("This command allows you to run a script by code.")]
-    [Attributes.ClassAttributes.UsesDescription("Use this command when you want to run a script by code.")]
+    [Attributes.ClassAttributes.Description("This command allows you to run a batch script by code.")]
+    [Attributes.ClassAttributes.UsesDescription("Use this command when you want to run a batch script by code.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
     [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_script))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
@@ -21,7 +21,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_MultiLinesTextBox))]
         [PropertyDescription("Batch Script Code")]
         [PropertyDetailSampleUsage("**dir**", PropertyDetailSampleUsage.ValueType.Value, "Batch Script")]
-        [PropertyDetailSampleUsage("**{{{vCode}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Script File")]
+        [PropertyDetailSampleUsage("**{{{vCode}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Batch Script")]
         [PropertyParameterOrder(5000)]
         public string v_ScriptCode { get; set; }
 
