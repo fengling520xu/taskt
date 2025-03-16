@@ -1,5 +1,7 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.IO;
+using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -15,12 +17,67 @@ namespace taskt.Core.Automation.Commands
 
         public static CompilerResults CompileInput(string codeInput, string langVersion = "", string outFileName = "")
         {
-            if (string.IsNullOrEmpty(langVersion)) 
-            { 
+            //if (string.IsNullOrEmpty(langVersion)) 
+            //{ 
+            //    langVersion = defaultLangVersion;
+            //}
+            //if (string.IsNullOrEmpty(outFileName)) 
+            //{ 
+            //    outFileName = defaultOutFileName;
+            //}
+
+            //if (!outFileName.EndsWith(".exe"))
+            //{
+            //    outFileName += ".exe";
+            //}
+
+            //string outFilePath;
+            //if (string.IsNullOrEmpty(Path.GetDirectoryName(outFileName)))
+            //{
+            //    outFilePath = Path.Combine(IO.Folders.GetTasktTemporaryFolderPath(), outFileName);
+            //}
+            //else
+            //{
+            //    var fn = Path.GetFileName(outFileName);
+            //    outFilePath = Path.Combine(IO.Folders.GetTasktTemporaryFolderPath(), fn);
+            //}
+
+            //// create provider
+            ////CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
+            //var roslyn = new Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider();
+
+            //// create compile parameters
+            //var parameters = new CompilerParameters
+            //{
+            //    GenerateExecutable = true,
+            //    OutputAssembly = outFilePath,
+            //    CompilerOptions = $"-langversion:{langVersion}",
+            //};
+
+            //// compile
+            //return roslyn.CompileAssemblyFromSource(parameters, codeInput);
+
+            return CompileProcess(new Func<CSharpCodeProvider, CompilerParameters, CompilerResults>((r, p) =>
+            {
+                return r.CompileAssemblyFromSource(p, codeInput);
+            }), langVersion, outFileName);
+        }
+
+        /// <summary>
+        /// general compile action
+        /// </summary>
+        /// <param name="roslynCompileFunc"></param>
+        /// <param name="langVersion"></param>
+        /// <param name="outFileName"></param>
+        /// <returns></returns>
+        private static CompilerResults CompileProcess(Func<CSharpCodeProvider, CompilerParameters, CompilerResults> roslynCompileFunc, string langVersion = "", string outFileName = "")
+        {
+            if (string.IsNullOrEmpty(langVersion))
+            {
                 langVersion = defaultLangVersion;
             }
-            if (string.IsNullOrEmpty(outFileName)) 
-            { 
+            if (string.IsNullOrEmpty(outFileName))
+            {
                 outFileName = defaultOutFileName;
             }
 
@@ -42,7 +99,7 @@ namespace taskt.Core.Automation.Commands
 
             // create provider
             //CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
-            var roslyn = new Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider();
+            var roslyn = new CSharpCodeProvider();
 
             // create compile parameters
             var parameters = new CompilerParameters
@@ -52,8 +109,7 @@ namespace taskt.Core.Automation.Commands
                 CompilerOptions = $"-langversion:{langVersion}",
             };
 
-            // compile
-            return roslyn.CompileAssemblyFromSource(parameters, codeInput);
+            return roslynCompileFunc(roslyn, parameters);
         }
     }
 }
