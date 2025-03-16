@@ -37,7 +37,6 @@ namespace taskt.Core.Automation.Commands
         //[PropertyDetailSampleUsage("**1 2 3**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
         //[PropertyDetailSampleUsage("**{{{vArgs}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Arguments")]
         //[PropertyIsOptional(true)]
-        [PropertyFirstValue("-NoProfile -ExecutionPolicy unrestricted")]
         //[PropertyValidationRule("Arguments", PropertyValidationRule.ValidationRuleFlags.None)]
         //[PropertyDisplayText(false, "")]
         //[PropertyParameterOrder(6000)]
@@ -48,6 +47,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Convert Variables before Execution")]
         [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
+        [Remarks("This parameter is enabled when Execution Method is Base64")]
         [PropertyParameterOrder(7000)]
         public string v_ReplaceScriptVariables { get; set; }
 
@@ -59,6 +59,21 @@ namespace taskt.Core.Automation.Commands
         //[PropertyDisplayText(false, "")]
         //[PropertyParameterOrder(8000)]
         //public string v_Result { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Script Execution Method")]
+        [PropertyUISelectionOption("EncodedCommand Base64")]
+        [PropertyUISelectionOption("ExecutionPolicy Unrestricted")]
+        [PropertyUISelectionOption("ExecutionPolicy Bypass")]
+        [PropertyDetailSampleUsage("EncodedCommand Base64", "Encode the Script to Base64 and execute it by -EncodedCommand parameters. Arguments are sent to PowerShell, they cannot be retrieved by the Script. But you can expand the value of the taskt Variables in the Script.")]
+        [PropertyDetailSampleUsage("ExecutionPolicy Unrestricted", "'-ExecutionPolicy Unrestricted' is set up in PowerShell and a Script is specified and executed by the -File parameter. Arguments are sent to the Script.")]
+        [PropertyDetailSampleUsage("ExecutionPolicy Bypass", "'-ExecutionPolicy Bypass' is set up in PowerShell and a Script is specified and executed by the -File parameter. Arguments are sent to the Script.")]
+        [PropertyIsOptional(true, "EncodedCommand Base64")]
+        [PropertyValidationRule("Execution Method", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Execution Method")]
+        [PropertyParameterOrder(9000)]
+        public string v_ExecutionMethod { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
@@ -76,44 +91,90 @@ namespace taskt.Core.Automation.Commands
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //define script path
-            //string scriptPath = FilePathControls.FormatFilePath_NoFileCounter(v_ScriptPath, engine, new List<string>() { "ps1", "bat" }, true);
-            //var scriptPath = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
+            // define script path
             var scriptPath = this.WaitForFile(engine);
 
-            //get script text
-            var psCommand = File.ReadAllText(scriptPath);
+            var arguments = this.ExpandValueOrUserVariable(nameof(v_Arguments), "Arguments", engine);
 
-            //if (v_ReplaceScriptVariables.ToUpperInvariant() == "YES")
-            if (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ReplaceScriptVariables), engine) == "yes")
+            //ProcessStartInfo startInfo;
+            string sendArgs;
+            switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ExecutionMethod), engine))
             {
-                //convert variables
-                psCommand = psCommand.ExpandValueOrUserVariable(engine);
-            }
-            
-            //convert ps script
-            var psCommandBytes = System.Text.Encoding.Unicode.GetBytes(psCommand);
-            var psCommandBase64 = Convert.ToBase64String(psCommandBytes);
+                case "encodedcommand base64":
+                    // get script text
+                    var psCommand = File.ReadAllText(scriptPath);
+                    if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_ReplaceScriptVariables), engine))
+                    {
+                        // convert variables
+                        psCommand = psCommand.ExpandValueOrUserVariable(engine);
+                    }
 
-            //execute
+                    // convert ps script
+                    var psCommandBytes = System.Text.Encoding.Unicode.GetBytes(psCommand);
+                    var psCommandBase64 = Convert.ToBase64String(psCommandBytes);
+
+                    if (!arguments.ToLower().Contains("-noprofile"))
+                    {
+                        arguments = $"-NoProfile {arguments}";
+                    }
+
+                    //// execute
+                    //startInfo = new ProcessStartInfo()
+                    //{
+                    //    FileName = "powershell.exe",
+                    //    Arguments = $"{arguments} -EncodedCommand {psCommandBase64}",
+                    //    UseShellExecute = false,
+                    //    RedirectStandardOutput = true
+                    //};
+
+                    sendArgs = $"{arguments} -EncodedCommand {psCommandBase64}";
+                    break;
+
+                case "executionpolicy unrestricted":
+                    //startInfo = new ProcessStartInfo()
+                    //{
+                    //    FileName = "powershell.exe",
+                    //    Arguments = $"-ExecutionPolicy Unrestricted -File \"{scriptPath}\" {arguments}",
+                    //    UseShellExecute = false,
+                    //    RedirectStandardOutput = true
+                    //};
+                    sendArgs = $"-ExecutionPolicy Unrestricted -File \"{scriptPath}\" {arguments}";
+                    break;
+
+                case "executionpolicy bypass":
+                    //startInfo = new ProcessStartInfo()
+                    //{
+                    //    FileName = "powershell.exe",
+                    //    Arguments = $"-ExecutionPolicy ByPass -File \"{scriptPath}\" {arguments}",
+                    //    UseShellExecute = false,
+                    //    RedirectStandardOutput = true
+                    //};
+                    sendArgs = $"-ExecutionPolicy ByPass -File \"{scriptPath}\" {arguments}";
+                    break;
+
+                default:
+                    throw new Exception("bad execution method");    //
+            }
+
             var startInfo = new ProcessStartInfo()
             {
                 FileName = "powershell.exe",
-                Arguments = $"{v_Arguments} -EncodedCommand {psCommandBase64}",
+                Arguments = sendArgs,
                 UseShellExecute = false,
-                RedirectStandardOutput = true                  
+                RedirectStandardOutput = true
             };
-
             var proc =  Process.Start(startInfo);
 
-            proc.WaitForExit();
-
-            //store output into variable
+            // url: https://stackoverflow.com/questions/2285288/calling-a-ruby-script-in-c-sharp/12848337#12848337
             var reader = proc.StandardOutput;
-            
+            string output = reader.ReadToEnd();
+
+            proc.WaitForExit();
+            proc.Close();
+
+            // store output into variable
             if (!string.IsNullOrEmpty(v_Result))
             {
-                string output = reader.ReadToEnd();
                 output.StoreRawDataInUserVariable(engine, v_Result);
             }
         }
