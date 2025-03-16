@@ -69,7 +69,7 @@ namespace taskt.Core.Automation.Commands
             {
                 //create temp directory
                 //var tempDir = Core.IO.Folders.GetFolder(Folders.FolderType.TempFolder);
-                var tempDir = Folders.GetTempFolderPath();
+                var tempDir = Folders.GetUserTemporaryFolderPath();
                 var tempFile = System.IO.Path.Combine(tempDir, $"{ Guid.NewGuid()}.pdf");
 
                 //check if directory does not exist then create directory

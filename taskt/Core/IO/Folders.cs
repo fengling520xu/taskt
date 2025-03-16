@@ -25,7 +25,7 @@ namespace taskt.Core.IO
         /// <summary>
         /// taskt temp folder name
         /// </summary>
-        private const string TEMP_FOLDER_NAME = "taskt";
+        private const string USER_TEMPORARY_FOLDER_NAME = "taskt";
         /// <summary>
         /// Resouces folder name
         /// </summary>
@@ -46,6 +46,10 @@ namespace taskt.Core.IO
         /// BeforeConverted folder name
         /// </summary>
         public const string BEFORE_CONVERTED_FOLDER_NAME = "BeforeConverted";
+        /// <summary>
+        /// Temporary folder name for compile c# code, etc.
+        /// </summary>
+        public const string TASKT_TEMPORARY_FOLDER_NAME = "Temporary";
         /// <summary>
         /// taskt update working folder name
         /// </summary>
@@ -167,9 +171,9 @@ namespace taskt.Core.IO
         /// get temp folder path
         /// </summary>
         /// <returns></returns>
-        public static string GetTempFolderPath()
+        public static string GetUserTemporaryFolderPath()
         {
-            return Path.Combine(Path.GetTempPath(), $"{TEMP_FOLDER_NAME}\\");
+            return Path.Combine(Path.GetTempPath(), $"{USER_TEMPORARY_FOLDER_NAME}\\");
         }
 
         /// <summary>
@@ -215,6 +219,15 @@ namespace taskt.Core.IO
         public static string GetBeforeConvertedFolderPath()
         {
             return Path.Combine(GetRootFolderPath(), $"{BEFORE_CONVERTED_FOLDER_NAME}\\");
+        }
+
+        /// <summary>
+        /// get taskt temporary folder
+        /// </summary>
+        /// <returns></returns>
+        public static string GetTasktTemporaryFolderPath()
+        {
+            return Path.Combine(GetRootFolderPath(), $"{TASKT_TEMPORARY_FOLDER_NAME}");
         }
 
         /// <summary>

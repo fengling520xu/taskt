@@ -94,7 +94,7 @@ namespace taskt.Core.Automation.Commands
             {
                 //create temp directory
                 //var tempDir = Folders.GetFolder(Folders.FolderType.TempFolder);
-                var tempDir = Folders.GetTempFolderPath();
+                var tempDir = Folders.GetUserTemporaryFolderPath();
                 var tempFile = Path.Combine(tempDir, $"{ Guid.NewGuid()}." + vFileType);
 
                 //check if directory does not exist then create directory
