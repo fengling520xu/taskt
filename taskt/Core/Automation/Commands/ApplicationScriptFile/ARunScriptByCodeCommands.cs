@@ -10,6 +10,8 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_MultiLinesTextBox))]
         [PropertyDescription("Script Code")]
+        [PropertyValidationRule("Script Code", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(false, "Script Code")]
         [PropertyParameterOrder(5000)]
         public virtual string v_ScriptCode { get; set; }
 
@@ -41,7 +43,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Variable Name to Receive the Output")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "")]
+        [PropertyDisplayText(true, "Result")]
         [PropertyParameterOrder(8000)]
         public virtual string v_Result { get; set; }
 
