@@ -44,7 +44,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
-        [PropertyDescription("Convert Variables before Execution")]
+        [PropertyDescription("Expand taskt Variables In Script File")]
         [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
         [Remarks("This parameter is enabled when Execution Method is Base64")]
