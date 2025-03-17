@@ -31,7 +31,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Variable Name to Receive the Output")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "")]
+        [PropertyDisplayText(true, "Result")]
         [PropertyParameterOrder(8000)]
         public virtual string v_Result { get; set; }
 
