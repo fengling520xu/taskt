@@ -51,7 +51,6 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Delete Script File After Execute")]
         [PropertyIsOptional(true, "Yes")]
-        [PropertyFirstValue("Yes")]
         [PropertyValidationRule("Delete Script File", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
         [PropertyParameterOrder(10000)]
