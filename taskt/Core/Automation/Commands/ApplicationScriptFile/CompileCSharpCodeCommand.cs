@@ -45,7 +45,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true, "tasktOnTheFly")]
         [PropertyFirstValue("tasktOnTheFly")]
         [PropertyValidationRule("File Name", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "File Name")]
+        [PropertyDisplayText(true, "File Name")]
         public string v_ExecutableFileName { get; set; }
 
         [XmlAttribute]
@@ -53,7 +53,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDescription("Variable Name to Store Executable File Path")]
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Executable File Path", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "Executable File Path")]
+        [PropertyDisplayText(true, "Executable File Path")]
         public string v_ExecutableFilePath { get; set; }
 
         [XmlAttribute]
@@ -106,7 +106,7 @@ namespace taskt.Core.Automation.Commands
             var langVer = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CSharpLanguageVersion), engine);
 
             // compile custom code
-            var result = CSharpCodeCompilerControls.CompileInput(csharpCode, langVer, fileName);
+            var result = CSharpCodeCompilerControls.CompileCSCode(csharpCode, langVer, fileName);
 
             // check for errors
             if (result.Errors.HasErrors)

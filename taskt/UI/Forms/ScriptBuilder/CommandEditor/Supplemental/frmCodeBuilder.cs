@@ -109,7 +109,7 @@ namespace taskt.UI.Forms.ScriptBuilder.CommandEditor.Supplemental
             //var compilerSvc = new Core.CompilerServices();
 
             lstCompilerResults.Items.Add("Compiling..");
-            var result = CSharpCodeCompilerControls.CompileInput(rtbCode.Text);
+            var result = CSharpCodeCompilerControls.CompileCSCode(rtbCode.Text);
 
             if (result.Errors.HasErrors)
             {

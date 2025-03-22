@@ -133,7 +133,7 @@ namespace taskt.Core.Automation.Commands
             var langVer = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_CSharpLanguageVersion), engine);
 
             // compile custom code
-            var result = CSharpCodeCompilerControls.CompileInput(csharpCode, langVer, fileName);
+            var result = CSharpCodeCompilerControls.CompileCSCode(csharpCode, langVer, fileName);
 
             // check for errors
             if (result.Errors.HasErrors)
