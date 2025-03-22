@@ -358,6 +358,7 @@
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\AScriptFileCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunScriptFileCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunScriptByCodeCommands.cs" />
+    <Compile Include="Core\Automation\Commands\ApplicationScriptFile\CompileCSharpCodeCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunPowerShellScriptByCodeCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunJavaScriptByCodeCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunBatchScriptByCodeCommand.cs" />
