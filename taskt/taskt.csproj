@@ -360,6 +360,7 @@
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunScriptByCodeCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\CompileCSharpFileCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\CompileCSharpCodeCommand.cs" />
+    <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunCSharpFileCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunPowerShellScriptByCodeCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunJavaScriptByCodeCommand.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\RunBatchScriptByCodeCommand.cs" />
