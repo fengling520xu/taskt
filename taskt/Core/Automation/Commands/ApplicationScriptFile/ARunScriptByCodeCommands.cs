@@ -69,6 +69,15 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(11000)]
         public virtual string v_TemporaryScriptFolder { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyDescription("Variable Name to Store Temporary Script File Path")]
+        [PropertyIsOptional(true)]
+        [PropertyValidationRule("Temporary Script File Path", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Temporary Script File Path")]
+        [PropertyParameterOrder(12000)]
+        public string v_ScriptFilePath { get; set; }
+
         /// <summary>
         /// run script action
         /// </summary>
@@ -159,6 +168,11 @@ namespace taskt.Core.Automation.Commands
                     v_TargetFilePath = scriptFilePath,
                 };
                 deleteScript.RunCommand(engine);
+            }
+
+            if (!string.IsNullOrEmpty(v_ScriptFilePath))
+            {
+                scriptFilePath.StoreInUserVariable(engine,v_ScriptFilePath);
             }
         }
     }
