@@ -182,19 +182,19 @@ namespace taskt.Core.Automation.Commands
                         return !string.IsNullOrEmpty(preFunc(trgStr));
                     });
                     break;
-                case "is a number":
+                case "is number":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return decimal.TryParse(preFunc(trgStr), out _);
                     });
                     break;
-                case "is a boolean":
+                case "is boolean":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return bool.TryParse(preFunc(trgStr), out _);
                     });
                     break;
-                case "is a boolean loose":
+                case "is boolean loose":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return IsBooleanLoose(preFunc(trgStr));
@@ -206,19 +206,19 @@ namespace taskt.Core.Automation.Commands
                         return string.IsNullOrEmpty(preFunc(trgStr));
                     });
                     break;
-                case "is not a number":
+                case "is not number":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return !decimal.TryParse(preFunc(trgStr), out _);
                     });
                     break;
-                case "is not a boolean":
+                case "is not boolean":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return !bool.TryParse(preFunc(trgStr), out _);
                     });
                     break;
-                case "is not a boolean loose":
+                case "is not boolean loose":
                     ret = new Func<string, string, bool>((trgStr, condition) =>
                     {
                         return !IsBooleanLoose(preFunc(trgStr));
