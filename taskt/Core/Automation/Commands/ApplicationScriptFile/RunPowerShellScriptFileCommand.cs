@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
@@ -28,7 +29,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "ps1")]
         public override string v_TargetFilePath { get; set; }
 
-        [XmlAttribute]
+        //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         //[PropertyDescription("Arguments")]
         //[InputSpecification("Arguments", true)]
@@ -40,25 +41,7 @@ namespace taskt.Core.Automation.Commands
         //[PropertyValidationRule("Arguments", PropertyValidationRule.ValidationRuleFlags.None)]
         //[PropertyDisplayText(false, "")]
         //[PropertyParameterOrder(6000)]
-        public override string v_Arguments { get; set; }
-
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
-        [PropertyDescription("Convert Variables before Execution")]
-        [PropertyIsOptional(true, "No")]
-        [PropertyFirstValue("No")]
-        [Remarks("This parameter is enabled when Execution Method is Base64")]
-        [PropertyParameterOrder(7000)]
-        public string v_ReplaceScriptVariables { get; set; }
-
-        //[XmlAttribute]
-        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        //[PropertyDescription("Variable Name to Receive the Output")]
-        //[PropertyIsOptional(true)]
-        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
-        //[PropertyDisplayText(false, "")]
-        //[PropertyParameterOrder(8000)]
-        //public string v_Result { get; set; }
+        //public override string v_Arguments { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -72,8 +55,27 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true, "EncodedCommand Base64")]
         [PropertyValidationRule("Execution Method", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "Execution Method")]
-        [PropertyParameterOrder(9000)]
+        [PropertySelectionChangeEvent(nameof(cmbExecutionMethod_SelectionChangeCommited))]
+        [PropertyParameterOrder(7000)]
         public string v_ExecutionMethod { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        [PropertyDescription("Expand taskt Variables In Script File")]
+        [PropertyIsOptional(true, "No")]
+        [PropertyFirstValue("No")]
+        [Remarks("This parameter is enabled when Execution Method is Base64")]
+        [PropertyParameterOrder(7100)]
+        public string v_ReplaceScriptVariables { get; set; }
+
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        //[PropertyDescription("Variable Name to Receive the Output")]
+        //[PropertyIsOptional(true)]
+        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
+        //[PropertyDisplayText(false, "")]
+        //[PropertyParameterOrder(8000)]
+        //public string v_Result { get; set; }
 
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
@@ -177,6 +179,19 @@ namespace taskt.Core.Automation.Commands
             {
                 output.StoreRawDataInUserVariable(engine, v_Result);
             }
+        }
+
+        private void cmbExecutionMethod_SelectionChangeCommited(object sender, EventArgs e)
+        {
+            bool visible = true;
+            switch (((ComboBox)sender).SelectedItem.ToString().ToLower())
+            {
+                case "executionpolicy unrestricted":
+                case "executionpolicy bypass":
+                    visible = false;
+                    break;
+            }
+            FormUIControls.SetVisibleParameterControlGroup(this.ControlsList, nameof(v_ReplaceScriptVariables), visible);
         }
     }
 }

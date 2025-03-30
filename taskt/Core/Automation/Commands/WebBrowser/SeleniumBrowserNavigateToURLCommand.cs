@@ -62,9 +62,18 @@ namespace taskt.Core.Automation.Commands
             var parsedURL = v_URL.ExpandValueOrUserVariable(engine);
             if (!parsedURL.StartsWith("http"))
             {
-                var useHttps = v_UseHttps.ExpandValueOrUserVariableAsBool("Use HTTPS", engine);
-                //parsedURL = this.v_HttpsChoice[useHttps] + parsedURL;
-                parsedURL = ((useHttps) ? "https://" : "http://") + parsedURL;
+                // check Edge/Chrome/Firefox special
+                if (!parsedURL.StartsWith("edge://") &&
+                    !parsedURL.StartsWith("chrome://") &&
+                    !parsedURL.StartsWith("about:"))
+                {
+                    if (string.IsNullOrEmpty(v_UseHttps))
+                    {
+                        v_UseHttps = "True";
+                    }
+                    var useHttps = v_UseHttps.ExpandValueOrUserVariableAsBool("Use HTTPS", engine);
+                    parsedURL = ((useHttps) ? "https://" : "http://") + parsedURL;
+                }
             }
 
             var seleniumInstance = v_InstanceName.ExpandValueOrUserVariableAsSeleniumBrowserInstance(engine);

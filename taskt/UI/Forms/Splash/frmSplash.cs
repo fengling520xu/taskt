@@ -22,6 +22,8 @@ namespace taskt.UI.Forms.Splash
             CreateFolderProcess(Folders.GetBeforeConvertedFolderPath());
 
             CreateFolderProcess(Folders.GetTasktTemporaryFolderPath());
+
+            CreateFolderProcess(Folders.GetUserTemporaryFolderPath());
         }
 
         /// <summary>

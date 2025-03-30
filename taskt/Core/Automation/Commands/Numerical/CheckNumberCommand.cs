@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
@@ -21,7 +22,23 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_CheckMethod))]
+        [PropertySelectionChangeEvent(nameof(cmbCompareMethod_SelectionChangeCommitted))]
         public string v_CheckMethod { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_Value))]
+        [PropertyDescription("Numerical Value to be Compared")]
+        [PropertyDisplayText(true, "Compared")]
+
+        public string v_ComparedValue1 { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_Value))]
+        [PropertyDescription("Numerical Value to be Compared 2")]
+        [PropertyIsOptional(true, "")]
+        [PropertyValidationRule("Compared Value 2", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(true, "Compared2")]
+        public string v_ComparedValue2 { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_OutputNumericalVariableName))]
@@ -46,6 +63,7 @@ namespace taskt.Core.Automation.Commands
                     res = !decimal.TryParse(vStr, out _);
                     break;
                 default:
+                    // check number is ...
                     var v = this.ExpandValueOrUserVariableAsDecimal(nameof(v_TargetValue), engine);
                     var decimalPoint = v % 1;
                     switch (method)
@@ -80,11 +98,95 @@ namespace taskt.Core.Automation.Commands
                         case "is not integer":
                             res = (decimalPoint != 0);
                             break;
+
+                        default:
+                            // compare other numbers
+                            var a = v;
+                            decimal b, c;
+                            switch (method)
+                            {
+                                case "is between":
+                                case "is not between":
+                                    b = this.ExpandValueOrUserVariableAsDecimal(nameof(v_ComparedValue1), engine);
+                                    if (!string.IsNullOrEmpty(v_ComparedValue2))
+                                    {
+                                        c = this.ExpandValueOrUserVariableAsDecimal(nameof(v_ComparedValue2), engine);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("Compared Value 2 is not Specified.");
+                                    }
+
+                                    if (b > c)
+                                    {
+                                        (b, c) = (c, b);    // swap
+                                    }
+                                    break;
+
+                                default:
+                                    b = this.ExpandValueOrUserVariableAsDecimal(nameof(v_ComparedValue1), engine);
+                                    c = 0;
+                                    break;
+                            }
+                            switch (method)
+                            {
+                                case "is equal to":
+                                    res = (a == b);
+                                    break;
+                                case "is not equal to":
+                                    res = (a != b);
+                                    break;
+                                case "is greater than":
+                                    res = (a > b);
+                                    break;
+                                case "is greater than or equal to":
+                                    res = (a >= b);
+                                    break;
+                                case "is less than":
+                                    res = (a < b);
+                                    break;
+                                case "is less than or equal to":
+                                    res = (a <= b);
+                                    break;
+                                case "is between":
+                                    res = (a >= b) && (a <= c);
+                                    break;
+                                case "is not between":
+                                    res = (a < b) || (a > c);
+                                    break;
+                            }
+                            break;
                     }
                     break;
             }
 
             res.StoreInUserVariable(engine, v_Result);
+        }
+
+        private void cmbCompareMethod_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var cmb = (ComboBox)sender;
+            bool visible1 = false;
+            bool visible2 = false;
+            switch (cmb.SelectedItem.ToString().ToLower())
+            {
+                case "is equal to":
+                case "is not equal to":
+                case "is greater than":
+                case "is greater than or equal to":
+                case "is less than":
+                case "is less than or equal to":
+                    visible1 = true;
+                    visible2 = false;
+                    break;
+                case "is between":
+                case "is not between":
+                    visible1 = true;
+                    visible2 = true;
+                    break;
+            }
+            FormUIControls.SetVisibleParameterControlGroup(this.ControlsList, nameof(v_ComparedValue1), visible1);
+            FormUIControls.SetVisibleParameterControlGroup(this.ControlsList, nameof(v_ComparedValue2), visible2);
         }
     }
 }

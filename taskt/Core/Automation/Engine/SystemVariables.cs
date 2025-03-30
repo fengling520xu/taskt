@@ -23,6 +23,8 @@ namespace taskt.Core.Automation.Engine
         public static readonly ScriptVariable Folder_AttendedTasksPath = new ScriptVariable { VariableName = "Folder.AttendedTasksPath", VariableValue = Folders.GetAttendedTasksFolderPath() };
         public static readonly ScriptVariable Folder_ResoucesPath = new ScriptVariable { VariableName = "Folder.ResourcesPath", VariableValue = Folders.GetResourcesFolderPath() };
         public static readonly ScriptVariable Folder_SamplesPath = new ScriptVariable { VariableName = "Folder.SamplesPath", VariableValue = Folders.GetSamplesFolderPath() };
+        public static readonly ScriptVariable Folder_TasktTemporaryPath = new ScriptVariable { VariableName = "Folder.TasktTemporaryPath", VariableValue = Folders.GetTasktTemporaryFolderPath() };
+        public static readonly ScriptVariable Folder_UserTemporaryPath = new ScriptVariable { VariableName = "Folder.UserTemporaryPath", VariableValue = Folders.GetUserTemporaryFolderPath() };
 
         public static readonly ScriptVariable DateTime_Now = new ScriptVariable { VariableName = "DateTime.Now", VariableValue = "" };
         public static readonly ScriptVariable DateTime_Now_Month = new ScriptVariable { VariableName = "DateTime.Now.Month", VariableValue = "" };
@@ -153,6 +155,8 @@ namespace taskt.Core.Automation.Engine
             Folder_AttendedTasksPath,
             Folder_ResoucesPath,
             Folder_SamplesPath,
+            Folder_TasktTemporaryPath,
+            Folder_UserTemporaryPath,
 
             // datetime
             DateTime_Now,

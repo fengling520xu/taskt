@@ -15,7 +15,14 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         private const string defaultLangVersion = "default";
 
-        public static CompilerResults CompileInput(string codeInput, string langVersion = "", string outFileName = "")
+        /// <summary>
+        /// compile csharp code, specified code text
+        /// </summary>
+        /// <param name="codeInput"></param>
+        /// <param name="langVersion"></param>
+        /// <param name="outFileName"></param>
+        /// <returns></returns>
+        public static CompilerResults CompileCSCode(string codeInput, string langVersion = "", string outFileName = "")
         {
             //if (string.IsNullOrEmpty(langVersion)) 
             //{ 
@@ -60,6 +67,21 @@ namespace taskt.Core.Automation.Commands
             return CompileProcess(new Func<CSharpCodeProvider, CompilerParameters, CompilerResults>((r, p) =>
             {
                 return r.CompileAssemblyFromSource(p, codeInput);
+            }), langVersion, outFileName);
+        }
+
+        /// <summary>
+        /// compile csharp file
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="langVersion"></param>
+        /// <param name="outFileName"></param>
+        /// <returns></returns>
+        public static CompilerResults CompileCSFile(string filePath, string langVersion = "", string outFileName = "")
+        {
+            return CompileProcess(new Func<CSharpCodeProvider, CompilerParameters, CompilerResults>((r, p) =>
+            {
+                return r.CompileAssemblyFromFile(p, filePath);
             }), langVersion, outFileName);
         }
 

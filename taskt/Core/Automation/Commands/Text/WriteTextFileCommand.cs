@@ -32,6 +32,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Append")]
         [PropertyUISelectionOption("Overwrite")]
         [PropertyIsOptional(true, "Overwrite")]
+        [PropertyDisplayText(false, "Overwrite")]
         public string v_Overwrite { get; set; }
 
         [XmlAttribute]
@@ -40,6 +41,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Yes")]
         [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
+        [PropertyValidationRule("Expand Variables", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Replace [crLF]")]
         public string v_ReplaceToLineBreak { get; set; }
 
         [XmlAttribute]
