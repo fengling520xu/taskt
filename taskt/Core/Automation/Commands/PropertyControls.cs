@@ -111,7 +111,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="virtualPropInfo"></param>
         /// <returns></returns>
         public static T GetCustomAttributeWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo)
-            where T : System.Attribute
+            where T : ASingleComamndPropertyAttribute
         {
             return propInfo.GetCustomAttribute<T>() ?? virtualPropInfo?.GetCustomAttribute<T>() ?? null;
         }
@@ -125,7 +125,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="margeAttributes">when the value is true, return value is merged attribute get from two PropertyInfo. when the value is false, return value is propInfo attribute has priority.</param>
         /// <returns></returns>
         public static List<T> GetCustomAttributesWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo)
-            where T : System.Attribute
+            where T : AMultiCommandPropertyAttribute
         {
             // DBG
             //Console.WriteLine("### wv : " + typeof(T).Name);
