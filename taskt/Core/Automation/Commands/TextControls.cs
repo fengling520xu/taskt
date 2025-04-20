@@ -1,7 +1,7 @@
-﻿using System.Text;
-using System;
-using taskt.Core.Automation.Attributes.PropertyAttributes;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
