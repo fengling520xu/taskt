@@ -14,50 +14,52 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// text
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_OneLineTextBox))]
         [PropertyDescription("Text Value")]
-        [InputSpecification("Text Value", true)]
-        [Remarks("")]
+        [InputSpecification("Text", true)]
         [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Text Value")]
         [PropertyDetailSampleUsage("**Hello**", PropertyDetailSampleUsage.ValueType.Value, "Text Value")]
         [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Text Value")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
         [PropertyDisplayText(true, "Text")]
-        [PropertyParameterOrder(5000)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyParameterOrder(5000)]
         public static string v_Text { get; }
 
         /// <summary>
         /// text multiline
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_MultiLinesTextBox))]
         [PropertyDescription("Text Value")]
-        [InputSpecification("Text Value", true)]
-        [Remarks("")]
+        [InputSpecification("Text", true)]
         [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Text Value")]
         [PropertyDetailSampleUsage("**Hello**", PropertyDetailSampleUsage.ValueType.Value, "Text Value")]
         [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Text Value")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.MultiLineTextBox)]
         [PropertyDisplayText(true, "Text")]
-        [PropertyParameterOrder(5000)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.MultiLineTextBox)]
+        //[PropertyParameterOrder(5000)]
         public static string v_Text_MultiLine { get; }
 
         /// <summary>
         /// text variable name
         /// </summary>
-        [PropertyDescription("Text Variable Name")]
-        [InputSpecification("Text Variable Name", true)]
-        [PropertyDetailSampleUsage("**vText**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyDetailSampleUsage("**{{{vText}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyIsVariablesList(true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
-        [PropertyValidationRule("Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Variable")]
-        [PropertyParameterOrder(5000)]
-
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyDescription("Text Variable Name to Store Result")]
+        //[InputSpecification("Variable Name", true)]
+        //[PropertyDetailSampleUsage("**vText**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        //[PropertyDetailSampleUsage("**{{{vText}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[Remarks("")]
+        //[PropertyValidationRule("Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Variable")]
+        //[PropertyParameterOrder(5000)]
         public static string v_OutputTextVariableName { get; set; }
 
         ///// <summary>
