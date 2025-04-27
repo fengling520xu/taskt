@@ -18,7 +18,7 @@ namespace taskt.Core.Automation.Commands
     public sealed class ReadTextFileCommand : ScriptCommand, IFileExistsFilePathProperties
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathAndURL))]
         [PropertyFilePathSetting(true, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "txt,log,json")]
         public string v_TargetFilePath { get; set; }
 

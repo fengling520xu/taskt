@@ -24,7 +24,7 @@ namespace taskt.Core.Automation.Commands
         //public string v_ColumnIndex { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "txt")]
         [PropertyParameterOrder(8000)]
         public string v_FilePath { get; set; }

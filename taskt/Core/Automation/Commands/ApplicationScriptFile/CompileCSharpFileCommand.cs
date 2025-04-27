@@ -18,7 +18,7 @@ namespace taskt.Core.Automation.Commands
     public sealed class CompileCSharpFileCommand : ScriptCommand, ICanHandleFileName, ICanHandleFilePath
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_NoSample_FilePath))]
         [PropertyFilePathSetting(true, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "cs")]
         [PropertyDescription("C# File Path")]
         [PropertyDetailSampleUsage("**C:\\temp\\mycode.cs**", PropertyDetailSampleUsage.ValueType.Value, "C# File")]

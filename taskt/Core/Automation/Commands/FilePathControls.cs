@@ -9,90 +9,104 @@ namespace taskt.Core.Automation.Commands
     internal static class FilePathControls
     {
         #region VirtualProperty
+
+        /// <summary>
+        /// for file path and url (recommened use PropertyFilePathSetting attribute)
+        /// </summary>
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
+        [PropertyDetailSampleUsage("**http://exmample.com/mytext.txt**", PropertyDetailSampleUsage.ValueType.Value, "Path")]
+        [PropertyDetailSampleUsage("**{{{vURL}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Path")]
+        public static string v_FilePathAndURL { get; }
+
         /// <summary>
         /// for file path (recommended use PropertyFilePathSetting attribute)
         /// </summary>
-        [PropertyDescription("File Path")]
-        [InputSpecification("File Path", true)]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_NoSample_FilePath))]        
         [PropertyDetailSampleUsage("**C:\\temp\\myfile.txt**", PropertyDetailSampleUsage.ValueType.Value, "File Path")]
         [PropertyDetailSampleUsage("**{{{vFilePath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Path")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [Remarks("")]
-        [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
-        [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
-        [PropertyTextBoxSetting(1, false)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyValidationRule("File Path", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "File")]
-        [PropertyParameterOrder(5000)]
+        //[PropertyDescription("File Path")]
+        //[InputSpecification("File Path", true)]
+        //[PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
+        //[PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyValidationRule("File Path", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "File")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[Remarks("")]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterOrder(5000)]
         public static string v_FilePath { get; }
 
         /// <summary>
         /// for file path (recommended use PropertyFilePathSetting attribute)
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("File Path")]
         [InputSpecification("File Path", true)]
         [PropertyShowSampleUsageInDescription(true)]
-        [Remarks("")]
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
-        [PropertyTextBoxSetting(1, false)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
         [PropertyValidationRule("File Path", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "File")]
-        [PropertyParameterOrder(5000)]
+        //[Remarks("")]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyParameterOrder(5000)]
         public static string v_NoSample_FilePath { get; }
 
         /// <summary>
         /// file does not exists behavior
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("When the File does Not Exists")]
-        [InputSpecification("", true)]
-        [Remarks("")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyUISelectionOption("Error")]
         [PropertyDetailSampleUsage("**Ignore**", "Continue Script File")]
         [PropertyDetailSampleUsage("**Error**", "Rise A Error")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyIsOptional(true, "Error")]
         [PropertyDisplayText(false, "")]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyParameterOrder(5000)]
+        //[InputSpecification("", true)]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyParameterOrder(5000)]
         public static string v_WhenFileDoesNotExists { get; }
 
         /// <summary>
         /// for wait time
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_OneLineTextBox))]
         [PropertyDescription("Wait Time for the File to Exist (sec)")]
         [InputSpecification("Wait Time", true)]
         [PropertyDetailSampleUsage("**10**", PropertyDetailSampleUsage.ValueType.Value, "Wait Time")]
         [PropertyDetailSampleUsage("**{{{vWaitTime}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Wait Time")]
         [Remarks("Specify how long to Wait before an Error will occur because the File is not Found.")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
         [PropertyIsOptional(true, "10")]
         [PropertyFirstValue("10")]
         [PropertyDisplayText(true, "Wait", "s")]
-        [PropertyParameterOrder(5000)]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyParameterOrder(5000)]
         public static string v_WaitTime { get; }
 
         /// <summary>
         /// file path result
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [PropertyDescription("Variable Name to Store File Path")]
         [InputSpecification("Variable Name", true)]
         [PropertyDetailSampleUsage("**vPath**", PropertyDetailSampleUsage.ValueType.VariableName)]
         [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyIsVariablesList(true)]
-        [PropertyIsOptional(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
         [PropertyValidationRule("File Path Result", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
-        [PropertyParameterOrder(5000)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyIsOptional(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[PropertyParameterOrder(5000)]
         public static string v_FilePathResult { get; }
         #endregion
 

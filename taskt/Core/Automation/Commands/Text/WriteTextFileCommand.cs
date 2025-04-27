@@ -17,7 +17,7 @@ namespace taskt.Core.Automation.Commands
     public sealed class WriteTextFileCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "txt")]
         public string v_FilePath { get; set; }
 
