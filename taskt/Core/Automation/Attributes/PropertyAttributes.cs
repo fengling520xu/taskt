@@ -31,6 +31,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     #region enum
+    /// <summary>
+    /// Multi Values command property attributes behavior in VirtualProperty
+    /// </summary>
     public enum MultiAttributesBehavior
     {
         Merge = 0,
@@ -40,6 +43,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region Parameter Order
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// parameter order ASC
+    /// </summary>
     public sealed class PropertyParameterOrder : ASingleComamndPropertyAttribute
     {
         public int order = 3000;
@@ -59,6 +65,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region Virtual Property
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// virtual property like class inherit
+    /// </summary>
     public sealed class PropertyVirtualProperty : ASingleComamndPropertyAttribute
     {
         public string className;
@@ -78,6 +87,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region Intermediate/Raw
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specify script intermediate languate convert methods
+    /// </summary>
     public sealed class PropertyIntermediateConvert : ASingleComamndPropertyAttribute
     {
         public string intermediateMethod = "";
@@ -96,6 +108,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region to Label, Document
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// input specification. like Text, Number, List, etc
+    /// </summary>
     public sealed class InputSpecification : ASingleComamndPropertyAttribute
     {
         public string inputSpecification;
@@ -115,6 +130,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// sample usage. like "hello", {{{vList}}}, etc.
+    /// </summary>
     public sealed class SampleUsage : ASingleComamndPropertyAttribute
     {
         public string sampleUsage;
@@ -125,6 +143,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// detail sample usage. specify sample usage value, valueType, description.
+    /// </summary>
     public sealed class PropertyDetailSampleUsage : AMultiCommandPropertyAttribute
     {
         public string sampleUsage = "";
@@ -157,6 +178,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// detail sample usage behavior
+    /// </summary>
     public sealed class PropertyDetailSampleUsageBehavior : ASingleComamndPropertyAttribute
     {
         public MultiAttributesBehavior behavior = MultiAttributesBehavior.Merge;
@@ -172,6 +196,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// Remarks, memo.
+    /// </summary>
     public sealed class Remarks : ASingleComamndPropertyAttribute
     {
         public string remarks;
@@ -182,6 +209,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// Property description. This value is displayed as a Description above each parameter in the CommandEditor form.
+    /// </summary>
     public sealed class PropertyDescription : ASingleComamndPropertyAttribute
     {
         public string propertyDescription;
@@ -192,6 +222,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// show sample usage or not, in each parameter in the CommandEditor form.
+    /// </summary>
     public sealed class PropertyShowSampleUsageInDescription : ASingleComamndPropertyAttribute
     {
         public bool showSampleUsage = false;
@@ -208,6 +241,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for 2ndLabel
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// use SecondalyLabel in the CommandEditor
+    /// </summary>
     public sealed class PropertySecondaryLabel : ASingleComamndPropertyAttribute
     {
         public bool useSecondaryLabel = false;
@@ -223,6 +259,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// Additional Parameter Description. This value apper in SecondaryLabel.
+    /// </summary>
     public sealed class PropertyAddtionalParameterInfo : AMultiCommandPropertyAttribute
     {
         public string searchKey = "";
@@ -256,6 +295,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for UIHelper/CustomUIHelper
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// Show Insert Variable, Select File, Select Folder link
+    /// </summary>
     public sealed class PropertyUIHelper : AMultiCommandPropertyAttribute
     {
         public UIAdditionalHelperType additionalHelper;
@@ -272,6 +314,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// UIHelper behavior for VirtualProperty
+    /// </summary>
     public sealed class PropertyUIHelperBehavior : ASingleComamndPropertyAttribute
     {
         public MultiAttributesBehavior behavior = MultiAttributesBehavior.Merge;
@@ -287,6 +332,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// show custom ui helper, open other form
+    /// </summary>
     public sealed class PropertyCustomUIHelper : AMultiCommandPropertyAttribute
     {
         public string labelText;
@@ -301,6 +349,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// CustomUIHelper behevior for VirtualProperty
+    /// </summary>
     public sealed class PropertyCustomUIHelperBehavior : ASingleComamndPropertyAttribute
     {
         public MultiAttributesBehavior behavior = MultiAttributesBehavior.Merge;
@@ -316,6 +367,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specifiy AvailableSystemVariable behavior for VirtualProperty
+    /// </summary>
     public sealed class PropertyAvailableSystemVariableBehavior : ASingleComamndPropertyAttribute
     {
         public MultiAttributesBehavior behavior = MultiAttributesBehavior.Merge;
@@ -331,6 +385,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// specifiy available SystemVariables
+    /// </summary>
     public sealed class PropertyAvailableSystemVariable : AMultiCommandPropertyAttribute
     {
         public Engine.SystemVariables.LimitedSystemVariableNames variable = Engine.SystemVariables.LimitedSystemVariableNames.None;
@@ -347,6 +404,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for All Controls
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specifiy UI control type. TextBox, ComboBox, DataGridView
+    /// </summary>
     public sealed class PropertyRecommendedUIControl : ASingleComamndPropertyAttribute
     {
         public RecommendeUIControlType recommendedControl = RecommendeUIControlType.TextBox;
@@ -368,6 +428,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// instance type. Excel, Word, WebBrowser, List, Dictionary, etc
+    /// </summary>
     public sealed class PropertyInstanceType : ASingleComamndPropertyAttribute
     {
         public InstanceType instanceType = InstanceType.none;
@@ -410,6 +473,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// parameter description. input, output, etc
+    /// </summary>
     public sealed class PropertyParameterDirection : ASingleComamndPropertyAttribute
     {
         public ParameterDirection porpose = ParameterDirection.Unknown;
@@ -423,14 +489,29 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
         }
         public enum ParameterDirection
         {
+            /// <summary>
+            /// unknown
+            /// </summary>
             Unknown,
+            /// <summary>
+            /// value use taskt engine
+            /// </summary>
             Input,
+            /// <summary>
+            /// for variable name to store result
+            /// </summary>
             Output,
+            /// <summary>
+            /// input and output
+            /// </summary>
             Both
         }
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// what? forgotten
+    /// </summary>
     public sealed class PropertyControlIntoCommandField : ASingleComamndPropertyAttribute
     {
         public string labelName = "";
@@ -445,6 +526,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// property value valudation rule
+    /// </summary>
     public sealed class PropertyValidationRule : ASingleComamndPropertyAttribute
     {
         public string parameterName = "";
@@ -488,6 +572,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// property value range. for validation rule
+    /// </summary>
     public sealed class PropertyValueRange : ASingleComamndPropertyAttribute
     {
         public double min;
@@ -508,6 +595,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// display text in ScriptBuilder form. like "Value: 'abc'"
+    /// </summary>
     public sealed class PropertyDisplayText : ASingleComamndPropertyAttribute
     {
         public bool parameterDisplay = false;
@@ -526,6 +616,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// this property value allows empty or not
+    /// </summary>
     public sealed class PropertyIsOptional : ASingleComamndPropertyAttribute
     {
         public bool isOptional = false;
@@ -545,6 +638,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for TextBox/ComboBox
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// property first(initial) value. only for TextBox, ComboBox
+    /// </summary>
     public sealed class PropertyFirstValue : ASingleComamndPropertyAttribute
     {
         public string firstValue = "";
@@ -561,6 +657,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for TextBox
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// TextBox setting
+    /// </summary>
     public sealed class PropertyTextBoxSetting : ASingleComamndPropertyAttribute
     {
         public int height = 1;
@@ -584,6 +683,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// file path setting
+    /// </summary>
     public sealed class PropertyFilePathSetting : ASingleComamndPropertyAttribute
     {
         /// <summary>
@@ -676,6 +778,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for ComboBox
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// ComboBox items
+    /// </summary>
     public sealed class PropertyUISelectionOption : AMultiCommandPropertyAttribute
     {
         public string uiOption;
@@ -686,6 +791,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// UISelectionOption behavior for VirtualProperty
+    /// </summary>
     public sealed class PropertyUISelectionOptionBehavior : ASingleComamndPropertyAttribute
     {
         public MultiAttributesBehavior behavior = MultiAttributesBehavior.Merge;
@@ -701,6 +809,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// selection value sensitive, Case Sensitive etc
+    /// </summary>
     public sealed class PropertySelectionValueSensitive : ASingleComamndPropertyAttribute
     {
         public bool caseSensitive = false;
@@ -717,6 +828,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specify event when ComoBox item changes
+    /// </summary>
     public sealed class PropertySelectionChangeEvent : ASingleComamndPropertyAttribute
     {
         public string methodName = "";
@@ -731,6 +845,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// ComboBox items is Window Names List
+    /// </summary>
     public sealed class PropertyIsWindowNamesList : ASingleComamndPropertyAttribute
     {
         public bool isWindowNamesList = false;
@@ -752,6 +869,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// ComboBox item is Variable Name List
+    /// </summary>
     public sealed class PropertyIsVariablesList : ASingleComamndPropertyAttribute
     {
         public bool isVariablesList = false;
@@ -766,6 +886,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specify a method to Add items to ComboBox
+    /// </summary>
     public sealed class PropertyComboBoxItemMethod : ASingleComamndPropertyAttribute
     {
         /// <summary>
@@ -786,6 +909,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
 
     #region for DataGridView
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// DataGridView settings
+    /// </summary>
     public sealed class PropertyDataGridViewSetting : ASingleComamndPropertyAttribute
     {
         public bool allowAddRow = true;
@@ -813,6 +939,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// DataGridView column settings
+    /// </summary>
     public sealed class PropertyDataGridViewColumnSettings : AMultiCommandPropertyAttribute
     {
         public string columnName = "";
@@ -852,6 +981,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    /// <summary>
+    /// specify event when DataGridView Cell is Clicked or BeginEdit
+    /// </summary>
     public sealed class PropertyDataGridViewCellEditEvent : AMultiCommandPropertyAttribute
     {
         public string methodName;
@@ -869,6 +1001,9 @@ namespace taskt.Core.Automation.Attributes.PropertyAttributes
     }
 
     //[AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    /// specify method to init DataGridView
+    /// </summary>
     public sealed class PropertyDataGridViewInitMethod : ASingleComamndPropertyAttribute
     {
         /// <summary>
