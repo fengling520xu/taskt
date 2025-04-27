@@ -10,22 +10,23 @@ namespace taskt.Core.Automation.Commands
     internal static class BooleanControls
     {
         /// <summary>
-        /// output variable property
+        /// output boolean variable property
         /// </summary>
         [XmlAttribute]
-        [PropertyDescription("Variable Name to Store Result")]
-        [InputSpecification("")]
-        [PropertyDetailSampleUsage("**vResult**", "Specify Variable Name **vResult**")]
-        [PropertyDetailSampleUsage("**{{{vResult}}}**", "Specify Variable Name **vResult**")]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyIsVariablesList(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
-        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Result")]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true)]
-        [PropertyParameterOrder(5000)]
+        //[PropertyDescription("Variable Name to Store Result")]
+        //[InputSpecification("")]
+        //[PropertyDetailSampleUsage("**vResult**", "Specify Variable Name **vResult**")]
+        //[PropertyDetailSampleUsage("**{{{vResult}}}**", "Specify Variable Name **vResult**")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Result")]
+        //[PropertyParameterOrder(5000)]
         public static string v_Result { get; }
 
         /// <summary>
