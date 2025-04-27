@@ -83,6 +83,21 @@ namespace taskt.Core.Automation.Commands
         //[PropertyParameterOrder(5000)]
         public static string v_Result { get; }
 
+        /// <summary>
+        /// input variable name for specify the variable
+        /// </summary>
+        /// [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Variable Name")]
+        [InputSpecification("Variable Name")]
+        [PropertyDetailSampleUsage("**vValue**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyShowSampleUsageInDescription(true)]
+        [PropertyIsVariablesList(true)]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyValidationRule("Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Variable")]
+        public static string v_InputVariableName { get; }
+
         #endregion
     }
 }
