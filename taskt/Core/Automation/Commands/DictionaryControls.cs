@@ -48,16 +48,16 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// input Dictionary property
         /// </summary>
-        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_OutputDictionaryName))]
+        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
         [PropertyDescription("Dictionary Variable Name")]
         [InputSpecification("Dictionary Variable Name", true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyInstanceType(PropertyInstanceType.InstanceType.Dictionary)]
         //[PropertyDetailSampleUsageBehavior(MultiAttributesBehavior.Overwrite)]
         //[PropertyDetailSampleUsage("**vDictionary**", PropertyDetailSampleUsage.ValueType.VariableName)]
         //[PropertyDetailSampleUsage("**{{{vDictionary}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
         //[Remarks("")]
         //[PropertyShowSampleUsageInDescription(true)]
-        //[PropertyInstanceType(PropertyInstanceType.InstanceType.Dictionary)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
         //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         //[PropertyValidationRule("Dictionary", PropertyValidationRule.ValidationRuleFlags.Empty)]
         //[PropertyDisplayText(true, "Dictionary")]
@@ -67,7 +67,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// input & output Dictionary property
         /// </summary>
-        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_OutputDictionaryName))]
+        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
         [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Both)]
         [PropertyDescription("Dictionary Variable Name")]
         [InputSpecification("Dictionary Variable Name", true)]
