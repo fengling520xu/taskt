@@ -1,5 +1,4 @@
-﻿using System;
-using taskt.Core.Automation.Attributes.PropertyAttributes;
+﻿using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
