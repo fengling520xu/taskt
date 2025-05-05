@@ -11,7 +11,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// input DateTime Variable property
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputVariableName))]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("DateTime Variable Name")]
         [InputSpecification("DateTime Variable")]
         [PropertyDetailSampleUsage("**{{{vDateTime}}}**", PropertyDetailSampleUsage.ValueType.VariableValue)]

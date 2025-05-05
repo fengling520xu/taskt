@@ -48,7 +48,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// input Dictionary property
         /// </summary>
-        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("Dictionary Variable Name")]
         [InputSpecification("Dictionary Variable Name", true)]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.Dictionary)]

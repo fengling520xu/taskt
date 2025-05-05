@@ -7,7 +7,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// color variable name
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputVariableName))]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("Color Variable Name")]
         [InputSpecification("Color Variable Name")]
         [PropertyDetailSampleUsage("**vColor**", PropertyDetailSampleUsage.ValueType.VariableValue)]
