@@ -11,6 +11,8 @@ namespace taskt.Core.Automation.Commands
     /// </summary>
     internal static class SelectionItemsControls
     {
+        #region VirtualProperty
+
         /// <summary>
         /// yes no combobox
         /// </summary>
@@ -22,6 +24,24 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("No")]
         [PropertyParameterOrder(5000)]
         public static string v_YesNoComboBox { get; }
+
+        /// <summary>
+        /// combobox has Error
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyUISelectionOption("Error")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        public static string v_ComboBoxHasError { get; }
+
+        /// <summary>
+        /// combobox has Error and Ignore
+        /// </summary>
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasError))]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing To Do")]
+        public static string v_ComboBoxHasErrorIgnore { get; }
+
+        #endregion
 
         /// <summary>
         /// private ExpandValueOrUserVariableAsSelectionItem method. This method supports check selection value, first value, case sensitive.  This method may use PropertyValidationRule, PropertyDisplayValue, PropertyDescription attributes.

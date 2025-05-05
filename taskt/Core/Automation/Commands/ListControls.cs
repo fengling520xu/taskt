@@ -111,7 +111,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// for convert parameter
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyIsOptional(true, "Ignore")]
         //[PropertyDescription("When the number of items in the List is greater than the number of ???")]
         //[InputSpecification("", true)]
@@ -127,7 +127,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// for convert parameter
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyUISelectionOption("Insert Empty Value")]
         [PropertyIsOptional(true, "Ignore")]
         //[PropertyDescription("When the number of ??? is greater than the number of items in the List")]
@@ -144,7 +144,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// when convert number
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasError))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasError))]
         [PropertyDescription("Action When List Value is Not Numeric")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyDetailSampleUsage("Ignore", "Ignore not numeric value")]

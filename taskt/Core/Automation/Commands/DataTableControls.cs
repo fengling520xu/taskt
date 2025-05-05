@@ -90,7 +90,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// when column does not exists
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyDescription("When DataTable Column does not Exists")]
         [PropertyIsOptional(true, "Ignore")]
         //[PropertyUISelectionOption("Ignore")]
@@ -159,7 +159,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// for set column values parameter
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyDescription("When there are Less Rows than *** to set")]
         [PropertyUISelectionOption("Add Rows")]
         [PropertyDetailSampleUsage("**Add Rows**", "Add New Rows")]
@@ -177,7 +177,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// for set column values parameter
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyDescription("When there are Less Rows than DataTable to be Setted")]
         [PropertyIsOptional(true, "Ignore")]
         //[PropertyUISelectionOption("Ignore")]

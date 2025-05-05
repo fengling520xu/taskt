@@ -57,7 +57,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// file does not exists behavior
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyDescription("When the File does Not Exists")]
         [PropertyIsOptional(true, "Error")]
         [PropertyDisplayText(false, "When the File does Not Exists")]

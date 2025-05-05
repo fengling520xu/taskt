@@ -297,7 +297,7 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// when items not enough
         /// </summary>
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasErrorIgnore))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_ComboBoxHasErrorIgnore))]
         [PropertyDescription("When A Items Not Enough")]
         [PropertyIsOptional(true, "Ignore")]
         //[InputSpecification("", true)]
