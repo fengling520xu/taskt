@@ -98,6 +98,22 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(true, "Variable")]
         public static string v_InputInstanceName { get; }
 
+        /// <summary>
+        /// combobox has Error
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyUISelectionOption("Error")]
+        [PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        public static string v_ComboBoxHasError { get; }
+
+        /// <summary>
+        /// combobox has Error and Ignore
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasError))]
+        [PropertyUISelectionOption("Ignore")]
+        [PropertyDetailSampleUsage("**Ignore**", "Nothing To Do")]
+        public static string v_ComboBoxHasErrorIgnore { get; }
+
         #endregion
     }
 }
