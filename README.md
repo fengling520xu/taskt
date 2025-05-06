@@ -55,7 +55,7 @@ Please note whatever software that taskt is automating can affect the minimum so
  * 200MB disk space
  * 1 vCPU
  * .NET Framework 4.8
- * (We think it will probably work in Windows Server 2022 :-)
+ * (We think it will probably work in Windows Server 2022/2025 :-)
 
 **Attension**: Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2016 are no longer supported.
 
