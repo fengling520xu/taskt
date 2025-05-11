@@ -16,13 +16,14 @@ namespace taskt.Core.Automation.Commands
         /// <summary>
         /// yes no combobox
         /// </summary>
-        [PropertyDescription("Value")]
-        [InputSpecification("", true)]
-        [Remarks("")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyUISelectionOption("Yes")]
         [PropertyUISelectionOption("No")]
-        [PropertyParameterOrder(5000)]
+        [PropertyDescription("Value")]
+        //[InputSpecification("", true)]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterOrder(5000)]
         public static string v_YesNoComboBox { get; }
 
         /// <summary>

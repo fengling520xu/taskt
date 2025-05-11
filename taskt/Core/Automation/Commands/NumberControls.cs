@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Reflection;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 using static taskt.Core.Automation.Commands.PropertyControls;
@@ -11,76 +12,81 @@ namespace taskt.Core.Automation.Commands
     internal static class NumberControls
     {
         #region Virtual Property
+
         /// <summary>
-        /// for both numerical variable name
+        /// for input numerical variable name
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("Numerical Variable Name")]
-        [InputSpecification("")]
-        [Remarks("")]
+        [InputSpecification("Numerical Variable Name")]
         [PropertyDetailSampleUsage("**vNum**", PropertyDetailSampleUsage.ValueType.VariableName)]
         [PropertyDetailSampleUsage("**{{{vNum}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Both)]
-        [PropertyIsVariablesList(true)]
         [PropertyValidationRule("Numerical Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Numerical Name")]
-        [PropertyParameterOrder(5000)]
-        public static string v_BothNumericalVariableName { get; }
+        [PropertyDisplayText(true, "Numerical Variable")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyParameterOrder(5000)]
+        public static string v_InputNumericalVariableName { get; }
 
         /// <summary>
         /// for both numerical variable name
         /// </summary>
-        [PropertyDescription("Numerical Variable Name")]
-        [InputSpecification("")]
-        [Remarks("")]
-        [PropertyDetailSampleUsage("**vNum**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyDetailSampleUsage("**{{{vNum}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyIsVariablesList(true)]
-        [PropertyValidationRule("Numerical Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Numerical Name")]
-        [PropertyParameterOrder(5000)]
-        public static string v_InputNumericalVariableName { get; }
+        [PropertyVirtualProperty(nameof(NumberControls), nameof(NumberControls.v_InputNumericalVariableName))]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Both)]
+        //[PropertyDescription("Numerical Variable Name")]
+        //[InputSpecification("")]
+        //[Remarks("")]
+        //[PropertyDetailSampleUsage("**vNum**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        //[PropertyDetailSampleUsage("**{{{vNum}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyValidationRule("Numerical Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Numerical Name")]
+        //[PropertyParameterOrder(5000)]
+        public static string v_BothNumericalVariableName { get; }
 
         /// <summary>
         /// for output numerical variable name
         /// </summary>
         [PropertyDescription("Numerical Variable Name to Store Result")]
-        [InputSpecification("")]
-        [Remarks("")]
         [PropertyDetailSampleUsage("**vNum**", PropertyDetailSampleUsage.ValueType.VariableName)]
         [PropertyDetailSampleUsage("**{{{vNum}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
-        [PropertyIsVariablesList(true)]
-        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Result")]
+        //[InputSpecification("")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Result")]
         [PropertyParameterOrder(5000)]
         public static string v_OutputNumericalVariableName { get; }
 
         /// <summary>
         /// for numerical value
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Numerical Value")]
         [InputSpecification("Numerical Value", true)]
-        [Remarks("")]
         [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Value")]
         [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Value")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyValidationRule("Value", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Value")]
-        [PropertyParameterOrder(5000)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyValidationRule("Value", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Value")]
+        //[PropertyParameterOrder(5000)]
         public static string v_Value { get; }
 
         /// <summary>
         /// number check method
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("Check Method")]
         [PropertyUISelectionOption("Is Number")]
         [PropertyUISelectionOption("Is Not Number")]
@@ -100,10 +106,10 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Is Less Than Or Equal To")]
         [PropertyUISelectionOption("Is Between")]
         [PropertyUISelectionOption("Is Not Between")]
-        [Remarks("")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyValidationRule("Check Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Method")]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         public static string v_CheckMethod { get; }
 
         ///// <summary>

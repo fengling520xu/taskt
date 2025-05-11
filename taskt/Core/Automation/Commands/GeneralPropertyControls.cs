@@ -93,6 +93,7 @@ namespace taskt.Core.Automation.Commands
         [InputSpecification("Variable Name")]
         [PropertyDetailSampleUsage("**vValue**", PropertyDetailSampleUsage.ValueType.VariableName)]
         [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyDetailSampleUsageBehavior(MultiAttributesBehavior.Overwrite)]
         [PropertyShowSampleUsageInDescription(true)]
         [PropertyIsVariablesList(false)]
         [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]

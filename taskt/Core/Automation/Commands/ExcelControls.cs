@@ -63,7 +63,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("Excel Instance Name")]
-        [InputSpecification("Excel Instance Name", true)]
+        [InputSpecification("Excel Instance Name")]
         [PropertyDetailSampleUsage("**RPAExcel**", PropertyDetailSampleUsage.ValueType.Value, "Excel Instance Name")]
         [PropertyDetailSampleUsage("**{{{vInstance}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Excel Instance Name")]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.Excel)]
@@ -82,7 +82,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Worksheet Name")]
-        [InputSpecification("Worksheet Name", true)]
+        [InputSpecification("Worksheet Name")]
         [PropertyDetailSampleUsage("**mySheet**", PropertyDetailSampleUsage.ValueType.Value, "Worksheet Name")]
         [PropertyDetailSampleUsage("**{{{vSheet}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Worksheet Name")]
         [PropertyDetailSampleUsage("**%kwd_excel_current_worksheet%**", "Specify Current Worksheet Name")]
@@ -100,7 +100,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Cell Location")]
-        [InputSpecification("Cell Location like A1", true)]
+        [InputSpecification("Cell Location like A1")]
         [PropertyDetailSampleUsage("**A1**", PropertyDetailSampleUsage.ValueType.Value)]
         [PropertyDetailSampleUsage("**B10**", PropertyDetailSampleUsage.ValueType.Value)]
         [PropertyDetailSampleUsage("**{{{vAddress}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Cell Location")]
@@ -117,7 +117,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Row Location")]
-        [InputSpecification("Number", true)]
+        [InputSpecification("Number")]
         [PropertyDetailSampleUsage("**1**", "Specify the First Row")]
         [PropertyDetailSampleUsage("**2**", PropertyDetailSampleUsage.ValueType.Value, "Row Location")]
         [PropertyDetailSampleUsage("**{{{vRow}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Row Location")]
@@ -134,7 +134,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Column Location")]
-        [InputSpecification("Number", true)]
+        [InputSpecification("Number")]
         [PropertyDetailSampleUsage("**1**", "Specify the First Column")]
         [PropertyDetailSampleUsage("**2**", PropertyDetailSampleUsage.ValueType.Value, "Column Location")]
         [PropertyDetailSampleUsage("**{{{vColumn}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Column Location")]
@@ -212,7 +212,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Column Location or Index")]
-        [InputSpecification("Column Location (Text) or Index (Number)", true)]
+        [InputSpecification("Column Location (Text) or Index (Number)")]
         [PropertyDetailSampleUsage("**A**", "Specify the First Column when **Range** is specified for Column Type.")]
         [PropertyDetailSampleUsage("**1**", "Specify the First Column when **RC** is specified for Column Type.")]
         [PropertyDetailSampleUsage("**{{{vColumn}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Column")]
@@ -229,7 +229,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Start Row Index")]
-        [InputSpecification("Number", true)]
+        [InputSpecification("Number")]
         [PropertyDetailSampleUsage("**1**", "Specify the First Row Index for Start Row")]
         [PropertyDetailSampleUsage("**2**", PropertyDetailSampleUsage.ValueType.Value, "Start Row")]
         [PropertyDetailSampleUsage("**{{{vRow}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Start Row")]
@@ -246,7 +246,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("End Row Index")]
-        [InputSpecification("Number", true)]
+        [InputSpecification("Number")]
         [PropertyDetailSampleUsage("**1**", "Specify the First Row Index for End Row")]
         [PropertyDetailSampleUsage("**2**", PropertyDetailSampleUsage.ValueType.Value, "End Row")]
         [PropertyDetailSampleUsage("**{{{vRow}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "End Row")]
@@ -315,7 +315,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_NoSample_FilePath))]
         [PropertyDescription("Workbook (Excel File) Path")]
-        [InputSpecification("Excel File Path", true)]
+        [InputSpecification("Excel File Path")]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, EXCEL_SUPPORT_FILE_EXTENSIONS)]
         [PropertyDetailSampleUsage("**C:\\temp\\myfile.xlsx**", PropertyDetailSampleUsage.ValueType.Value, "File Path")]
         [PropertyDetailSampleUsage("**{{{vFilePath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "File Path")]
@@ -341,7 +341,7 @@ namespace taskt.Core.Automation.Commands
         /// </summary>
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_OneLineTextBox))]
         [PropertyDescription("Value to Set")]
-        [InputSpecification("Text or Number", true)]
+        [InputSpecification("Text or Number")]
         [PropertyShowSampleUsageInDescription(true)]
         [PropertyDetailSampleUsage("**Hello**", PropertyDetailSampleUsage.ValueType.Value, "Value to Set")]
         [PropertyDetailSampleUsage("**{{{vText}}}**", PropertyDetailSampleUsage.ValueType.VariableName, "Value to Set")]
