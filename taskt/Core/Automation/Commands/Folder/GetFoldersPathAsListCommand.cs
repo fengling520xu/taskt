@@ -49,7 +49,7 @@ namespace taskt.Core.Automation.Commands
         public string v_CompareMethod { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CaseSensitive))]
+        [PropertyVirtualProperty(nameof(TextCompareSelectMethodControls), nameof(TextCompareSelectMethodControls.v_CaseSensitiveNo))]
         [PropertyParameterOrder(6200)]
         public string v_CaseSensitive { get; set; }
 
