@@ -6,7 +6,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("DateTime")]
-    [Attributes.ClassAttributes.SubGruop("")]
+    [Attributes.ClassAttributes.SubGruop("Calculate")]
     [Attributes.ClassAttributes.CommandSettings("Calculate DateTime By Unix Time")]
     [Attributes.ClassAttributes.Description("This command allows you to Calculate DateTime By Unix Time. Add Day, Minute, etc.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Calculate DateTime By Unix Time. Add Day, Minute, etc.")]

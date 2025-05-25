@@ -4,7 +4,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("DateTime")]
-    [Attributes.ClassAttributes.SubGruop("")]
+    [Attributes.ClassAttributes.SubGruop("Calculate")]
     [Attributes.ClassAttributes.CommandSettings("Get Formatted DateTime From Calculated DateTime")]
     [Attributes.ClassAttributes.Description("This command allows you to Get Formatted DateTime Text From Calculated DateTime Value.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Get Formatted DateTime Text From Calculated DateTime Value.")]

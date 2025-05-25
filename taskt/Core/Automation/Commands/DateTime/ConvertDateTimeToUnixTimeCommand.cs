@@ -6,7 +6,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("DateTime")]
-    [Attributes.ClassAttributes.SubGruop("")]
+    [Attributes.ClassAttributes.SubGruop("Convert")]
     [Attributes.ClassAttributes.CommandSettings("Convert DateTime To Unix Time")]
     [Attributes.ClassAttributes.Description("This command allows you to Convert DateTime To Unix Time.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want Convert DateTime To Unix Time.")]

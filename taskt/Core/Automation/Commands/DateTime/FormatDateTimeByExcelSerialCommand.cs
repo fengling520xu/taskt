@@ -6,7 +6,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("DateTime")]
-    [Attributes.ClassAttributes.SubGruop("")]
+    [Attributes.ClassAttributes.SubGruop("Format")]
     [Attributes.ClassAttributes.CommandSettings("Format DateTime By Excel Serial")]
     [Attributes.ClassAttributes.Description("This command allows you to Format DateTime By Excel Serial.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Format DateTime By Excel Serial.")]

@@ -6,7 +6,7 @@ namespace taskt.Core.Automation.Commands
 {
     [Serializable]
     [Attributes.ClassAttributes.Group("DateTime")]
-    [Attributes.ClassAttributes.SubGruop("")]
+    [Attributes.ClassAttributes.SubGruop("Create")]
     [Attributes.ClassAttributes.CommandSettings("Create DateTime")]
     [Attributes.ClassAttributes.Description("This command allows you to create DateTime.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to create DateTime.")]
