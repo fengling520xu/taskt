@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows.Forms;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.UI.CustomControls;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -98,6 +100,22 @@ namespace taskt.Core.Automation.Commands
         //[PropertyParameterOrder(5000)]
         public static string v_UnixTime { get; }
 
+        /// <summary>
+        /// datetime format
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
+        [PropertyDescription("DateTime Format")]
+        [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowVariableHelper)]
+        [PropertyCustomUIHelper("Format Checker", nameof(DateTimeControls)+"+"+nameof(lnkFormatChecker_Click))]
+        [InputSpecification("DateTime Format Text", true)]
+        [PropertyDetailSampleUsage("**MM/dd/yyyy**", "Specify Format Month/Day/Year")]
+        [PropertyDetailSampleUsage("**HH:mm:ss**", "Specify Format Hour/Minute/Second")]
+        [PropertyDetailSampleUsage("{{{vFormat}}}", PropertyDetailSampleUsage.ValueType.VariableValue, "Format")]
+        [Remarks("Please refer to the Microsoft DateTime.ToString() page for format details")]
+        [PropertyValidationRule("Format", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Format")]
+        public static string v_Format { get; }
+
         ///// <summary>
         ///// Expand user variable As DateTime
         ///// </summary>
@@ -142,6 +160,17 @@ namespace taskt.Core.Automation.Commands
             {
                 throw new Exception(parameterName + " '" + str + "' is not a DateTime.");
             }
+        }
+
+        /// <summary>
+        /// show FormatChecker form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void lnkFormatChecker_Click(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)((CommandItemControl)sender).Tag;
+            UI.Forms.ScriptBuilder.CommandEditor.Supplemental.frmFormatChecker.ShowFormatCheckerFormLinkClicked(txt, "DateTime");
         }
     }
 }
