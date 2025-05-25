@@ -375,9 +375,14 @@
     <Compile Include="Core\Automation\Commands\Color\IColorProperties.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\AFormatDateTimeCommands.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\ACalculateDateTimeCommands.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\AGetFormattedDateTimeByCalculatedDateTimeCommands.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByExcelSerialCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CalculateDateTimeByTextCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\GetFormatedDateTimeByCalculatedExcelSerialDateTimeCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\GetFormatedDateTimeByCalculatedUnixDateTimeCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\GetFormatedDateTimeByCalculatedTextDateTimeCommand.cs" />
+    <Compile Include="Core\Automation\Commands\DateTime\GetFormatedDateTimeByCalculatedDateTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\ConvertDateTimeToUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\CreateDateTimeFromUnixTimeCommand.cs" />
     <Compile Include="Core\Automation\Commands\DateTime\EM_DateTimeResultPropertiesExtensionMethods.cs" />
