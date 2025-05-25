@@ -26,27 +26,32 @@ namespace taskt.Core.Automation.Commands
         [InputSpecification("C# File", true)]
         [PropertyValidationRule("C# File", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "C# File")]
+        [PropertyParameterOrder(5000)]
         public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
-        [PropertyDescription("Arguments")]
-        [InputSpecification("Arguments", true)]
-        [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
-        [PropertyDetailSampleUsage("**Hello**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
-        [PropertyDetailSampleUsage("**1 2 3**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
-        [PropertyDetailSampleUsage("**{{{vArgs}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Arguments")]
-        [PropertyIsOptional(true)]
-        [PropertyValidationRule("Arguments", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(false, "")]
+        [PropertyVirtualProperty(nameof(ApplicationScriptControls), nameof(ApplicationScriptControls.v_Arguments))]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
+        //[PropertyDescription("Arguments")]
+        //[InputSpecification("Arguments", true)]
+        //[PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
+        //[PropertyDetailSampleUsage("**Hello**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
+        //[PropertyDetailSampleUsage("**1 2 3**", PropertyDetailSampleUsage.ValueType.Value, "Arguments")]
+        //[PropertyDetailSampleUsage("**{{{vArgs}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Arguments")]
+        //[PropertyIsOptional(true)]
+        //[PropertyValidationRule("Arguments", PropertyValidationRule.ValidationRuleFlags.None)]
+        //[PropertyDisplayText(false, "")]
+        [PropertyParameterOrder(6000)]
         public string v_Arguments { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        [PropertyDescription("Variable Name to Receive the Output")]
-        [PropertyIsOptional(true)]
-        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
-        [PropertyDisplayText(true, "Result")]
+        [PropertyVirtualProperty(nameof(ApplicationScriptControls), nameof(ApplicationScriptControls.v_Result))]
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        //[PropertyDescription("Variable Name to Receive the Output")]
+        //[PropertyIsOptional(true)]
+        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.None)]
+        //[PropertyDisplayText(true, "Result")]
+        [PropertyParameterOrder(7000)]
         public string v_Result { get; set; }
 
         [XmlAttribute]
@@ -56,6 +61,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyFirstValue("tasktOnTheFly")]
         [PropertyValidationRule("File Name", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "File Name")]
+        [PropertyParameterOrder(8000)]
         public string v_ExecutableFileName { get; set; }
 
         [XmlAttribute]
@@ -64,6 +70,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true)]
         [PropertyValidationRule("Executable File Path", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Executable File Path")]
+        [PropertyParameterOrder(9000)]
         public string v_ExecutableFilePath { get; set; }
 
         [XmlAttribute]
@@ -94,6 +101,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyValidationRule("C# Language Version", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "C# Language Version")]
         [Remarks("More Information: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version?WT.mc_id=AI-MVP-123445")]
+        [PropertyParameterOrder(10000)]
         public string v_CSharpLanguageVersion { get; set; }
 
         [XmlAttribute]
@@ -103,6 +111,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyFirstValue("Yes")]
         [PropertyValidationRule("Delete Executable File", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(false, "")]
+        [PropertyParameterOrder(11000)]
         public string v_DeleteExecutableFile { get; set; }
 
         public RunCSharpFileCommand()
