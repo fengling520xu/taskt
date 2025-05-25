@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -38,5 +39,22 @@ namespace taskt.Core.Automation.Commands
         //    TextBox txt = (TextBox)((CommandItemControl)sender).Tag;
         //    UI.Forms.ScriptBuilder.CommandEditor.Supplemental.frmFormatChecker.ShowFormatCheckerFormLinkClicked(txt, "DateTime");
         //}
+
+        protected void CommandProcess(ADateTimeCreateCommands create, Engine.AutomationEngineInstance engine)
+        {
+            using (var v = new InnerScriptVariable(engine))
+            {
+                create.v_DateTime = v.VariableName;
+                create.RunCommand(engine);
+
+                var fdt = new FormatDateTimeCommand()
+                {
+                    v_DateTime = v.VariableName,
+                    v_Format = this.v_Format,
+                    v_Result = this.v_Result,
+                };
+                fdt.RunCommand(engine);
+            }
+        }
     }
 }
