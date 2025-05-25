@@ -353,6 +353,7 @@
     <Compile Include="Core\ApplicationSettings\ServerSettings.cs" />
     <Compile Include="Core\ApplicationSettings\WhiteListIP.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptControls.cs" />
+    <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunCSharpSomethingCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\AScriptFileCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunScriptFileCommands.cs" />
     <Compile Include="Core\Automation\Commands\ApplicationScriptFile\ARunScriptByCodeCommands.cs" />
