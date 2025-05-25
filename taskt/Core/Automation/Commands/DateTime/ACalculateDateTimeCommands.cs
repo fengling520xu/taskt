@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -52,5 +53,28 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.DateTime, true)]
         public override string v_Result { get; set; }
+
+        /// <summary>
+        /// general caclulate datetime process
+        /// </summary>
+        /// <param name="create"></param>
+        /// <param name="engine"></param>
+        protected void CommandProcess(ADateTimeCreateCommands create, Engine.AutomationEngineInstance engine)
+        {
+            using (var dt = new InnerScriptVariable(engine))
+            {
+                create.v_DateTime = dt.VariableName;
+                create.RunCommand(engine);
+
+                var calc = new CalculateDateTimeCommand()
+                {
+                    v_DateTime = dt.VariableName,
+                    v_CalculationMethod = this.v_CalculationMethod,
+                    v_Value = this.v_Value,
+                    v_Result = this.v_Result,
+                };
+                calc.RunCommand(engine);
+            }
+        }
     }
 }
