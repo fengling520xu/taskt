@@ -18,28 +18,14 @@ namespace taskt.Core.Automation.Commands
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        public string v_applyToVariableName { get; set; }
+        public string v_Result { get; set; }
 
         public ShowFolderDialogCommand()
         {
-            //this.CommandName = "FolderDialogCommand";
-            //this.SelectionName = "Folder Dialog";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //object result = null;
-            //engine.tasktEngineUI.Invoke(new Action(() =>
-            //    {
-            //        result = engine.tasktEngineUI.ShowFolderDialog();
-            //    }
-            //));
-            //if (result != null)
-            //{
-            //    result.ToString().StoreInUserVariable(sender, v_applyToVariableName);
-            //}
             engine.tasktEngineUI.Invoke(new Action(() =>
             {
                 using (var dialog = new FolderBrowserDialog())
@@ -53,7 +39,7 @@ namespace taskt.Core.Automation.Commands
                     {
                         result = "";
                     }
-                    result.StoreInUserVariable(engine, v_applyToVariableName);
+                    result.StoreInUserVariable(engine, v_Result);
                 }
             }));
         }

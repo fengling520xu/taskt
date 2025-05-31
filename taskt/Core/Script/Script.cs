@@ -4341,6 +4341,20 @@ namespace taskt.Core.Script
                     }
                 })
             );
+
+            // ShowFileDialogCommand, ShowFolderDialogCommand v_applyToVariableName -> v_Result
+            ChangeAttributeName(doc,
+                new Func<XElement, bool>(el =>
+                {
+                    switch (GetCommandName(el))
+                    {
+                        case "ShowFileDialogCommand":
+                        case "ShowFolderDialogCommand":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }), "v_applyToVariableName", "v_Result");
         }
 
         /// <summary>

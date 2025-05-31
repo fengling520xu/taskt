@@ -29,17 +29,17 @@ namespace taskt.Core.Automation.Commands
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Value of the Filter Property")]
-        [InputSpecification("Filter", true)]
+        [InputSpecification("Filter Text", true)]
         [PropertyIsOptional(true, "All Files (*.*)|*.*")]
         [PropertyFirstValue("All Files (*.*)|*.*")]
         [PropertyDisplayText(true, "Filter")]
+        [Remarks("https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.filedialog.filter?view=windowsdesktop-8.0")]
         public string v_Filter { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Value of the FilterIndex Property")]
-        [InputSpecification("FilterIndex", true)]
-        //[SampleUsage("**1** or **2** or **{{{vIndex}}}**")]
+        [InputSpecification("Filter Index Number", true)]
         [PropertyDetailSampleUsage("**1**", "Specify the First Filter")]
         [PropertyDetailSampleUsage("**2**", PropertyDetailSampleUsage.ValueType.Value, "FilterIndex")]
         [PropertyDetailSampleUsage("**{{{vIndex}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "FilterIndex")]
@@ -52,7 +52,6 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
         [PropertyDescription("Value of the InitialDirectory Property")]
         [InputSpecification("InitialDirectory", true)]
-        //[SampleUsage("**C:\\Users\\myUser\\Documents** or **{{{vFolderPath}}}**")]
         [PropertyDetailSampleUsage("**C:\\Users\\myUser\\Documents**", PropertyDetailSampleUsage.ValueType.Value, "InitialDirectory")]
         [PropertyDetailSampleUsage("**{{{vFolderPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "InitialDirectory")]
         [PropertyIsOptional(true, "Documents")]
@@ -63,25 +62,16 @@ namespace taskt.Core.Automation.Commands
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
-        public string v_applyToVariableName { get; set; }
+        public string v_Result { get; set; }
 
         public ShowFileDialogCommand()
         {
-            //this.CommandName = "FileDialogCommand";
-            //this.SelectionName = "File Dialog";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
-
-            //this.v_DialogType = "Open";
-            //this.v_Filter = "Text file (*.txt)|*.txt";
-            //this.v_FilterIndex = "";
-            //this.v_InitialDirectory = "";
         }
 
         public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             var filter = v_Filter.ExpandValueOrUserVariable(engine);
-            if (!checkFileterProperty(filter))
+            if (!CheckFileterProperty(filter))
             {
                 throw new Exception($"Strange Filter Property. Value: '{filter}'");
             }
@@ -99,7 +89,6 @@ namespace taskt.Core.Automation.Commands
             }
             else
             {
-                //directory = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_InitialDirectory), engine);
                 directory = this.ExpandValueOrUserVariableAsFolderPath(nameof(v_InitialDirectory), engine);
             }
 
@@ -132,12 +121,12 @@ namespace taskt.Core.Automation.Commands
                         result = "";
                     }
 
-                    result.StoreInUserVariable(engine, v_applyToVariableName);
+                    result.StoreInUserVariable(engine, v_Result);
                 }
             }));
         }
 
-        private static bool checkFileterProperty(string filter)
+        private static bool CheckFileterProperty(string filter)
         {
             return (filter.Split('|').Length % 2 == 0);
         }
