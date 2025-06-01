@@ -32,6 +32,7 @@
         public const string Log4NetURL = "";    //?
         public const string MailKitURL = "http://www.mimekit.net/";
         public const string MarkddigURL = "https://github.com/xoofx/markdig";
+        public const string MicrosoftWindowsAPICodePackURL = "https://github.com/samypr100/Windows-API-Code-Pack-1.1";
         public const string MimeKitURL = "http://www.mimekit.net/";
         public const string NewtonSoftJSONURL = "https://www.nuget.org/packages/newtonsoft.json/";
         public const string OneNoteOCRURL = "https://github.com/ignatandrei/OneNoteOCR";
