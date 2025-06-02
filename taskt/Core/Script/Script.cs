@@ -4321,7 +4321,7 @@ namespace taskt.Core.Script
                             attr.SetValue("Subtract Months");
                             break;
                         case "substract days":
-                            attr.SetValue("Subract Days");
+                            attr.SetValue("Subtract Days");
                             break;
                         case "substract hours":
                             attr.SetValue("Subtract Hours");
