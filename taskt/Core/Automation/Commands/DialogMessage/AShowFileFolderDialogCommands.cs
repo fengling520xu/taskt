@@ -43,6 +43,13 @@ namespace taskt.Core.Automation.Commands
         [PropertyParameterOrder(12000)]
         public string v_WhenCancel { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyDescription("Variable Name To Store Dislog Result")]
+        [Remarks("Value is **OK** or **Cancel**")]
+        [PropertyParameterOrder(13000)]
+        public string v_DialogResult { get; set; }
+
         /// <summary>
         /// get InitialDirectory
         /// </summary>
@@ -84,6 +91,14 @@ namespace taskt.Core.Automation.Commands
                 throw new Exception($"Strange dialog object. Type; {dialog.GetType().Name}");
             }
 
+            void StoreDialogResultValue(string v)
+            {
+                if (!string.IsNullOrEmpty(v_DialogResult))
+                {
+                    v.StoreInUserVariable(engine, v_DialogResult);
+                }
+            }
+
             var whenCancel = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenCancel), engine);
             switch (whenCancel)
             {
@@ -97,14 +112,17 @@ namespace taskt.Core.Automation.Commands
                             isAgain = false;
                         }
                     }
+                    StoreDialogResultValue("OK");
                     break;
                 default:
                     if ((int)dialog.ShowDialog() == okValue)
                     {
                         GetPathFunc().StoreInUserVariable(engine, v_Result);
+                        StoreDialogResultValue("OK");
                     }
                     else
                     {
+                        StoreDialogResultValue("Cancel");
                         switch (whenCancel)
                         {
                             case "error":
