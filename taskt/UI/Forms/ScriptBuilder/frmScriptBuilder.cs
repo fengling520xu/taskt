@@ -26,9 +26,12 @@ using taskt.Core.Script;
 
 namespace taskt.UI.Forms.ScriptBuilder
 {
+    /// <summary>
+    /// Script Builder
+    /// Form tracks the overall configuration and enables script editing, saving, and running
+    /// Features ability to add, drag/drop reorder commands
+    /// </summary>
     public partial class frmScriptBuilder : Form
-    //Form tracks the overall configuration and enables script editing, saving, and running
-    //Features ability to add, drag/drop reorder commands
     {
         private TreeNode[] bufferedCommandList;
         private ImageList bufferedCommandTreeImages;
@@ -78,7 +81,13 @@ namespace taskt.UI.Forms.ScriptBuilder
         private Supplemental.frmSearchCommands frmSearch = null;
         private AttendedMode.frmAttendedMode frmAttended = null;
 
+        /// <summary>
+        /// current open script folder path
+        /// </summary>
         private string _scriptFilePath = null;
+        /// <summary>
+        /// script xml serializer
+        /// </summary>
         private XmlSerializer scriptSerializer = null;
 
         #region properties
@@ -96,21 +105,6 @@ namespace taskt.UI.Forms.ScriptBuilder
                 UpdateWindowTitle();
             }
         }
-
-        //public TreeNode[] treeAllCommands
-        //{
-        //    get
-        //    {
-        //        return this.bufferedCommandList;
-        //    }
-        //}
-        //public ImageList treeAllCommandsImage
-        //{
-        //    get
-        //    {
-        //        return this.commandTreeImages;
-        //    }
-        //}
         #endregion
 
         #region enums
@@ -153,7 +147,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void frmScriptBuilder_Load(object sender, EventArgs e)
         {
-            //load all commands
+            // load all commands
             automationCommands = CustomControls.CommandControls.GenerateCommandsAndControls();
 
             // title
@@ -165,7 +159,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             indentDashLine = new Pen(Color.LightGray, 1);
             indentDashLine.DashStyle = DashStyle.Dash;
 
-            //set controls double buffered
+            // set controls double buffered
             foreach (Control control in Controls)
             {
                 typeof(Control).InvokeMember("DoubleBuffered",
@@ -173,10 +167,10 @@ namespace taskt.UI.Forms.ScriptBuilder
                     null, control, new object[] { true });
             }
 
-            //create undo list
+            // create undo list
             undoList = new List<List<ListViewItem>>();
 
-            //get app settings
+            // get app settings
             //appSettings = new Core.ApplicationSettings();
             //appSettings = appSettings.GetOrCreateApplicationSettings();
             //appSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings();
@@ -199,9 +193,8 @@ namespace taskt.UI.Forms.ScriptBuilder
             // script serializer
             this.scriptSerializer = Core.Script.Script.CreateSerializer();
 
-            //handle action bar preference
-            //hide action panel
-
+            // handle action bar preference
+            // hide action panel
             if (this.editMode)
             {
                 tlpControls.RowStyles[1].SizeType = SizeType.Absolute;
@@ -209,7 +202,6 @@ namespace taskt.UI.Forms.ScriptBuilder
 
                 tlpControls.RowStyles[2].SizeType = SizeType.Absolute;
                 tlpControls.RowStyles[2].Height = 81;
-
             }
             else if (appSettings.ClientSettings.UseSlimActionBar)
             {
@@ -222,7 +214,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 tlpControls.RowStyles[1].Height = 0;
             }
 
-            //get scripts folder
+            // get scripts folder
             //var rpaScriptsFolder = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
             var rpaScriptsFolder = Core.IO.Folders.GetScriptsFolderPath();
 
@@ -237,10 +229,10 @@ namespace taskt.UI.Forms.ScriptBuilder
                 }
             }
 
-            //get latest files for recent files list on load
+            // get latest files for recent files list on load
             GenerateRecentFiles();
 
-            //show/hide status bar
+            // show/hide status bar
             if (appSettings.ClientSettings.HideNotifyAutomatically)
             {
                 HideNotificationRow();
@@ -250,29 +242,28 @@ namespace taskt.UI.Forms.ScriptBuilder
                 ShowNotificationRow();
             }
 
-            //instantiate for script variables
+            // instantiate for script variables
             if (!editMode)
             {
                 scriptVariables = new List<ScriptVariable>();
                 scriptInfo = new ScriptInformation();
             }
 
-            //instantiate and populate display icons for commands
+            // instantiate and populate display icons for commands
             scriptImages = Images.UIImageList();
 
-            //set image list
+            // set image list
             lstScriptActions.SmallImageList = scriptImages;
             lstScriptActions.Columns[0].Width = 14; // 1digit width
             lstScriptActions.Columns[1].Width = 16; // icon size
             lstScriptActions.Columns[2].Width = lstScriptActions.ClientSize.Width - 30;
 
-            //set listview column size
+            // set listview column size
             frmScriptBuilder_SizeChanged(null, null);
 
             GenerateTreeViewCommands();
 
-
-            //start attended mode if selected
+            // start attended mode if selected
             if (appSettings.ClientSettings.StartupMode == "Attended Task Mode")
             {
                 this.WindowState = FormWindowState.Minimized;
@@ -322,7 +313,6 @@ namespace taskt.UI.Forms.ScriptBuilder
         
         private void frmScriptBuilder_Shown(object sender, EventArgs e)
         {
-            //Program.SplashForm.Hide();
             Program.HideSplashScreen();
 
             if (editMode)
@@ -350,8 +340,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         
         private void frmScriptBuilder_Resize(object sender, EventArgs e)
         {
-            //check when minimized
-
+            // check when minimized
             if ((this.WindowState == FormWindowState.Minimized) && (appSettings.ClientSettings.MinimizeToTray))
             {
                 //appSettings = new Core.ApplicationSettings().GetOrCreateApplicationSettings();
@@ -375,6 +364,9 @@ namespace taskt.UI.Forms.ScriptBuilder
         #endregion
 
         #region Form title methods
+        /// <summary>
+        /// update window title
+        /// </summary>
         private void UpdateWindowTitle()
         {
             if (ScriptFilePath != null)
@@ -393,6 +385,10 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
         }
 
+        /// <summary>
+        /// change save state and update window title
+        /// </summary>
+        /// <param name="dontSaveNow"></param>
         private void ChangeSaveState(bool dontSaveNow)
         {
             this.dontSaveFlag = dontSaveNow;
@@ -406,8 +402,6 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             flwRecentFiles.Controls.Clear();
 
-
-            //var scriptPath = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
             var scriptPath = Core.IO.Folders.GetScriptsFolderPath();
 
             if (!System.IO.Directory.Exists(scriptPath))
@@ -486,7 +480,6 @@ namespace taskt.UI.Forms.ScriptBuilder
         private void NewFileLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             LinkLabel senderLink = (LinkLabel)sender;
-            //string targetScriptPath = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder) + senderLink.Text;
             var targetScriptPath = System.IO.Path.Combine(Core.IO.Folders.GetScriptsFolderPath(), senderLink.Text);
             OpenScriptFromFilePath(targetScriptPath, true);
         }
@@ -540,7 +533,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             if (this.currentEditAction == CommandEditAction.Move)
             {
-                Point cp = lstScriptActions.PointToClient(new Point(e.X, e.Y));
+                var cp = lstScriptActions.PointToClient(new Point(e.X, e.Y));
                 var dragToItem = lstScriptActions.HitTest(cp.X, cp.Y);
                 this.DnDIndex = (dragToItem.Item == null) ? -1 : dragToItem.Item.Index;
             }
@@ -549,7 +542,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void lstScriptActions_DragEnter(object sender, DragEventArgs e)
         {
-            int len = e.Data.GetFormats().Length - 1;
+            //int len = e.Data.GetFormats().Length - 1;
             if (e.Data.GetFormats()[0] == "System.Windows.Forms.ListView+SelectedListViewItemCollection")
             {
                 e.Effect = DragDropEffects.Move;
@@ -621,10 +614,11 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             CreateUndoSnapshot();
 
-            //Returns the location of the mouse pointer in the ListView control.
-            Point cp = lstScriptActions.PointToClient(new Point(e.X, e.Y));
-            //Obtain the item that is located at the specified location of the mouse pointer.
-            ListViewItem dragToItem = lstScriptActions.GetItemAt(cp.X, cp.Y);
+            // Returns the location of the mouse pointer in the ListView control.
+            var cp = lstScriptActions.PointToClient(new Point(e.X, e.Y));
+
+            // Obtain the item that is located at the specified location of the mouse pointer.
+            var dragToItem = lstScriptActions.GetItemAt(cp.X, cp.Y);
             if (dragToItem == null)
             {
                 return;
@@ -632,20 +626,20 @@ namespace taskt.UI.Forms.ScriptBuilder
 
             lstScriptActions.BeginUpdate();
 
-            //drag and drop for sequence
-            if ((dragToItem.Tag is SequenceCommand) && (appSettings.ClientSettings.EnableSequenceDragDrop))
+            // drag and drop for sequence
+            if ((dragToItem.Tag is SequenceCommand sequence) && (appSettings.ClientSettings.EnableSequenceDragDrop))
             {
-                //sequence command for drag drop
-                var sequence = (SequenceCommand)dragToItem.Tag;
+                // sequence command for drag drop
+                //var sequence = (SequenceCommand)dragToItem.Tag;
 
-                //add command to script actions
+                // add command to script actions
                 for (int i = 0; i <= lstScriptActions.SelectedItems.Count - 1; i++)
                 {
                     var command = (ScriptCommand)lstScriptActions.SelectedItems[i].Tag;
                     sequence.v_scriptActions.Add(command);
                 }
 
-                //remove originals
+                // remove originals
                 int[] indices = new int[lstScriptActions.SelectedIndices.Count];
                 lstScriptActions.SelectedIndices.CopyTo(indices, 0);
                 for (int i = indices.Length - 1; i>=0; i--)
@@ -655,18 +649,18 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
             else
             {
-                //Obtain the index of the item at the mouse pointer.
+                // Obtain the index of the item at the mouse pointer.
                 int dragIndex = dragToItem.Index;
 
-                ListViewItem[] sel = new ListViewItem[lstScriptActions.SelectedItems.Count];
+                var sel = new ListViewItem[lstScriptActions.SelectedItems.Count];
                 for (int i = 0; i <= lstScriptActions.SelectedItems.Count - 1; i++)
                 {
                     sel[i] = lstScriptActions.SelectedItems[i];
                 }
                 for (int i = 0; i < sel.GetLength(0); i++)
                 {
-                    //Obtain the ListViewItem to be dragged to the target location.
-                    ListViewItem dragItem = sel[i];
+                    // Obtain the ListViewItem to be dragged to the target location.
+                    var dragItem = sel[i];
                     int itemIndex = dragIndex;
                     if (itemIndex == dragItem.Index)
                     {
@@ -674,19 +668,24 @@ namespace taskt.UI.Forms.ScriptBuilder
                         break;
                     }
                     if (dragItem.Index < itemIndex)
+                    {
                         itemIndex++;
+                    }
                     else
+                    {
                         itemIndex = dragIndex + i;
-                    //Insert the item at the mouse pointer.
-                    ListViewItem insertItem = (ListViewItem)dragItem.Clone();
+                    }
+
+                    // Insert the item at the mouse pointer.
+                    var insertItem = (ListViewItem)dragItem.Clone();
 
                     var command = (ScriptCommand)insertItem.Tag;
                     command.IsDontSavedCommand = true;
                     command.IsNewInsertedCommand = true;
 
                     lstScriptActions.Items.Insert(itemIndex, insertItem);
-                    //Removes the item from the initial location while
-                    //the item is moved to the new location.
+                    // Removes the item from the initial location while
+                    // the item is moved to the new location.
                     lstScriptActions.Items.Remove(dragItem);
                 }
             }
@@ -805,7 +804,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             lstScriptActions.BeginUpdate();
             foreach(ListViewItem itm in lstScriptActions.Items)
             {
-                ScriptCommand cmd = (ScriptCommand)itm.Tag;
+                var cmd = (ScriptCommand)itm.Tag;
                 if (cmd.CheckMatched(keyword, caseSensitive, checkParameters, checkCommandName, checkComment, checkDisplayText, checkInstanceType, instanceType))
                 {
                     matchedCount++;
@@ -1089,16 +1088,15 @@ namespace taskt.UI.Forms.ScriptBuilder
                 return;
             }
 
-            //bring up edit mode to edit the action
-            ListViewItem selectedCommandItem = lstScriptActions.SelectedItems[0];
+            // bring up edit mode to edit the action
+            var selectedCommandItem = lstScriptActions.SelectedItems[0];
 
-            //set selected command from the listview item tag object which was assigned to the command
+            // set selected command from the listview item tag object which was assigned to the command
             var currentCommand = (ScriptCommand)selectedCommandItem.Tag;
 
-            //check if editing a sequence
-            if (currentCommand is SequenceCommand)
+            // check if editing a sequence
+            if (currentCommand is SequenceCommand sequence)
             {
-
                 if (editMode)
                 {
                     MessageBox.Show("Embedding Sequence Commands within Sequence Commands not yet supported.");
@@ -1106,12 +1104,11 @@ namespace taskt.UI.Forms.ScriptBuilder
                 }
 
                 //get sequence events
-                SequenceCommand sequence = (SequenceCommand)currentCommand;
+                //SequenceCommand sequence = (SequenceCommand)currentCommand;
 
                 using (var newBuilder = new frmScriptBuilder())
                 {
-                    //add variables
-
+                    // add variables
                     newBuilder.scriptVariables = new List<ScriptVariable>();
                     newBuilder.instanceList = instanceList;
 
@@ -1120,37 +1117,37 @@ namespace taskt.UI.Forms.ScriptBuilder
                         newBuilder.scriptVariables.Add(variable);
                     }
 
-                    //append to new builder
+                    // append to new builder
                     foreach (var cmd in sequence.v_scriptActions)
                     {
                         newBuilder.lstScriptActions.Items.Add(CreateScriptCommandListViewItem(cmd));
                     }
 
-                    //apply editor style format
+                    // apply editor style format
                     newBuilder.ApplyEditorFormat();
 
                     newBuilder.parentBuilder = this;
 
-                    //if data has been changed
+                    // if data has been changed
                     if (newBuilder.ShowDialog() == DialogResult.OK)
                     {
                         ChangeSaveState(true);
 
-                        //create updated list
-                        List<ScriptCommand> updatedList = new List<ScriptCommand>();
+                        // create updated list
+                        var updatedList = new List<ScriptCommand>();
 
-                        //update to list
+                        // update to list
                         for (int i = 0; i < newBuilder.lstScriptActions.Items.Count; i++)
                         {
                             var command = (ScriptCommand)newBuilder.lstScriptActions.Items[i].Tag;
                             updatedList.Add(command);
                         }
 
-                        //apply new list to existing sequence
+                        // apply new list to existing sequence
                         sequence.v_scriptActions = updatedList;
                         sequence.IsDontSavedCommand = true;
 
-                        //update label
+                        // update label
                         selectedCommandItem.Text = sequence.GetDisplayValue();
                     }
                 }
@@ -1160,19 +1157,19 @@ namespace taskt.UI.Forms.ScriptBuilder
                 ScriptCommand cloneCommand = currentCommand.Clone();
                 currentCommand.RemoveInstance(instanceList);
 
-                //create new command editor form
+                // create new command editor form
                 using (var editCommand = new CommandEditor.frmCommandEditor(automationCommands, GetConfiguredCommands(), this.bufferedCommandList, this.bufferedCommandTreeImages))
                 {
-                    //creation mode edit locks form to current command
+                    // creation mode edit locks form to current command
                     editCommand.creationMode = CommandEditor.frmCommandEditor.CreationMode.Edit;
 
                     editCommand.editingCommand = currentCommand;
 
-                    //create clone of current command so databinding does not affect if changes are not saved
+                    // create clone of current command so databinding does not affect if changes are not saved
                     //editCommand.originalCommand = Core.Common.Clone(currentCommand);
                     editCommand.originalCommand = currentCommand.Clone();
 
-                    //set variables
+                    // set variables
                     editCommand.scriptVariables = this.scriptVariables;
 
                     // set taskt settings
@@ -1189,7 +1186,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                         editCommand.Location = lastEditorPosition;
                     }
 
-                    //show edit command form and save changes on OK result
+                    // show edit command form and save changes on OK result
                     if (editCommand.ShowDialog(this) == DialogResult.OK)
                     {
                         ChangeSaveState(true);
@@ -1228,7 +1225,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             lstScriptActions.SelectedIndices.CopyTo(indices, 0);
 
             // remove instance name
-            List<ScriptCommand> removeCommands = new List<ScriptCommand>();
+            var removeCommands = new List<ScriptCommand>();
             foreach(int i in indices)
             {
                 removeCommands.Add((ScriptCommand)lstScriptActions.Items[i].Tag);
@@ -1252,7 +1249,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void CutRows()
         {
-            //copy into list for all selected            
+            // copy into list for all selected            
             if (lstScriptActions.SelectedItems.Count >= 1)
             {
                 ChangeSaveState(true);
@@ -1292,7 +1289,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void CopyRows()
         {
-            //copy into list for all selected            
+            // copy into list for all selected            
             if (lstScriptActions.SelectedItems.Count >= 1)
             {
                 ChangeSaveState(true);
@@ -1393,15 +1390,16 @@ namespace taskt.UI.Forms.ScriptBuilder
                 lstScriptActions.Invalidate();
             }
         }
+
         private void SetSelectedCodeToCommented(bool setCommented)
         {
-            //warn if nothing was selected
+            // warn if nothing was selected
             if (lstScriptActions.SelectedItems.Count == 0)
             {
                 Notify("No code was selected!");
             }
 
-            //get each item and set appropriately
+            // get each item and set appropriately
             foreach (ListViewItem item in lstScriptActions.SelectedItems)
             {
                 var selectedCommand = (ScriptCommand)item.Tag;
@@ -1410,19 +1408,19 @@ namespace taskt.UI.Forms.ScriptBuilder
 
             ChangeSaveState(true);
 
-            //recolor
+            // recolor
             lstScriptActions.Invalidate();
         }
 
         private void SetPauseBeforeExecution()
         {
-            //warn if nothing was selected
+            // warn if nothing was selected
             if (lstScriptActions.SelectedItems.Count == 0)
             {
                 Notify("No code was selected!");
             }
 
-            //get each item and set appropriately
+            // get each item and set appropriately
             foreach (ListViewItem item in lstScriptActions.SelectedItems)
             {
                 var selectedCommand = (ScriptCommand)item.Tag;
@@ -1436,13 +1434,13 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void SetDontPauseBeforeExecution()
         {
-            //warn if nothing was selected
+            // warn if nothing was selected
             if (lstScriptActions.SelectedItems.Count == 0)
             {
                 Notify("No code was selected!");
             }
 
-            //get each item and set appropriately
+            // get each item and set appropriately
             foreach (ListViewItem item in lstScriptActions.SelectedItems)
             {
                 var selectedCommand = (ScriptCommand)item.Tag;
@@ -1474,7 +1472,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void CreateUndoSnapshot()
         {
-            List<ListViewItem> itemList = new List<ListViewItem>();
+            var itemList = new List<ListViewItem>();
             foreach (ListViewItem rowItem in lstScriptActions.Items)
             {
                 itemList.Add(rowItem);
@@ -1520,7 +1518,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private ListViewItem CreateScriptCommandListViewItem(ScriptCommand cmdDetails, bool isOpenFile = false)
         {
-            ListViewItem newCommand = new ListViewItem();
+            var newCommand = new ListViewItem();
 
             string dispValue = cmdDetails.GetDisplayValue();
 
@@ -1554,13 +1552,13 @@ namespace taskt.UI.Forms.ScriptBuilder
             // count instance name
             AddInstanceName(new List<ScriptCommand>() { selectedCommand });
 
-            //insert to end by default
+            // insert to end by default
             var insertionIndex = lstScriptActions.Items.Count;
 
-            //verify setting to insert inline is selected and if an item is currently selected
+            // verify setting to insert inline is selected and if an item is currently selected
             if ((appSettings.ClientSettings.InsertCommandsInline) && (lstScriptActions.SelectedItems.Count > 0))
             {
-                //insert inline
+                // insert inline
                 insertionIndex = lstScriptActions.SelectedItems[0].Index + 1;            
             }
 
@@ -1587,12 +1585,12 @@ namespace taskt.UI.Forms.ScriptBuilder
                 }
             }
 
-            //insert command
+            // insert command
             lstScriptActions.Items.Insert(insertionIndex, command);
 
             var focusIndex = insertionIndex;
 
-            //special types also get a following command and comment
+            // special types also get a following command and comment
             //if ((selectedCommand is BeginLoopForComplexDataTypesCommand) || (selectedCommand is BeginContinousLoopCommand) || (selectedCommand is BeginNumberOfTimesLoopCommand) || (selectedCommand is BeginLoopCommand) || (selectedCommand is BeginMultiLoopCommand))
             if (selectedCommand is IHaveLoopAdditionalCommands)
             {
@@ -1920,20 +1918,20 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void lstScriptActions_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-            //switch between column index
+            // switch between column index
             switch (e.ColumnIndex)
             {
                 case 0:
-                    //draw row number
+                    // draw row number
                     drawLineNumber(e);
                     break;
                 case 1:
-                    //draw command icon
+                    // draw command icon
                     drawCommandIcon(e);
                     break;
 
                 case 2:
-                    //write command text
+                    // write command text
                     drawCommandText(e);
 
                     break;
@@ -1964,7 +1962,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void drawCommandText(DrawListViewSubItemEventArgs e)
         {
-            //get listviewitem
+            // get listviewitem
             ListViewItem item = e.Item;
             var command = (ScriptCommand)item.Tag;
             var modifiedBounds = e.Bounds;
@@ -2000,16 +1998,16 @@ namespace taskt.UI.Forms.ScriptBuilder
                 trg = Core.Theme.scriptTexts[decideNormalCommandText(e, command)];
             }
 
-            //fille with background color
+            // fille with background color
             e.Graphics.FillRectangle(new SolidBrush(trg.BackColor), modifiedBounds);
 
-            //get indent count
+            // get indent count
             var indentPixels = (item.IndentCount * indentWidth);
 
-            //set indented X position
+            // set indented X position
             modifiedBounds.X += indentPixels;
 
-            //draw string
+            // draw string
             e.Graphics.DrawString(command.GetDisplayValue(),
                            new Font(trg.Font, trg.FontSize, trg.Style), new SolidBrush(trg.FontColor), modifiedBounds);
 
@@ -2147,16 +2145,18 @@ namespace taskt.UI.Forms.ScriptBuilder
         private void lstScriptActions_SelectedIndexChangedProcess()
         {
             if (!appSettings.ClientSettings.InsertCommandsInline)
+            {
                 return;
+            }
 
-            //check to see if an item has been selected last
+            // check to see if an item has been selected last
             if (lstScriptActions.SelectedItems.Count > 0)
             {
                 selectedIndex = lstScriptActions.SelectedItems[0].Index;
             }
             else
             {
-                //nothing is selected
+                // nothing is selected
                 selectedIndex = -1;
             }
 
@@ -2168,14 +2168,14 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void lstScriptActions_KeyDown(object sender, KeyEventArgs e)
         {
-            //delete from listview if required
+            // delete from listview if required
             if (e.KeyCode == Keys.Delete)
             {
                 DeleteRows();
             }
             else if (e.KeyCode == Keys.Enter)
             {
-                //if user presses enter simulate double click event
+                // if user presses enter simulate double click event
                 lstScriptActions_DoubleClick(null, null);
             }
             else if ((e.Control) && (e.KeyCode == Keys.X))
@@ -2287,7 +2287,6 @@ namespace taskt.UI.Forms.ScriptBuilder
             SetPauseBeforeExecution();
         }
 
-
         private void dontPauseBeforeExecutionToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             SetDontPauseBeforeExecution();
@@ -2355,24 +2354,24 @@ namespace taskt.UI.Forms.ScriptBuilder
         private void moveToParentToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            //create command list
+            // create command list
             var commandList = new List<ScriptCommand>();
 
-            //loop each
+            // loop each
             for (int i = lstScriptActions.SelectedItems.Count - 1; i >= 0; i--)
             {
-                //add to list and remove existing
+                // add to list and remove existing
                 commandList.Add((ScriptCommand)lstScriptActions.SelectedItems[i].Tag);
                 lstScriptActions.Items.Remove(lstScriptActions.SelectedItems[i]);
             }
 
-            //reverse commands only if not inserting inline
+            // reverse commands only if not inserting inline
             if (!appSettings.ClientSettings.InsertCommandsInline)
             {
                 commandList.Reverse();
             }
 
-            //add to parent
+            // add to parent
             commandList.ForEach(x => parentBuilder.AddCommandToListView(x));
         }
 
@@ -2512,7 +2511,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                     PerformAntiIdle();
                 }
 
-                //check if notification is required
+                // check if notification is required
                 if ((notificationList.Count > 0) && (notificationExpires < DateTime.Now))
                 {
                     var itemToDisplay = notificationList[0];
@@ -2619,7 +2618,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
                 (var autoSavePath, var saveTime) = Script.GetAutoSaveScriptFilePath();
 
-                //serialize script
+                // serialize script
                 try
                 {
                     scriptInfo.TasktVersion = Application.ProductVersion;
@@ -2691,7 +2690,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             CheckAndSaveScriptIfForget();
 
-            //show ofd
+            // show ofd
             using (var openFileDialog = new OpenFileDialog())
             {
                 //openFileDialog.InitialDirectory = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
@@ -2699,10 +2698,10 @@ namespace taskt.UI.Forms.ScriptBuilder
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Filter = "Xml (*.xml)|*.xml";
 
-                //if user selected file
+                // if user selected file
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //open file
+                    // open file
                     OpenFile(openFileDialog.FileName);
                 }
             }
@@ -2734,13 +2733,13 @@ namespace taskt.UI.Forms.ScriptBuilder
 
             try
             {
-                //reinitialize
+                // reinitialize
                 lstScriptActions.Items.Clear();
                 scriptVariables = new List<ScriptVariable>();
                 scriptInfo = null;
                 instanceList = new Core.InstanceCounter(appSettings);
 
-                //get deserialized script
+                // get deserialized script
                 Script deserializedScript = Core.Script.Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
 
                 // check script created taskt version
@@ -2759,13 +2758,13 @@ namespace taskt.UI.Forms.ScriptBuilder
                     Notify("Error Parsing File: Commands not found!");
                 }
 
-                //update file path and reflect in title bar
+                // update file path and reflect in title bar
                 this.ScriptFilePath = filePath;
 
-                //assign variables
+                // assign variables
                 scriptVariables = deserializedScript.Variables;
 
-                //script information
+                // script information
                 scriptInfo = deserializedScript.Info;
                 if (scriptInfo == null)
                 {
@@ -2774,7 +2773,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
                 lstScriptActions.BeginUpdate();
 
-                //populate commands
+                // populate commands
                 PopulateExecutionCommands(deserializedScript.Commands);
 
                 // validate
@@ -2791,10 +2790,10 @@ namespace taskt.UI.Forms.ScriptBuilder
                 // Instance Count
                 AddInstanceName(deserializedScript.Commands.Select(t => t.ScriptCommand).ToList());
 
-                //format listview
+                // format listview
                 ChangeSaveState(false);
 
-                //notify
+                // notify
                 Notify("Script Loaded Successfully!");
 
                 // release
@@ -2811,7 +2810,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void BeginImportProcess()
         {
-            //show ofd
+            // show ofd
             using (var openFileDialog = new OpenFileDialog())
             {
                 //openFileDialog.InitialDirectory = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
@@ -2819,10 +2818,10 @@ namespace taskt.UI.Forms.ScriptBuilder
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Filter = "Xml (*.xml)|*.xml";
 
-                //if user selected file
+                // if user selected file
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //import
+                    // import
                     Cursor.Current = Cursors.WaitCursor;
                     Import(openFileDialog.FileName);
                     Cursor.Current = Cursors.Default;
@@ -2843,7 +2842,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
             try
             {
-                //deserialize file      
+                // deserialize file      
                 Script deserializedScript = Core.Script.Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
 
                 if (deserializedScript.Commands.Count == 0)
@@ -2852,15 +2851,15 @@ namespace taskt.UI.Forms.ScriptBuilder
                 }
                 deserializedScript.ReGenerateCommandID();   // change command ids
 
-                //variables for comments
+                // variables for comments
                 var fileName = new System.IO.FileInfo(filePath).Name;
                 var dateTimeNow = DateTime.Now.ToString();
 
                 lstScriptActions.BeginUpdate();
 
-                //comment
+                // comment
                 lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = "Imported From " + fileName + " @ " + dateTimeNow }));
-                //import
+                // import
                 PopulateExecutionCommands(deserializedScript.Commands, false);
                 foreach (ScriptVariable var in deserializedScript.Variables)
                 {
@@ -2873,7 +2872,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 // validate imported commands
                 CheckValidateCommands(deserializedScript.Commands.Select(t => t.ScriptCommand).ToList());
 
-                //comment
+                // comment
                 lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = "End Import From " + fileName + " @ " + dateTimeNow }));
 
                 lstScriptActions.EndUpdate();
@@ -2886,14 +2885,14 @@ namespace taskt.UI.Forms.ScriptBuilder
                 // check indent
                 IndentListViewItems();
 
-                //format listview
+                // format listview
 
-                //notify
+                // notify
                 Notify("Script Imported Successfully!");
             }
             catch (Exception ex)
             {
-                //signal an error has happened
+                // signal an error has happened
                 Notify("An Error Occured: " + ex.Message);
             }
         }
@@ -2941,14 +2940,14 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void BeginSaveScriptProcess(bool SaveAs)
         {
-            //clear selected items
+            // clear selected items
             ClearSelectedListViewItems();
             SaveToFile(SaveAs);
         }
 
         private List<ScriptCommand> GetConfiguredCommands()
         {
-            List<ScriptCommand> ConfiguredCommands = new List<ScriptCommand>();
+            var ConfiguredCommands = new List<ScriptCommand>();
             foreach (ListViewItem item in lstScriptActions.Items)
             {
                 ConfiguredCommands.Add(item.Tag as ScriptCommand);
@@ -3010,14 +3009,14 @@ namespace taskt.UI.Forms.ScriptBuilder
                     return;
                 }
 
-                //end loop was found first
+                // end loop was found first
                 if (beginLoopValidationCount < 0)
                 {
                     Notify("Please verify the ordering of your loops.");
                     return;
                 }
 
-                //end if was found first
+                // end if was found first
                 if (beginIfValidationCount < 0)
                 {
                     Notify("Please verify the ordering of your ifs.");
@@ -3025,13 +3024,13 @@ namespace taskt.UI.Forms.ScriptBuilder
                 }
             }
 
-            //extras were found
+            // extras were found
             if (beginLoopValidationCount != 0)
             {
                 Notify("Please verify the ordering of your loops.");
                 return;
             }
-            //extras were found
+            // extras were found
             if (beginIfValidationCount != 0)
             {
                 Notify("Please verify the ordering of your ifs.");
@@ -3044,7 +3043,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 return;
             }
 
-            //define default output path
+            // define default output path
             if ((this.ScriptFilePath == null) || (saveAs))
             {
                 using (var saveFileDialog = new SaveFileDialog())
@@ -3069,13 +3068,13 @@ namespace taskt.UI.Forms.ScriptBuilder
                 this.ScriptFilePath = appSettings.ClientSettings.RootFolder + "\\" + this.ScriptFilePath;
             }
 
-            //serialize script
+            // serialize script
             try
             {
                 scriptInfo.TasktVersion = Application.ProductVersion;
                 scriptInfo.Revision++;
                 var exportedScript = Core.Script.Script.SerializeScript(lstScriptActions.Items, scriptVariables, scriptInfo, appSettings.EngineSettings, scriptSerializer, this.ScriptFilePath);
-                //show success dialog
+                // show success dialog
                 Notify("File has been saved successfully!");
                 ChangeSaveState(false);
             }
@@ -3179,7 +3178,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 return;
             }
 
-            //clear selected items
+            // clear selected items
             ClearSelectedListViewItems();
 
             Notify("Running Script.");
@@ -3237,7 +3236,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             // DBG
             //MessageBox.Show(specificCommand);
 
-            //bring up new command configuration form
+            // bring up new command configuration form
             using (var newCommandForm = new CommandEditor.frmCommandEditor(automationCommands, GetConfiguredCommands(), this.bufferedCommandList, this.bufferedCommandTreeImages))
             {
                 newCommandForm.creationMode = CommandEditor.frmCommandEditor.CreationMode.Add;
@@ -3260,12 +3259,12 @@ namespace taskt.UI.Forms.ScriptBuilder
                     newCommandForm.Location = lastEditorPosition;
                 }
 
-                //if a command was selected
+                // if a command was selected
                 if (newCommandForm.ShowDialog(this) == DialogResult.OK)
                 {
                     ChangeSaveState(true);
 
-                    //add to listview
+                    // add to listview
                     var selectedComamnd = (ScriptCommand)newCommandForm.selectedCommand;
                     selectedComamnd.IsDontSavedCommand = true;
                     selectedComamnd.IsNewInsertedCommand = true;
@@ -3474,7 +3473,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private List<string> getAllVariablesNames()
         {
-            List<string> variables = new List<string>();
+            var variables = new List<string>();
             variables.AddRange(scriptVariables.Select(f => f.VariableName));
             //variables.AddRange(Core.Common.GenerateSystemVariables().Select(f => f.VariableName));
             variables.AddRange(Core.Automation.Engine.SystemVariables.GetSystemVariablesName());
@@ -3483,37 +3482,39 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         private void showSettingForm()
         {
-            //show settings dialog
+            // show settings dialog
             using (var newSettings = new Supplemental.frmSettings(this))
             {
                 newSettings.ShowDialog();
 
-                //reload app settings
+                // reload app settings
                 //appSettings = new Core.ApplicationSettings();
                 //appSettings = appSettings.GetOrCreateApplicationSettings();
                 //appSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
                 appSettings = App.GetFrmScriptBuilderApplicationSettings();
 
-                //reinit
+                // reinit
                 Core.Server.HttpServerClient.Initialize();
             }
         }
+
         private void showNewSettingForm()
         {
             using (var newSettings = new Supplemental.frmNewSettings(this))
             {
                 newSettings.ShowDialog();
 
-                //reload app settings
+                // reload app settings
                 //appSettings = new Core.ApplicationSettings();
                 //appSettings = appSettings.GetOrCreateApplicationSettings();
                 //appSettings = Core.ApplicationSettings.GetOrCreateApplicationSettings(App.Taskt_Settings_File_Path);
                 appSettings = App.GetFrmScriptBuilderApplicationSettings();
 
-                //reinit
+                // reinit
                 Core.Server.HttpServerClient.Initialize();
             }
         }
+
         private void showScriptInformationForm()
         {
             using (var frm = new Supplemental.frmScriptInformations())
@@ -3528,16 +3529,16 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             var state = appSettings.ClientSettings.ShowCommandSearchBar;
 
-            //set to empty
+            // set to empty
             tsSearchResult.Text = "";
             tsSearchBox.Text = "";
 
-            //show or hide
+            // show or hide
             tsSearchBox.Visible = state;
             tsSearchButton.Visible = state;
             tsSearchResult.Visible = state;
 
-            //update verbiage
+            // update verbiage
             if (state)
             {
                 showSearchBarToolStripMenuItem.Text = "Hide Search Bar";
