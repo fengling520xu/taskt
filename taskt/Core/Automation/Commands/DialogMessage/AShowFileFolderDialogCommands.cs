@@ -47,6 +47,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [PropertyDescription("Variable Name To Store Dislog Result")]
         [Remarks("Value is **OK** or **Cancel**")]
+        [PropertyValidationRule("DialogResult", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "DialogResult")]
         [PropertyParameterOrder(13000)]
         public string v_DialogResult { get; set; }
 
