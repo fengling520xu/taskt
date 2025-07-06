@@ -59,7 +59,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         private void OpenFile(string filePath)
         {
             // check file exists
-            if (!System.IO.File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 using (var fm = new General.frmDialog($"{filePath} does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
                 {
@@ -176,7 +176,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         private void Import(string filePath)
         {
             // check file exists
-            if (!System.IO.File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 using (var fm = new General.frmDialog($"{filePath}_ does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
                 {
@@ -407,7 +407,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
 
             // check file path is only filename
-            if (System.IO.Path.GetFileName(this.ScriptFilePath) == this.ScriptFilePath)
+            if (Path.GetFileName(this.ScriptFilePath) == this.ScriptFilePath)
             {
                 this.ScriptFilePath =  Path.Combine(appSettings.ClientSettings.RootFolder, this.ScriptFilePath);
             }
