@@ -5,11 +5,14 @@ using static taskt.Core.Automation.Attributes.PropertyAttributes.PropertyInstanc
 
 namespace taskt.Core
 {
+    // aliace for Instances Counter dictionary, too long!
+    using InstanceCounterData = Dictionary<string, Dictionary<string, Dictionary<string, int>>>;
+
     public class InstanceCounter
     {
         //private SafeApplicationSettings appSettings = null;
 
-        private Dictionary<string, Dictionary<string, Dictionary<string, int>>> instances;
+        private  InstanceCounterData instances;
 
         // instance
         //private Dictionary<string, Dictionary<string, int>> databaseInstance = new Dictionary<string, Dictionary<string, int>>
@@ -118,7 +121,7 @@ namespace taskt.Core
         {
             //this.appSettings = settings;
 
-            this.instances = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            this.instances = new InstanceCounterData();
             var names = Enum.GetNames(typeof(InstanceType));
             foreach(var name in names)
             {
@@ -130,7 +133,7 @@ namespace taskt.Core
             }
         }
 
-        public InstanceCounter(Dictionary<string, Dictionary<string, Dictionary<string, int>>> instances)
+        public InstanceCounter(InstanceCounterData instances)
         {
             var names = Enum.GetNames(typeof(InstanceType));
             foreach(var name in names)
@@ -275,9 +278,9 @@ namespace taskt.Core
         /// get instances counter clone
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, Dictionary<string, Dictionary<string, int>>> GetInstancesCounterClone()
+        public InstanceCounterData GetInstancesCounterClone()
         {
-            return new Dictionary<string, Dictionary<string, Dictionary<string, int>>>(this.instances);
+            return new InstanceCounterData(this.instances);
         }
 
         //private Dictionary<string, int> decideDictionary(InstanceType instanceType, bool isUsed = false)

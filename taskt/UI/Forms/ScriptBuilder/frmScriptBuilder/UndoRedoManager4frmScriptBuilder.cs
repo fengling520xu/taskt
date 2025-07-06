@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-using taskt.Core;
 using taskt.Core.Script;
 
 namespace taskt.UI.Forms
 {
+    // aliace for Instances Counter dictionary, too long!
+    using InstanceCounterData = Dictionary<string, Dictionary<string, Dictionary<string, int>>>;
+
     /// <summary>
     /// Undo, Redo manager for frmScriptBuilder
     /// </summary>
@@ -12,11 +14,11 @@ namespace taskt.UI.Forms
         /// <summary>
         /// undo stack
         /// </summary>
-        private readonly Stack<(Script, InstanceCounter)> undo = new Stack<(Script, InstanceCounter)>();
+        private readonly Stack<(Script, InstanceCounterData)> undo = new Stack<(Script, InstanceCounterData)>();
         /// <summary>
         /// redo stack
         /// </summary>
-        private readonly Stack<(Script, InstanceCounter)> redo = new Stack<(Script, InstanceCounter)>();
+        private readonly Stack<(Script, InstanceCounterData)> redo = new Stack<(Script, InstanceCounterData)>();
         
         /// <summary>
         /// can undo?
@@ -33,7 +35,7 @@ namespace taskt.UI.Forms
         /// add snapshot
         /// </summary>
         /// <param name="script"></param>
-        public void AddSnapshot(Script script, InstanceCounter counter)
+        public void AddSnapshot(Script script, InstanceCounterData counter)
         {
             undo.Push((script, counter));
         }
@@ -42,7 +44,7 @@ namespace taskt.UI.Forms
         /// undo
         /// </summary>
         /// <returns></returns>
-        public (Script, InstanceCounter) Undo()
+        public (Script, InstanceCounterData) Undo()
         {
             if (CanUndo)
             {
@@ -60,7 +62,7 @@ namespace taskt.UI.Forms
         /// redo
         /// </summary>
         /// <returns></returns>
-        public (Script, InstanceCounter) Redo()
+        public (Script, InstanceCounterData) Redo()
         {
             if (CanRedo)
             {

@@ -403,8 +403,14 @@ namespace taskt.UI.Forms.ScriptBuilder
             lstScriptActions.Invalidate();
         }
 
+        /// <summary>
+        /// create undo snapshot
+        /// </summary>
         private void CreateUndoSnapshot()
         {
+            // TEST: new undo redo
+            undoRedo.AddSnapshot(GetSerializedScript(), instanceList.GetInstancesCounterClone());
+
             var itemList = new List<ListViewItem>();
             foreach (ListViewItem rowItem in lstScriptActions.Items)
             {
