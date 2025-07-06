@@ -207,7 +207,7 @@ namespace taskt.Core
         /// <param name="isUsed"></param>
         public void RemoveInstance(string instanceName, Automation.Attributes.PropertyAttributes.PropertyInstanceType instanceType, bool isUsed = false)
         {
-            var name = FormatInstanceName(instanceName, instanceType);
+            instanceName = FormatInstanceName(instanceName, instanceType);
             var targetDic = DecideTargetDictionary(instanceType, isUsed);
 
             if (targetDic.ContainsKey(instanceName))
