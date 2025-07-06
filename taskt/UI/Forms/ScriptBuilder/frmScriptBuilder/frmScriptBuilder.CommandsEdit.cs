@@ -418,7 +418,6 @@ namespace taskt.UI.Forms.ScriptBuilder
                 undoList.RemoveAt(0);
             }
 
-
             undoIndex = itemList.Count - 1;
         }
         #endregion

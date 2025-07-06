@@ -13,6 +13,9 @@ namespace taskt.UI.Forms.ScriptBuilder
          * this file has script file processes
          */
 
+        /// <summary>
+        /// begin open script file
+        /// </summary>
         private void BeginOpenScriptProcess()
         {
             CheckAndSaveScriptIfForget();
@@ -20,7 +23,6 @@ namespace taskt.UI.Forms.ScriptBuilder
             // show ofd
             using (var openFileDialog = new OpenFileDialog())
             {
-                //openFileDialog.InitialDirectory = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
                 openFileDialog.InitialDirectory = Core.IO.Folders.GetScriptsFolderPath();
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Filter = "Xml (*.xml)|*.xml";
@@ -34,6 +36,9 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
         }
 
+        /// <summary>
+        /// show check and save dialog
+        /// </summary>
         private void CheckAndSaveScriptIfForget()
         {
             if (this.dontSaveFlag)
@@ -46,12 +51,16 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
         }
 
+        /// <summary>
+        /// open file core
+        /// </summary>
+        /// <param name="filePath"></param>
         private void OpenFile(string filePath)
         {
             // check file exists
             if (!System.IO.File.Exists(filePath))
             {
-                using (var fm = new General.frmDialog(filePath + " does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
+                using (var fm = new General.frmDialog($"{filePath} does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
                 {
                     fm.ShowDialog();
                     return;
@@ -67,7 +76,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 instanceList = new Core.InstanceCounter(appSettings);
 
                 // get deserialized script
-                Script deserializedScript = Core.Script.Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
+                Script deserializedScript = Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
 
                 // check script created taskt version
                 var myVer = new Version(Application.ProductVersion);
@@ -130,17 +139,20 @@ namespace taskt.UI.Forms.ScriptBuilder
             {
                 // DBG
                 //MessageBox.Show(ex.Message);
-                //signal an error has happened
-                Notify("An Error Occured: " + ex.Message);
+
+                // signal an error has happened
+                Notify($"An Error Occured: {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// begin script file import process
+        /// </summary>
         private void BeginImportProcess()
         {
             // show ofd
             using (var openFileDialog = new OpenFileDialog())
             {
-                //openFileDialog.InitialDirectory = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
                 openFileDialog.InitialDirectory = Core.IO.Folders.GetScriptsFolderPath();
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Filter = "Xml (*.xml)|*.xml";
@@ -156,12 +168,16 @@ namespace taskt.UI.Forms.ScriptBuilder
             }
         }
 
+        /// <summary>
+        /// import process core
+        /// </summary>
+        /// <param name="filePath"></param>
         private void Import(string filePath)
         {
             // check file exists
             if (!System.IO.File.Exists(filePath))
             {
-                using (var fm = new General.frmDialog(filePath + " does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
+                using (var fm = new General.frmDialog($"{filePath}_ does not exits.", "Open Error", General.frmDialog.DialogType.OkOnly, 0))
                 {
                     fm.ShowDialog();
                     return;
@@ -171,13 +187,14 @@ namespace taskt.UI.Forms.ScriptBuilder
             try
             {
                 // deserialize file      
-                Script deserializedScript = Core.Script.Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
+                Script deserializedScript = Script.DeserializeFile(filePath, appSettings.EngineSettings, scriptSerializer);
 
                 if (deserializedScript.Commands.Count == 0)
                 {
                     Notify("Error Parsing File: Commands not found!");
                 }
-                deserializedScript.ReGenerateCommandID();   // change command ids
+                // change command ids
+                deserializedScript.ReGenerateCommandID();
 
                 // variables for comments
                 var fileName = new System.IO.FileInfo(filePath).Name;
@@ -186,7 +203,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 lstScriptActions.BeginUpdate();
 
                 // comment
-                lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = "Imported From " + fileName + " @ " + dateTimeNow }));
+                lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = $"Imported From {fileName} @ {dateTimeNow}" }));
                 // import
                 PopulateExecutionCommands(deserializedScript.Commands, false);
                 foreach (ScriptVariable var in deserializedScript.Variables)
@@ -201,7 +218,7 @@ namespace taskt.UI.Forms.ScriptBuilder
                 CheckValidateCommands(deserializedScript.Commands.Select(t => t.ScriptCommand).ToList());
 
                 // comment
-                lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = "End Import From " + fileName + " @ " + dateTimeNow }));
+                lstScriptActions.Items.Add(CreateScriptCommandListViewItem(new CommentCommand() { v_Comment = $"End Import From {fileName} @ {dateTimeNow}" }));
 
                 lstScriptActions.EndUpdate();
 
@@ -221,7 +238,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             catch (Exception ex)
             {
                 // signal an error has happened
-                Notify("An Error Occured: " + ex.Message);
+                Notify($"An Error Occured: {ex.Message}");
             }
         }
 
@@ -267,6 +284,10 @@ namespace taskt.UI.Forms.ScriptBuilder
             return position;
         }
 
+        /// <summary>
+        /// begin script file save procee
+        /// </summary>
+        /// <param name="SaveAs"></param>
         private void BeginSaveScriptProcess(bool SaveAs)
         {
             // clear selected items
@@ -377,7 +398,6 @@ namespace taskt.UI.Forms.ScriptBuilder
             {
                 using (var saveFileDialog = new SaveFileDialog())
                 {
-                    //saveFileDialog.InitialDirectory = Core.IO.Folders.GetFolder(Core.IO.Folders.FolderType.ScriptsFolder);
                     saveFileDialog.InitialDirectory = Core.IO.Folders.GetScriptsFolderPath();
                     saveFileDialog.RestoreDirectory = true;
                     saveFileDialog.Filter = "Xml (*.xml)|*.xml";
@@ -402,14 +422,14 @@ namespace taskt.UI.Forms.ScriptBuilder
             {
                 scriptInfo.TasktVersion = Application.ProductVersion;
                 scriptInfo.Revision++;
-                var exportedScript = Core.Script.Script.SerializeScript(lstScriptActions.Items, scriptVariables, scriptInfo, appSettings.EngineSettings, scriptSerializer, this.ScriptFilePath);
+                var exportedScript = Script.SerializeScript(lstScriptActions.Items, scriptVariables, scriptInfo, appSettings.EngineSettings, scriptSerializer, this.ScriptFilePath);
                 // show success dialog
                 Notify("File has been saved successfully!");
                 ChangeSaveState(false);
             }
             catch (Exception ex)
             {
-                Notify("Save Error: " + ex.ToString());
+                Notify($"Save Error: {ex}");
             }
         }
 
@@ -452,7 +472,6 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             if (lstScriptActions.Items.Count == 0)
             {
-                // MessageBox.Show("You must first build the script by adding commands!", "Please Build Script");
                 Notify("You must first build the script by adding commands!");
                 return;
             }
@@ -460,8 +479,7 @@ namespace taskt.UI.Forms.ScriptBuilder
 
             if (ScriptFilePath == null)
             {
-                //MessageBox.Show("You must first save your script before you can run it!", "Please Save Script");
-                Notify("You must first save your script before you can run it!");
+                Notify("You must first save your script before you can run it! Or use 'Run w/o Saving'.");
                 return;
             }
 
