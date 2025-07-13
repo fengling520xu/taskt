@@ -59,6 +59,17 @@ namespace taskt.UI.Forms.ScriptBuilder
         #endregion
 
         #region Edit menu items click handler
+
+        private void undoSplitMenuItem_Click(object sender, EventArgs e)
+        {
+            UndoChange();
+        }
+
+        private void redoSplitMenuItem_Click(object sender, EventArgs e)
+        {
+            RedoChange();
+        }
+
         private void editThisActionStripMenuItem_Click(object sender, EventArgs e)
         {
             EditSelectedCommand();

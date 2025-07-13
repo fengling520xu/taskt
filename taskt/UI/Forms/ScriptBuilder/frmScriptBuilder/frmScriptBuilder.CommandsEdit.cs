@@ -296,6 +296,11 @@ namespace taskt.UI.Forms.ScriptBuilder
             (var script, var instances) = undoRedo.Undo();
             BeginUndoRedoProcess(script, instances);
 
+            if (undoRedo.CanRedo)
+            {
+                redoSplitMenuItem.Enabled = true;
+            }
+
             /*
             if (undoList.Count > 0)
             {
@@ -447,8 +452,9 @@ namespace taskt.UI.Forms.ScriptBuilder
         /// </summary>
         private void CreateUndoSnapshot()
         {
-            // TEST: new undo redo
             undoRedo.AddSnapshot(GetSerializedScript(), instanceList.GetInstancesCounterClone());
+
+            undoSplitMenuItem.Enabled = true;
 
             /*
             var itemList = new List<ListViewItem>();

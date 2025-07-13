@@ -70,14 +70,14 @@ namespace taskt.UI.Forms.ScriptBuilder
             {
                 PasteRows();
             }
-            else if ((e.Control) && (e.KeyCode == Keys.Z))
-            {
-                UndoChange();
-            }
-            else if ((e.Control) && (e.KeyCode == Keys.R))
-            {
-                RedoChange();
-            }
+            //else if ((e.Control) && (e.KeyCode == Keys.Z))
+            //{
+            //    UndoChange();
+            //}
+            //else if ((e.Control) && (e.KeyCode == Keys.R))
+            //{
+            //    RedoChange();
+            //}
             else if ((e.Control) && (e.Shift) && (e.KeyCode == Keys.E))
             {
                 lstScriptActions_DoubleClick(null, null);

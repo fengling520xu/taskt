@@ -541,6 +541,8 @@ namespace taskt.UI.Forms.ScriptBuilder
             scriptInfo = new ScriptInformation();
             instanceList = new Core.InstanceCounter();
             undoRedo = new UndoRedoManager4frmScriptBuilder();
+            undoSplitMenuItem.Enabled = false;
+            redoSplitMenuItem.Enabled = false;
 
             ChangeSaveState(false);
         }
@@ -756,5 +758,6 @@ namespace taskt.UI.Forms.ScriptBuilder
             isRememberChildCommandEditorPosition = true;
         }
         #endregion
+
     }
 }

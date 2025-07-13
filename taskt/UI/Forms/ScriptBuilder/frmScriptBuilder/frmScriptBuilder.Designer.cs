@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            taskt.Core.Theme theme1 = new taskt.Core.Theme();
+            taskt.Core.Theme theme2 = new taskt.Core.Theme();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScriptBuilder));
             this.tlpControls = new System.Windows.Forms.TableLayoutPanel();
             this.headerMenu = new taskt.UI.CustomControls.UIMenuStrip();
@@ -46,21 +46,24 @@
             this.restartApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.undoSplitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redoSplitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editSplitMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.editThisActionStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpThisCommandStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whereThisCommandToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.editSplitMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.editSplitMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.enableSelectedActionsStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableSelectedActionsStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseBeforeExeutionStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dontPauseBeforeExecutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editSplitMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.editSplitMenuSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.SelectAllStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CutScriptStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PasteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editSplitMenuSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.editSplitMenuSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.SearchStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ReplaceStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightThisCommandStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -290,7 +293,6 @@
             this.helpStripMenuItem});
             this.headerMenu.Location = new System.Drawing.Point(0, 51);
             this.headerMenu.Name = "headerMenu";
-            this.headerMenu.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.headerMenu.ShowItemToolTips = true;
             this.headerMenu.Size = new System.Drawing.Size(1224, 38);
             this.headerMenu.TabIndex = 1;
@@ -414,21 +416,24 @@
             // editStripMenuItem
             // 
             this.editStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.undoSplitMenuItem,
+            this.redoSplitMenuItem,
+            this.editSplitMenuSeparator1,
             this.editThisActionStripMenuItem,
             this.helpThisCommandStripMenuItem,
             this.whereThisCommandToolStripMenuItem1,
-            this.editSplitMenuSeparator1,
+            this.editSplitMenuSeparator2,
             this.enableSelectedActionsStripMenuItem,
             this.disableSelectedActionsStripMenuItem,
             this.pauseBeforeExeutionStripMenuItem,
             this.dontPauseBeforeExecutionToolStripMenuItem,
-            this.editSplitMenuSeparator2,
+            this.editSplitMenuSeparator3,
             this.SelectAllStripMenuItem,
             this.CutScriptStripMenuItem,
             this.CopyStripMenuItem,
             this.PasteStripMenuItem,
             this.deleteStripMenuItem,
-            this.editSplitMenuSeparator3,
+            this.editSplitMenuSeparator4,
             this.SearchStripMenuItem,
             this.ReplaceStripMenuItem,
             this.highlightThisCommandStripMenuItem,
@@ -438,6 +443,31 @@
             this.editStripMenuItem.Name = "editStripMenuItem";
             this.editStripMenuItem.Size = new System.Drawing.Size(69, 34);
             this.editStripMenuItem.Text = "&Edit";
+            // 
+            // undoSplitMenuItem
+            // 
+            this.undoSplitMenuItem.Enabled = false;
+            this.undoSplitMenuItem.ForeColor = System.Drawing.Color.White;
+            this.undoSplitMenuItem.Name = "undoSplitMenuItem";
+            this.undoSplitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.undoSplitMenuItem.Size = new System.Drawing.Size(376, 26);
+            this.undoSplitMenuItem.Text = "&Undo";
+            this.undoSplitMenuItem.Click += new System.EventHandler(this.undoSplitMenuItem_Click);
+            // 
+            // redoSplitMenuItem
+            // 
+            this.redoSplitMenuItem.Enabled = false;
+            this.redoSplitMenuItem.ForeColor = System.Drawing.Color.White;
+            this.redoSplitMenuItem.Name = "redoSplitMenuItem";
+            this.redoSplitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.redoSplitMenuItem.Size = new System.Drawing.Size(376, 26);
+            this.redoSplitMenuItem.Text = "&Redo";
+            this.redoSplitMenuItem.Click += new System.EventHandler(this.redoSplitMenuItem_Click);
+            // 
+            // editSplitMenuSeparator1
+            // 
+            this.editSplitMenuSeparator1.Name = "editSplitMenuSeparator1";
+            this.editSplitMenuSeparator1.Size = new System.Drawing.Size(373, 6);
             // 
             // editThisActionStripMenuItem
             // 
@@ -469,10 +499,10 @@
             this.whereThisCommandToolStripMenuItem1.Text = "Where This Command";
             this.whereThisCommandToolStripMenuItem1.Click += new System.EventHandler(this.whereThisCommandToolStripMenuItem1_Click);
             // 
-            // editSplitMenuSeparator1
+            // editSplitMenuSeparator2
             // 
-            this.editSplitMenuSeparator1.Name = "editSplitMenuSeparator1";
-            this.editSplitMenuSeparator1.Size = new System.Drawing.Size(373, 6);
+            this.editSplitMenuSeparator2.Name = "editSplitMenuSeparator2";
+            this.editSplitMenuSeparator2.Size = new System.Drawing.Size(373, 6);
             // 
             // enableSelectedActionsStripMenuItem
             // 
@@ -514,10 +544,10 @@
             this.dontPauseBeforeExecutionToolStripMenuItem.Text = "Don\'t Pause Before Execution";
             this.dontPauseBeforeExecutionToolStripMenuItem.Click += new System.EventHandler(this.dontPauseBeforeExecutionToolStripMenuItem_Click);
             // 
-            // editSplitMenuSeparator2
+            // editSplitMenuSeparator3
             // 
-            this.editSplitMenuSeparator2.Name = "editSplitMenuSeparator2";
-            this.editSplitMenuSeparator2.Size = new System.Drawing.Size(373, 6);
+            this.editSplitMenuSeparator3.Name = "editSplitMenuSeparator3";
+            this.editSplitMenuSeparator3.Size = new System.Drawing.Size(373, 6);
             // 
             // SelectAllStripMenuItem
             // 
@@ -564,10 +594,10 @@
             this.deleteStripMenuItem.Text = "Delete Selected Actions";
             this.deleteStripMenuItem.Click += new System.EventHandler(this.deleteStripMenuItem_Click);
             // 
-            // editSplitMenuSeparator3
+            // editSplitMenuSeparator4
             // 
-            this.editSplitMenuSeparator3.Name = "editSplitMenuSeparator3";
-            this.editSplitMenuSeparator3.Size = new System.Drawing.Size(373, 6);
+            this.editSplitMenuSeparator4.Name = "editSplitMenuSeparator4";
+            this.editSplitMenuSeparator4.Size = new System.Drawing.Size(373, 6);
             // 
             // SearchStripMenuItem
             // 
@@ -906,7 +936,7 @@
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(4, 200);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -970,7 +1000,7 @@
             this.picCommandFilterClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picCommandFilterClear.Image = global::taskt.Properties.Resources.command_error;
             this.picCommandFilterClear.Location = new System.Drawing.Point(208, 2);
-            this.picCommandFilterClear.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picCommandFilterClear.Margin = new System.Windows.Forms.Padding(4);
             this.picCommandFilterClear.Name = "picCommandFilterClear";
             this.picCommandFilterClear.Size = new System.Drawing.Size(25, 25);
             this.picCommandFilterClear.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -984,7 +1014,7 @@
             this.picCommandFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picCommandFilter.Image = global::taskt.Properties.Resources.command_search;
             this.picCommandFilter.Location = new System.Drawing.Point(170, -1);
-            this.picCommandFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picCommandFilter.Margin = new System.Windows.Forms.Padding(4);
             this.picCommandFilter.Name = "picCommandFilter";
             this.picCommandFilter.Size = new System.Drawing.Size(30, 30);
             this.picCommandFilter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -999,7 +1029,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCommandFilter.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtCommandFilter.Location = new System.Drawing.Point(32, 0);
-            this.txtCommandFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCommandFilter.Margin = new System.Windows.Forms.Padding(4);
             this.txtCommandFilter.Name = "txtCommandFilter";
             this.txtCommandFilter.Size = new System.Drawing.Size(134, 27);
             this.txtCommandFilter.TabIndex = 1;
@@ -1024,7 +1054,7 @@
             this.tvCommands.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tvCommands.ForeColor = System.Drawing.Color.White;
             this.tvCommands.Location = new System.Drawing.Point(0, 0);
-            this.tvCommands.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvCommands.Margin = new System.Windows.Forms.Padding(4);
             this.tvCommands.Name = "tvCommands";
             this.tvCommands.ShowLines = false;
             this.tvCommands.ShowNodeToolTips = true;
@@ -1056,7 +1086,7 @@
             this.pnlCommandHelper.Controls.Add(this.lblNote);
             this.pnlCommandHelper.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCommandHelper.Location = new System.Drawing.Point(0, 0);
-            this.pnlCommandHelper.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlCommandHelper.Margin = new System.Windows.Forms.Padding(4);
             this.pnlCommandHelper.Name = "pnlCommandHelper";
             this.pnlCommandHelper.Size = new System.Drawing.Size(973, 455);
             this.pnlCommandHelper.TabIndex = 7;
@@ -1102,7 +1132,7 @@
             this.flwRecentFiles.Font = new System.Drawing.Font("Segoe UI Light", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.flwRecentFiles.ForeColor = System.Drawing.Color.LightSteelBlue;
             this.flwRecentFiles.Location = new System.Drawing.Point(145, 302);
-            this.flwRecentFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flwRecentFiles.Margin = new System.Windows.Forms.Padding(4);
             this.flwRecentFiles.Name = "flwRecentFiles";
             this.flwRecentFiles.Size = new System.Drawing.Size(758, 180);
             this.flwRecentFiles.TabIndex = 12;
@@ -1125,7 +1155,7 @@
             // 
             this.picRecentFiles.Image = global::taskt.Properties.Resources.recent_files;
             this.picRecentFiles.Location = new System.Drawing.Point(15, 274);
-            this.picRecentFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picRecentFiles.Margin = new System.Windows.Forms.Padding(4);
             this.picRecentFiles.Name = "picRecentFiles";
             this.picRecentFiles.Size = new System.Drawing.Size(105, 105);
             this.picRecentFiles.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1138,7 +1168,7 @@
             // 
             this.picWebLinks.Image = global::taskt.Properties.Resources.links_header;
             this.picWebLinks.Location = new System.Drawing.Point(15, 135);
-            this.picWebLinks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picWebLinks.Margin = new System.Windows.Forms.Padding(4);
             this.picWebLinks.Name = "picWebLinks";
             this.picWebLinks.Size = new System.Drawing.Size(105, 105);
             this.picWebLinks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1149,7 +1179,7 @@
             // 
             this.picWelcomeToTaskt.Image = global::taskt.Properties.Resources.item_header;
             this.picWelcomeToTaskt.Location = new System.Drawing.Point(15, 10);
-            this.picWelcomeToTaskt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picWelcomeToTaskt.Margin = new System.Windows.Forms.Padding(4);
             this.picWelcomeToTaskt.Name = "picWelcomeToTaskt";
             this.picWelcomeToTaskt.Size = new System.Drawing.Size(105, 105);
             this.picWelcomeToTaskt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1271,7 +1301,7 @@
             this.lstScriptActions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.lstScriptActions.HideSelection = false;
             this.lstScriptActions.Location = new System.Drawing.Point(0, 0);
-            this.lstScriptActions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.lstScriptActions.Margin = new System.Windows.Forms.Padding(6);
             this.lstScriptActions.Name = "lstScriptActions";
             this.lstScriptActions.OwnerDraw = true;
             this.lstScriptActions.ShowItemToolTips = true;
@@ -1322,9 +1352,9 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(1224, 51);
             this.pnlMain.TabIndex = 2;
-            theme1.BgGradientEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(50)))), ((int)(((byte)(178)))));
-            theme1.BgGradientStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(136)))), ((int)(((byte)(204)))));
-            this.pnlMain.Theme = theme1;
+            theme2.BgGradientEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(50)))), ((int)(((byte)(178)))));
+            theme2.BgGradientStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(136)))), ((int)(((byte)(204)))));
+            this.pnlMain.Theme = theme2;
             // 
             // lblMainLogo
             // 
@@ -1392,9 +1422,9 @@
             this.grpSearch.Controls.Add(this.lblTotalResults);
             this.grpSearch.Controls.Add(this.txtCommandSearch);
             this.grpSearch.Location = new System.Drawing.Point(741, 8);
-            this.grpSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpSearch.Margin = new System.Windows.Forms.Padding(4);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpSearch.Padding = new System.Windows.Forms.Padding(4);
             this.grpSearch.Size = new System.Drawing.Size(248, 91);
             this.grpSearch.TabIndex = 20;
             this.grpSearch.TabStop = false;
@@ -1408,7 +1438,7 @@
             // 
             this.picCommandSearch.Image = global::taskt.Properties.Resources.command_search;
             this.picCommandSearch.Location = new System.Drawing.Point(198, 22);
-            this.picCommandSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picCommandSearch.Margin = new System.Windows.Forms.Padding(4);
             this.picCommandSearch.Name = "picCommandSearch";
             this.picCommandSearch.Size = new System.Drawing.Size(20, 20);
             this.picCommandSearch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1449,7 +1479,7 @@
             // 
             this.txtCommandSearch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCommandSearch.Location = new System.Drawing.Point(6, 20);
-            this.txtCommandSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCommandSearch.Margin = new System.Windows.Forms.Padding(4);
             this.txtCommandSearch.Name = "txtCommandSearch";
             this.txtCommandSearch.Size = new System.Drawing.Size(188, 27);
             this.txtCommandSearch.TabIndex = 0;
@@ -1463,9 +1493,9 @@
             this.grpSaveClose.Controls.Add(this.uiBtnKeep);
             this.grpSaveClose.Controls.Add(this.uiBtnClose);
             this.grpSaveClose.Location = new System.Drawing.Point(984, 4);
-            this.grpSaveClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpSaveClose.Margin = new System.Windows.Forms.Padding(4);
             this.grpSaveClose.Name = "grpSaveClose";
-            this.grpSaveClose.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpSaveClose.Padding = new System.Windows.Forms.Padding(4);
             this.grpSaveClose.Size = new System.Drawing.Size(206, 91);
             this.grpSaveClose.TabIndex = 19;
             this.grpSaveClose.TabStop = false;
@@ -1486,7 +1516,7 @@
             this.btnSequenceImport.Image = global::taskt.Properties.Resources.action_bar_import;
             this.btnSequenceImport.IsMouseOver = false;
             this.btnSequenceImport.Location = new System.Drawing.Point(138, 22);
-            this.btnSequenceImport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSequenceImport.Margin = new System.Windows.Forms.Padding(4);
             this.btnSequenceImport.Name = "btnSequenceImport";
             this.btnSequenceImport.Size = new System.Drawing.Size(60, 62);
             this.btnSequenceImport.TabIndex = 20;
@@ -1505,7 +1535,7 @@
             this.uiBtnKeep.Image = global::taskt.Properties.Resources.action_bar_record;
             this.uiBtnKeep.IsMouseOver = false;
             this.uiBtnKeep.Location = new System.Drawing.Point(2, 22);
-            this.uiBtnKeep.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnKeep.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnKeep.Name = "uiBtnKeep";
             this.uiBtnKeep.Size = new System.Drawing.Size(60, 62);
             this.uiBtnKeep.TabIndex = 19;
@@ -1524,7 +1554,7 @@
             this.uiBtnClose.Image = global::taskt.Properties.Resources.action_bar_schedule;
             this.uiBtnClose.IsMouseOver = false;
             this.uiBtnClose.Location = new System.Drawing.Point(68, 22);
-            this.uiBtnClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnClose.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnClose.Name = "uiBtnClose";
             this.uiBtnClose.Size = new System.Drawing.Size(65, 62);
             this.uiBtnClose.TabIndex = 13;
@@ -1542,9 +1572,9 @@
             this.grpFileActions.Controls.Add(this.uiBtnNew);
             this.grpFileActions.Controls.Add(this.uiBtnOpen);
             this.grpFileActions.Location = new System.Drawing.Point(2, 6);
-            this.grpFileActions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpFileActions.Margin = new System.Windows.Forms.Padding(4);
             this.grpFileActions.Name = "grpFileActions";
-            this.grpFileActions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpFileActions.Padding = new System.Windows.Forms.Padding(4);
             this.grpFileActions.Size = new System.Drawing.Size(319, 91);
             this.grpFileActions.TabIndex = 16;
             this.grpFileActions.TabStop = false;
@@ -1564,7 +1594,7 @@
             this.uiBtnImport.Image = global::taskt.Properties.Resources.action_bar_import;
             this.uiBtnImport.IsMouseOver = false;
             this.uiBtnImport.Location = new System.Drawing.Point(125, 24);
-            this.uiBtnImport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnImport.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnImport.Name = "uiBtnImport";
             this.uiBtnImport.Size = new System.Drawing.Size(60, 62);
             this.uiBtnImport.TabIndex = 14;
@@ -1582,7 +1612,7 @@
             this.uiBtnSaveAs.Image = global::taskt.Properties.Resources.action_bar_saveas;
             this.uiBtnSaveAs.IsMouseOver = false;
             this.uiBtnSaveAs.Location = new System.Drawing.Point(248, 24);
-            this.uiBtnSaveAs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnSaveAs.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnSaveAs.Name = "uiBtnSaveAs";
             this.uiBtnSaveAs.Size = new System.Drawing.Size(60, 62);
             this.uiBtnSaveAs.TabIndex = 13;
@@ -1600,7 +1630,7 @@
             this.uiBtnSave.Image = global::taskt.Properties.Resources.action_bar_save;
             this.uiBtnSave.IsMouseOver = false;
             this.uiBtnSave.Location = new System.Drawing.Point(186, 24);
-            this.uiBtnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnSave.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnSave.Name = "uiBtnSave";
             this.uiBtnSave.Size = new System.Drawing.Size(60, 62);
             this.uiBtnSave.TabIndex = 11;
@@ -1618,7 +1648,7 @@
             this.uiBtnNew.Image = global::taskt.Properties.Resources.action_bar_new;
             this.uiBtnNew.IsMouseOver = false;
             this.uiBtnNew.Location = new System.Drawing.Point(2, 24);
-            this.uiBtnNew.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnNew.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnNew.Name = "uiBtnNew";
             this.uiBtnNew.Size = new System.Drawing.Size(60, 62);
             this.uiBtnNew.TabIndex = 12;
@@ -1636,7 +1666,7 @@
             this.uiBtnOpen.Image = global::taskt.Properties.Resources.action_bar_open;
             this.uiBtnOpen.IsMouseOver = false;
             this.uiBtnOpen.Location = new System.Drawing.Point(64, 24);
-            this.uiBtnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnOpen.Name = "uiBtnOpen";
             this.uiBtnOpen.Size = new System.Drawing.Size(60, 62);
             this.uiBtnOpen.TabIndex = 10;
@@ -1651,9 +1681,9 @@
             this.grpRecordRun.Controls.Add(this.uiBtnRunScript);
             this.grpRecordRun.Controls.Add(this.uiBtnScheduleManagement);
             this.grpRecordRun.Location = new System.Drawing.Point(541, 8);
-            this.grpRecordRun.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpRecordRun.Margin = new System.Windows.Forms.Padding(4);
             this.grpRecordRun.Name = "grpRecordRun";
-            this.grpRecordRun.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpRecordRun.Padding = new System.Windows.Forms.Padding(4);
             this.grpRecordRun.Size = new System.Drawing.Size(202, 91);
             this.grpRecordRun.TabIndex = 18;
             this.grpRecordRun.TabStop = false;
@@ -1673,7 +1703,7 @@
             this.uiBtnRecordSequence.Image = global::taskt.Properties.Resources.action_bar_record;
             this.uiBtnRecordSequence.IsMouseOver = false;
             this.uiBtnRecordSequence.Location = new System.Drawing.Point(2, 22);
-            this.uiBtnRecordSequence.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnRecordSequence.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnRecordSequence.Name = "uiBtnRecordSequence";
             this.uiBtnRecordSequence.Size = new System.Drawing.Size(60, 62);
             this.uiBtnRecordSequence.TabIndex = 19;
@@ -1691,7 +1721,7 @@
             this.uiBtnRunScript.Image = global::taskt.Properties.Resources.action_bar_run;
             this.uiBtnRunScript.IsMouseOver = false;
             this.uiBtnRunScript.Location = new System.Drawing.Point(130, 22);
-            this.uiBtnRunScript.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnRunScript.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnRunScript.Name = "uiBtnRunScript";
             this.uiBtnRunScript.Size = new System.Drawing.Size(60, 62);
             this.uiBtnRunScript.TabIndex = 12;
@@ -1709,7 +1739,7 @@
             this.uiBtnScheduleManagement.Image = global::taskt.Properties.Resources.action_bar_schedule;
             this.uiBtnScheduleManagement.IsMouseOver = false;
             this.uiBtnScheduleManagement.Location = new System.Drawing.Point(64, 22);
-            this.uiBtnScheduleManagement.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnScheduleManagement.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnScheduleManagement.Name = "uiBtnScheduleManagement";
             this.uiBtnScheduleManagement.Size = new System.Drawing.Size(65, 62);
             this.uiBtnScheduleManagement.TabIndex = 13;
@@ -1724,9 +1754,9 @@
             this.grpVariable.Controls.Add(this.uiBtnSettings);
             this.grpVariable.Controls.Add(this.uiBtnAddVariable);
             this.grpVariable.Location = new System.Drawing.Point(321, 8);
-            this.grpVariable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpVariable.Margin = new System.Windows.Forms.Padding(4);
             this.grpVariable.Name = "grpVariable";
-            this.grpVariable.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpVariable.Padding = new System.Windows.Forms.Padding(4);
             this.grpVariable.Size = new System.Drawing.Size(214, 91);
             this.grpVariable.TabIndex = 17;
             this.grpVariable.TabStop = false;
@@ -1746,7 +1776,7 @@
             this.uiBtnClearAll.Image = global::taskt.Properties.Resources.action_bar_clear;
             this.uiBtnClearAll.IsMouseOver = false;
             this.uiBtnClearAll.Location = new System.Drawing.Point(135, 24);
-            this.uiBtnClearAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnClearAll.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnClearAll.Name = "uiBtnClearAll";
             this.uiBtnClearAll.Size = new System.Drawing.Size(60, 62);
             this.uiBtnClearAll.TabIndex = 14;
@@ -1765,7 +1795,7 @@
             this.uiBtnSettings.Image = global::taskt.Properties.Resources.action_bar_options;
             this.uiBtnSettings.IsMouseOver = false;
             this.uiBtnSettings.Location = new System.Drawing.Point(74, 24);
-            this.uiBtnSettings.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnSettings.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnSettings.Name = "uiBtnSettings";
             this.uiBtnSettings.Size = new System.Drawing.Size(60, 62);
             this.uiBtnSettings.TabIndex = 12;
@@ -1783,7 +1813,7 @@
             this.uiBtnAddVariable.Image = global::taskt.Properties.Resources.action_bar_variable;
             this.uiBtnAddVariable.IsMouseOver = false;
             this.uiBtnAddVariable.Location = new System.Drawing.Point(8, 24);
-            this.uiBtnAddVariable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiBtnAddVariable.Margin = new System.Windows.Forms.Padding(4);
             this.uiBtnAddVariable.Name = "uiBtnAddVariable";
             this.uiBtnAddVariable.Size = new System.Drawing.Size(65, 62);
             this.uiBtnAddVariable.TabIndex = 13;
@@ -2187,7 +2217,7 @@
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.headerMenu;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmScriptBuilder";
             this.Text = "taskt";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmScriptBuilder_FormClosing);
@@ -2419,6 +2449,9 @@
         private System.Windows.Forms.Timer autoSaveTimer;
         private System.Windows.Forms.ToolStripMenuItem dontPauseBeforeExecutionToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem dontPauseBeforeExecutionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem undoSplitMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem redoSplitMenuItem;
+        private System.Windows.Forms.ToolStripSeparator editSplitMenuSeparator4;
     }
 }
 
