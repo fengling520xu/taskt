@@ -453,7 +453,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         /// <returns></returns>
         private Script GetSerializedScript(string fileName = "")
         {
-            return Script.SerializeScript(lstScriptActions.Items, scriptVariables, scriptInfo, appSettings.EngineSettings, scriptSerializer, fileName);
+            return Script.SerializeScript(lstScriptActions.Items, this.scriptVariables, this.scriptInfo, appSettings.EngineSettings, scriptSerializer, fileName);
         }
 
         private void CheckValidateCommands(List<ScriptCommand> commands)

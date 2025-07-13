@@ -43,9 +43,6 @@ namespace taskt.UI.Forms.ScriptBuilder
 
         public Core.SafeFrmScriptBuilderApplicationSettings appSettings;
 
-        //private List<List<ListViewItem>> undoList;
-        //private int undoIndex = -1;
-
         /// <summary>
         /// undo redo manager
         /// </summary>

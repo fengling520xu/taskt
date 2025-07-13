@@ -296,29 +296,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             (var script, var instances) = undoRedo.Undo();
             BeginUndoRedoProcess(script, instances);
 
-            /*
-            if (undoList.Count > 0)
-            {
-                if ((undoIndex < 0) || (undoIndex >= undoList.Count))
-                {
-                    undoIndex = undoList.Count - 1;
-                }
-
-                lstScriptActions.Items.Clear();
-
-                foreach (ListViewItem rowItem in undoList[undoIndex])
-                {
-                    lstScriptActions.Items.Add(rowItem);
-                }
-
-                undoIndex--;
-
-                // check indent
-                IndentListViewItems();
-
-                lstScriptActions.Invalidate();
-            }
-            */
+            undoSplitMenuItem.Enabled = undoRedo.CanUndo;
         }
 
         private void RedoChange()
@@ -326,29 +304,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             (var script, var instances) = undoRedo.Redo();
             BeginUndoRedoProcess(script, instances, false);
 
-            /*
-            if (undoList.Count > 0)
-            {
-                undoIndex++;
-
-                if (undoIndex > undoList.Count - 1)
-                {
-                    undoIndex = undoList.Count - 1;
-                }
-
-                lstScriptActions.Items.Clear();
-
-                foreach (ListViewItem rowItem in undoList[undoIndex])
-                {
-                    lstScriptActions.Items.Add(rowItem);
-                }
-
-                // check indent
-                IndentListViewItems();
-
-                lstScriptActions.Invalidate();
-            }
-            */
+            redoSplitMenuItem.Enabled = undoRedo.CanRedo;
         }
 
         private void SetSelectedCodeToCommented(bool setCommented)
@@ -450,23 +406,6 @@ namespace taskt.UI.Forms.ScriptBuilder
             undoRedo.AddUndoSnapshot(GetSerializedScript(), instanceList.GetInstancesCounterClone());
 
             undoSplitMenuItem.Enabled = true;
-
-            /*
-            var itemList = new List<ListViewItem>();
-            foreach (ListViewItem rowItem in lstScriptActions.Items)
-            {
-                itemList.Add(rowItem);
-            }
-
-            undoList.Add(itemList);
-
-            if (undoList.Count > 10)
-            {
-                undoList.RemoveAt(0);
-            }
-
-            undoIndex = itemList.Count - 1;
-            */
         }
 
         /// <summary>

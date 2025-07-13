@@ -15,6 +15,7 @@ namespace taskt.UI.Forms.ScriptBuilder
             {
                 if (scriptVariableEditor.ShowDialog() == DialogResult.OK)
                 {
+                    CreateUndoSnapshot();
                     this.scriptVariables = scriptVariableEditor.scriptVariables.OrderBy(v => v.VariableName).ToList();
                     ChangeSaveState(true);
                 }
@@ -60,6 +61,7 @@ namespace taskt.UI.Forms.ScriptBuilder
         {
             using (var frm = new Supplemental.frmScriptInformations())
             {
+                CreateUndoSnapshot();
                 frm.infos = scriptInfo;
                 frm.ShowDialog();
                 ChangeSaveState(true);
