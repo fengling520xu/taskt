@@ -62,9 +62,9 @@ namespace taskt.UI.Forms.ScriptBuilder
         private int[,] miniMap = null;
         private Bitmap miniMapImg = null;
 
-        List<string> notificationList = new List<string>();
-        private DateTime notificationExpires;
-        private bool isDisplaying;
+        //List<string> notificationList = new List<string>();
+        //private DateTime notificationExpires;
+        //private bool isDisplaying;
         public string notificationText { get; set; }
 
         /// <summary>
