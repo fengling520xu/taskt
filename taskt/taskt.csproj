@@ -1238,6 +1238,12 @@
     <Compile Include="UI\Forms\AttendedMode\frmAttendedMode.Designer.cs">
       <DependentUpon>frmAttendedMode.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\DialogLikeThemedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DialogLikeThemedForm.Designer.cs">
+      <DependentUpon>DialogLikeThemedForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\ScriptBuilder\frmScriptBuilder\frmScriptBuilder.AutoSave.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1537,6 +1543,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\AttendedMode\frmAttendedMode.resx">
       <DependentUpon>frmAttendedMode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\DialogLikeThemedForm.resx">
+      <DependentUpon>DialogLikeThemedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\ScriptBuilder\Supplemental\frmNewSettings.resx">
       <DependentUpon>frmNewSettings.cs</DependentUpon>

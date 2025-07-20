@@ -21,11 +21,6 @@ namespace taskt.UI.Forms
             InitializeComponent();
         }
 
-        private void ThemedForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);

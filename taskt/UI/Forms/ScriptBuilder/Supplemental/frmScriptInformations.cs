@@ -4,7 +4,7 @@ using taskt.Core.Script;
 
 namespace taskt.UI.Forms.ScriptBuilder.Supplemental
 {
-    public partial class frmScriptInformations : ThemedForm
+    public partial class frmScriptInformations : DialogLikeThemedForm
     {
         //public frmScriptBuilder scriptBuilderForm;
         public ScriptInformation infos { get; private set; }
@@ -38,14 +38,6 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-        }
-
-        private void frmScriptInformations_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Escape)
-            {
-                this.DialogResult = DialogResult.Cancel;
-            }
         }
     }
 }

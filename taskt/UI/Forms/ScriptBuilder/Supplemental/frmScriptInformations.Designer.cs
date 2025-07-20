@@ -346,7 +346,6 @@ namespace taskt.UI.Forms.ScriptBuilder.Supplemental
             this.Name = "frmScriptInformations";
             this.Text = "Script Informations";
             this.Load += new System.EventHandler(this.frmScriptInformations_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmScriptInformations_KeyPress);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
