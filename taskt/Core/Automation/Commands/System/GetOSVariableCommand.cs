@@ -9,14 +9,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("System Commands")]
+    [Attributes.ClassAttributes.Group("System")]
     [Attributes.ClassAttributes.CommandSettings("Get OS Variable")]
     [Attributes.ClassAttributes.Description("This command allows you to exclusively select a system/environment variable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to exclusively retrieve a system variable")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_system))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class GetOSVariableCommand : ScriptCommand
+    public sealed class GetOSVariableCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -46,9 +47,9 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var systemVariable = v_OSVariableName.ConvertToUserVariable(sender);
+            var systemVariable = v_OSVariableName.ExpandValueOrUserVariable(engine);
 
             ObjectQuery wql = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(wql);
@@ -61,11 +62,10 @@ namespace taskt.Core.Automation.Commands
                     if (prop.Name == systemVariable)
                     {
                         var sysValue = prop.Value?.ToString() ?? "";
-                        sysValue.StoreInUserVariable(sender, v_applyToVariableName);
+                        sysValue.StoreInUserVariable(engine, v_applyToVariableName);
                         return;
                     }
                 }
-
             }
 
             throw new Exception("System Property '" + systemVariable + "' not found!");

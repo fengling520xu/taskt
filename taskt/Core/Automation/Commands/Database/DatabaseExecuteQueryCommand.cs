@@ -12,11 +12,12 @@ using taskt.UI.CustomControls;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Database Commands")]
+    [Attributes.ClassAttributes.Group("Database")]
     [Attributes.ClassAttributes.Description("This command allows you to perform a database query and apply the result to a dataset")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to select data from a database.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'OLEDB' to achieve automation.")]
-    public class DatabaseExecuteQueryCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_database))]
+    public sealed class DatabaseExecuteQueryCommand : ScriptCommand, ICanHandleDataTable, IHaveDataTableElements
     {
         [XmlAttribute]
         [Attributes.PropertyAttributes.PropertyDescription("Please Enter the instance name")]
@@ -90,16 +91,15 @@ namespace taskt.Core.Automation.Commands
 
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             //create engine, instance, query
-            var engine = (Core.Automation.Engine.AutomationEngineInstance)sender;
-            var vInstance = v_InstanceName.ConvertToUserVariable(engine);
-            var query = v_Query.ConvertToUserVariable(sender);
+            var vInstance = v_InstanceName.ExpandValueOrUserVariable(engine);
+            var query = v_Query.ExpandValueOrUserVariable(engine);
 
             //define connection
             var databaseConnection = (OleDbConnection)engine.GetAppInstance(vInstance);
-            var queryExecutionType = v_QueryType.ConvertToUserVariable(sender);
+            var queryExecutionType = v_QueryType.ExpandValueOrUserVariable(engine);
 
             //define commad
             var oleCommand = new System.Data.OleDb.OleDbCommand(query, databaseConnection);
@@ -107,9 +107,9 @@ namespace taskt.Core.Automation.Commands
             //add parameters
             foreach (DataRow rw in this.v_QueryParameters.Rows)
             {
-                var parameterName = rw.Field<string>("Parameter Name").ConvertToUserVariable(sender);
-                var parameterValue = rw.Field<string>("Parameter Value").ConvertToUserVariable(sender);
-                var parameterType = rw.Field<string>("Parameter Type").ConvertToUserVariable(sender);
+                var parameterName = rw.Field<string>("Parameter Name").ExpandValueOrUserVariable(engine);
+                var parameterValue = rw.Field<string>("Parameter Value").ExpandValueOrUserVariable(engine);
+                var parameterType = rw.Field<string>("Parameter Type").ExpandValueOrUserVariable(engine);
 
                 object convertedValue = null;
                 //"STRING", "BOOLEAN", "DECIMAL", "INT16", "INT32", "INT64", "DATETIME", "DOUBLE", "SINGLE", "GUID", "BYTE", "BYTE[]"
@@ -156,13 +156,10 @@ namespace taskt.Core.Automation.Commands
                 }
 
                 oleCommand.Parameters.AddWithValue(parameterName, convertedValue);
-
-
             }
 
             if (queryExecutionType == "Return Dataset")
             {
-
                 DataTable dataTable = new DataTable();
                 OleDbDataAdapter adapter = new OleDbDataAdapter(oleCommand);
                 adapter.SelectCommand = oleCommand;
@@ -170,12 +167,12 @@ namespace taskt.Core.Automation.Commands
                 adapter.Fill(dataTable);
                 databaseConnection.Close();
 
-                
                 dataTable.TableName = v_DatasetName;
                 engine.DataTables.Add(dataTable);
 
-                engine.AddVariable(v_DatasetName, dataTable);
-           
+                //engine.AddVariable(v_DatasetName, dataTable);
+                //dataTable.StoreInUserVariable(engine, v_DatasetName);
+                this.StoreDataTableInUserVariable(dataTable, nameof(v_DatasetName), engine);
             }
             else if (queryExecutionType == "Execute NonQuery")
             {
@@ -183,7 +180,8 @@ namespace taskt.Core.Automation.Commands
                 var result = oleCommand.ExecuteNonQuery();
                 databaseConnection.Close();
 
-                engine.AddVariable(v_DatasetName, result.ToString());
+                //engine.AddVariable(v_DatasetName, result.ToString());
+                result.StoreInUserVariable(engine, v_DatasetName);
             }
             else if(queryExecutionType == "Execute Stored Procedure")
             {
@@ -191,15 +189,16 @@ namespace taskt.Core.Automation.Commands
                 databaseConnection.Open();
                 var result = oleCommand.ExecuteNonQuery();
                 databaseConnection.Close();
-                engine.AddVariable(v_DatasetName, result.ToString());
+                //engine.AddVariable(v_DatasetName, result.ToString());
+                result.StoreInUserVariable(engine, v_DatasetName);
             }
             else
             {
                 throw new NotImplementedException($"Query Execution Type '{queryExecutionType}' not implemented.");
             }
-
         }
-        public override List<Control> Render(frmCommandEditor editor)
+
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
 
@@ -267,7 +266,7 @@ namespace taskt.Core.Automation.Commands
             RenderedControls.AddRange(CommandControls.CreateDefaultDropdownGroupFor("v_QueryType", this, editor));
             RenderedControls.AddRange(CommandControls.CreateDefaultInputGroupFor("v_DatasetName", this, editor));
 
-            if (editor.creationMode == frmCommandEditor.CreationMode.Add)
+            if (editor.creationMode == UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor.CreationMode.Add)
             {
                 this.v_InstanceName = editor.appSettings.ClientSettings.DefaultDBInstanceName;
             }

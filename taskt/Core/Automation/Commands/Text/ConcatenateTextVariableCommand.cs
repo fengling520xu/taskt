@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Text Commands")]
+    [Attributes.ClassAttributes.Group("Text")]
     [Attributes.ClassAttributes.SubGruop("Action")]
     [Attributes.ClassAttributes.CommandSettings("Concatenate Text Variable")]
     [Attributes.ClassAttributes.Description("This command allows you to you to concatenate text to Text Variable.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to concatenate text to Text Variable.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConcatenateTextVariableCommand : ScriptCommand
+    public sealed class ConcatenateTextVariableCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_OutputTextVariableName))]
@@ -55,17 +56,14 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //get engine
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var targetVariable = VariableNameControls.GetWrappedVariableName(v_TargetVariable, engine);
-            var text = targetVariable.ConvertToUserVariable(engine);
-            var con = v_ConcatText.ConvertToUserVariable(engine);
+            var text = targetVariable.ExpandValueOrUserVariable(engine);
+            var con = v_ConcatText.ExpandValueOrUserVariable(engine);
 
-            var insertNewLine = this.GetUISelectionValue(nameof(v_InsertNewLine), "Insert New Line", engine);
-            var concatPosition = this.GetUISelectionValue(nameof(v_ConcatenatePosition), "Concatenate Position", engine);
+            var insertNewLine = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_InsertNewLine), "Insert New Line", engine);
+            var concatPosition = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ConcatenatePosition), "Concatenate Position", engine);
 
             switch (insertNewLine)
             {

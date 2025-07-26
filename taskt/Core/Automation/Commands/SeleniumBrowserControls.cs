@@ -14,26 +14,31 @@ namespace taskt.Core.Automation.Commands
     /// </summary>
     internal static class SeleniumBrowserControls
     {
+        #region Virtual Property
+
         /// <summary>
-        /// instance property
+        /// webbrowser instance name
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("WebBrowser Instance Name")]
         [InputSpecification("WebBrowser Instance Name", true)]
         [PropertyDetailSampleUsage("**RPABrowser**", PropertyDetailSampleUsage.ValueType.Value, "WebBrowser Instance")]
         [PropertyDetailSampleUsage("**{{{vInstance}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "WebBrowser Instance")]
         [Remarks("Failure to enter the correct instance name or failure to first call **Create Broser** command will cause an error")]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.WebBrowser)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyFirstValue("%kwd_default_browser_instance%")]
-        [PropertyShowSampleUsageInDescription(true)]
         [PropertyValidationRule("WebBrowser Instance", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Instance")]
+        [PropertyFirstValue("%kwd_default_browser_instance%")]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyParameterOrder(5000)]
         public static string v_InputInstanceName { get; }
 
         /// <summary>
         /// search method property
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
         [PropertyDescription("Element Search Method")]
         [PropertyUISelectionOption("Find Element By XPath")]
         [PropertyUISelectionOption("Find Element By ID")]
@@ -49,40 +54,44 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Find Elements By Class Name")]
         [PropertyUISelectionOption("Find Elements By CSS Selector")]
         [PropertyUISelectionOption("Find Elements By Link Text")]
-        [InputSpecification("", true)]
-        [PropertyShowSampleUsageInDescription(false)]
-        //[SampleUsage("Select **Find Element By XPath**, **Find Element By ID**, **Find Element By Name**, **Find Element By Tag Name**, **Find Element By Class Name**, **Find Element By CSS Selector**, **Find Element By Link Text**")]
         [Remarks("Select the specific search type that you want to use to isolate the element in the web page.")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyValidationRule("Search Method", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Search Method")]
+        //[InputSpecification("", true)]
+        //[PropertyShowSampleUsageInDescription(false)]
+        //[SampleUsage("Select **Find Element By XPath**, **Find Element By ID**, **Find Element By Name**, **Find Element By Tag Name**, **Find Element By Class Name**, **Find Element By CSS Selector**, **Find Element By Link Text**")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterOrder(5000)]
         public static string v_SearchMethod { get; }
 
         /// <summary>
         /// search parameter property
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Element Search Parameter")]
         [InputSpecification("Element Search Parameter", true)]
-        [SampleUsage("")]
-        [PropertyShowSampleUsageInDescription(false)]
-        [Remarks("Specifies the parameter text that matches to the element based on the previously selected search type.")]
-        [PropertyTextBoxSetting(1, false)]
         [PropertyValidationRule("Search Parameter", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Search Parameter")]
+        [Remarks("Specifies the parameter text that matches to the element based on the previously selected search type.")]
+        //[SampleUsage("")]
+        //[PropertyShowSampleUsageInDescription(false)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterOrder(5000)]
         public static string v_SearchParameter { get; }
 
         /// <summary>
         /// element index
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Element Index")]
         [InputSpecification("Element Index", true)]
-        //[SampleUsage("**0** or **1** or **{{{vIndex}}}**")]
         [PropertyDetailSampleUsage("**0**", "Specify the First Element Index")]
         [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Element Index")]
         [PropertyDetailSampleUsage("**{{{vIndex}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Element Index")]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterOrder(5000)]
         public static string v_ElementIndex { get; }
 
         /// <summary>
@@ -107,11 +116,13 @@ namespace taskt.Core.Automation.Commands
         [PropertyDataGridViewSetting(true, true, true)]
         [PropertyDataGridViewColumnSettings("AttributeName", "Attribute Name")]
         [PropertyDataGridViewCellEditEvent(nameof(DataTableControls) + "+" + nameof(DataTableControls.AllEditableDataGridView_CellClick), PropertyDataGridViewCellEditEvent.DataGridViewCellEvent.CellClick)]
+        [PropertyParameterOrder(5000)]
         public static string v_AttributesName { get; }
 
         /// <summary>
         /// attribute name
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Attributes Name to Get")]
         [InputSpecification("Attributes Name", true)]
         [PropertyDetailSampleUsage("**id**", PropertyDetailSampleUsage.ValueType.Value, "Attribute")]
@@ -125,68 +136,79 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**Size**", "Get the Specified Element Size. like **W,H**, comma separated.", false)]
         [PropertyDetailSampleUsage("**TagName**", "Get the Specified Element Tag Name.", false)]
         [PropertyDetailSampleUsage("**Text**", "Get the Specified Element innerText.", false)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
         [PropertyValidationRule("Attribute", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterOrder(5000)]
         public static string v_AttributeName { get; }
 
         /// <summary>
         /// element wait time
         /// </summary>
+        [PropertyVirtualProperty(nameof(WaitControls), nameof(WaitControls.v_WaitTime))]
         [PropertyDescription("Wait Time for the WebElement to Exist (sec)")]
-        [InputSpecification("Wait Time", true)]
         [Remarks("Specify how long to Wait before an Error will occur because the WebElement is Not Found.")]
-        [PropertyDetailSampleUsage("**120**", PropertyDetailSampleUsage.ValueType.Value, "Wait Time")]
-        [PropertyDetailSampleUsage("**{{{vTime}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Wait Time")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyTextBoxSetting(1, false)]
         [PropertyIsOptional(true, "120")]
         [PropertyFirstValue("120")]
+        //[InputSpecification("Wait Time", true)]
+        //[PropertyDetailSampleUsage("**120**", PropertyDetailSampleUsage.ValueType.Value, "Wait Time")]
+        //[PropertyDetailSampleUsage("**{{{vTime}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Wait Time")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyTextBoxSetting(1, false)]
+        //[PropertyParameterOrder(5000)]
         public static string v_WaitTime { get; }
 
         /// <summary>
         /// input WebElement property
         /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_InputInstanceName))]
         [PropertyDescription("WebElement Variable Name")]
         [InputSpecification("WebElement Variable Name", true)]
         [PropertyDetailSampleUsage("**vElement**", PropertyDetailSampleUsage.ValueType.VariableValue)]
         [PropertyDetailSampleUsage("**{{{vElement}}}**", PropertyDetailSampleUsage.ValueType.VariableValue)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.WebElement, true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
         [PropertyValidationRule("WebElement", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Element")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        //[PropertyParameterOrder(5000)]
         public static string v_InputWebElementName { get; }
 
         /// <summary>
         /// output WebElement property
         /// </summary>
-        [PropertyDescription("WebElement Variable Name")]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyDescription("Variable Name to Store WebElement")]
         [InputSpecification("WebElement Variable Name", true)]
         [PropertyDetailSampleUsage("**vElement**", PropertyDetailSampleUsage.ValueType.VariableValue)]
         [PropertyDetailSampleUsage("**{{{vElement}}}**", PropertyDetailSampleUsage.ValueType.VariableValue)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.WebElement, true)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
         [PropertyValidationRule("WebElement", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Element")]
+        [PropertyDisplayText(true, "WebElement")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[PropertyParameterOrder(5000)]
         public static string v_OutputWebElementName { get; }
 
         /// <summary>
         /// scroll to element
         /// </summary>
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("Scroll to WebElement")]
-        [InputSpecification("", true)]
-        [Remarks("")]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
+        [PropertyDisplayText(false, "Scroll")]
+        //[InputSpecification("", true)]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyUISelectionOption("Yes")]
+        //[PropertyUISelectionOption("No")]
+        //[PropertyParameterOrder(5000)]
         public static string v_ScrollToElement { get; }
+        #endregion
 
         #region methods
 
@@ -200,7 +222,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static IWebElement ConvertToUserVariableAsWebElement(this string str, string parameterName, Engine.AutomationEngineInstance engine)
+        public static IWebElement ExpandUserVariableAsWebElement(this string str, string parameterName, Engine.AutomationEngineInstance engine)
         {
             var v = str.GetRawVariable(engine);
             if (v.VariableValue is IWebElement e)
@@ -228,9 +250,9 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static IWebDriver GetSeleniumBrowserInstance(this string instanceName, Engine.AutomationEngineInstance engine)
+        public static IWebDriver ExpandValueOrUserVariableAsSeleniumBrowserInstance(this string instanceName, Engine.AutomationEngineInstance engine)
         {
-            var vInstance = instanceName.ConvertToUserVariable(engine);
+            var vInstance = instanceName.ExpandValueOrUserVariable(engine);
             var browserObject = engine.GetAppInstance(vInstance);
 
             if (browserObject is IWebDriver wd)
@@ -346,7 +368,7 @@ namespace taskt.Core.Automation.Commands
         }
 
         /// <summary>
-        /// get instance and searched an element
+        /// expand value or user variable as instance and searched an webElement
         /// </summary>
         /// <param name="seleniumInstance"></param>
         /// <param name="searchMethod"></param>
@@ -356,7 +378,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static (IWebDriver, IWebElement) GetSeleniumBrowserInstanceAndElement(IWebDriver seleniumInstance, string searchMethod, string searchParameter, int index, int waitTime, Engine.AutomationEngineInstance engine)
+        public static (IWebDriver, IWebElement) ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElement(IWebDriver seleniumInstance, string searchMethod, string searchParameter, int index, int waitTime, Engine.AutomationEngineInstance engine)
         {
             var searchFunc = GetWebElementSearchMethod(searchMethod);
 
@@ -406,7 +428,7 @@ namespace taskt.Core.Automation.Commands
         }
 
         /// <summary>
-        /// get instance and searched an element
+        /// expand value or user variable as instance and searched an webElement
         /// </summary>
         /// <param name="command"></param>
         /// <param name="instanceParameterName"></param>
@@ -416,17 +438,17 @@ namespace taskt.Core.Automation.Commands
         /// <param name="waitTimeName"></param>
         /// <param name="engine"></param>
         /// <returns></returns>
-        public static (IWebDriver, IWebElement) GetSeleniumBrowserInstanceAndElement(ScriptCommand command, string instanceParameterName, string searchMethodName, string searchParameterName, string elementIndexName, string waitTimeName, Engine.AutomationEngineInstance engine)
+        public static (IWebDriver, IWebElement) ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElement(ScriptCommand command, string instanceParameterName, string searchMethodName, string searchParameterName, string elementIndexName, string waitTimeName, Engine.AutomationEngineInstance engine)
         {
-            var instanceName = command.ConvertToUserVariable(instanceParameterName, "WebBrowser Instance Name", engine);
-            var seleniumInstance = instanceName.GetSeleniumBrowserInstance(engine);
+            var instanceName = command.ExpandValueOrUserVariable(instanceParameterName, "WebBrowser Instance Name", engine);
+            var seleniumInstance = instanceName.ExpandValueOrUserVariableAsSeleniumBrowserInstance(engine);
 
-            var searchParameter = command.ConvertToUserVariable(searchParameterName, "Search Parameter", engine);
-            var searchMethod = command.ConvertToUserVariable(searchMethodName, "Search Method", engine);
+            var searchParameter = command.ExpandValueOrUserVariable(searchParameterName, "Search Parameter", engine);
+            var searchMethod = command.ExpandValueOrUserVariable(searchMethodName, "Search Method", engine);
 
-            var waitTime = command.ConvertToUserVariableAsInteger(waitTimeName, engine);
+            var waitTime = command.ExpandValueOrUserVariableAsInteger(waitTimeName, engine);
 
-            var indexString = command.GetRawPropertyString(elementIndexName, "Index");
+            var indexString = command.GetRawPropertyValueAsString(elementIndexName, "Index");
             int index;
             if (string.IsNullOrEmpty(indexString))
             {
@@ -434,14 +456,14 @@ namespace taskt.Core.Automation.Commands
             }
             else
             {
-                index = command.ConvertToUserVariableAsInteger(elementIndexName, engine);
+                index = command.ExpandValueOrUserVariableAsInteger(elementIndexName, engine);
             }
 
-            return GetSeleniumBrowserInstanceAndElement(seleniumInstance, searchMethod, searchParameter, index, waitTime, engine);
+            return ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElement(seleniumInstance, searchMethod, searchParameter, index, waitTime, engine);
         }
 
         /// <summary>
-        /// get instance and searched elements
+        /// expand value or user variable as instance and searched an webElements
         /// </summary>
         /// <param name="seleniumInstance"></param>
         /// <param name="searchMethod"></param>
@@ -450,7 +472,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="engine"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static (IWebDriver, List<IWebElement>) GetSeleniumBrowserInstanceAndElements(IWebDriver seleniumInstance, string searchMethod, string searchParameter, int waitTime, Engine.AutomationEngineInstance engine)
+        public static (IWebDriver, List<IWebElement>) ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElements(IWebDriver seleniumInstance, string searchMethod, string searchParameter, int waitTime, Engine.AutomationEngineInstance engine)
         {
             var searchFunc = GetWebElementSearchMethod(searchMethod);
 
@@ -496,7 +518,7 @@ namespace taskt.Core.Automation.Commands
         }
 
         /// <summary>
-        /// get instance and searched elements
+        /// expand value or user variable as instance and searched an webElements
         /// </summary>
         /// <param name="command"></param>
         /// <param name="instanceParameterName"></param>
@@ -505,17 +527,17 @@ namespace taskt.Core.Automation.Commands
         /// <param name="waitTimeName"></param>
         /// <param name="engine"></param>
         /// <returns></returns>
-        public static (IWebDriver, List<IWebElement>) GetSeleniumBrowserInstanceAndElements(ScriptCommand command, string instanceParameterName, string searchMethodName, string searchParameterName, string waitTimeName, Engine.AutomationEngineInstance engine)
+        public static (IWebDriver, List<IWebElement>) ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElements(ScriptCommand command, string instanceParameterName, string searchMethodName, string searchParameterName, string waitTimeName, Engine.AutomationEngineInstance engine)
         {
-            var instanceName = command.ConvertToUserVariable(instanceParameterName, "WebBrowser Instance Name", engine);
-            var seleniumInstance = instanceName.GetSeleniumBrowserInstance(engine);
+            var instanceName = command.ExpandValueOrUserVariable(instanceParameterName, "WebBrowser Instance Name", engine);
+            var seleniumInstance = instanceName.ExpandValueOrUserVariableAsSeleniumBrowserInstance(engine);
 
-            var searchParameter = command.ConvertToUserVariable(searchParameterName, "Search Parameter", engine);
-            var searchMethod = command.ConvertToUserVariable(searchMethodName, "Search Method", engine);
+            var searchParameter = command.ExpandValueOrUserVariable(searchParameterName, "Search Parameter", engine);
+            var searchMethod = command.ExpandValueOrUserVariable(searchMethodName, "Search Method", engine);
 
-            var waitTime = command.ConvertToUserVariableAsInteger(waitTimeName, engine);
+            var waitTime = command.ExpandValueOrUserVariableAsInteger(waitTimeName, engine);
 
-            return GetSeleniumBrowserInstanceAndElements(seleniumInstance, searchMethod, searchParameter, waitTime, engine);
+            return ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElements(seleniumInstance, searchMethod, searchParameter, waitTime, engine);
         }
 
         #endregion
@@ -534,7 +556,7 @@ namespace taskt.Core.Automation.Commands
             int rows = attributes.Rows.Count;
             for (int i = 0; i < rows; i++)
             {
-                string attrName = (attributes.Rows[i][0]?.ToString() ?? "").ConvertToUserVariable(engine);
+                string attrName = (attributes.Rows[i][0]?.ToString() ?? "").ExpandValueOrUserVariable(engine);
                 if (attrName != "")
                 {
                     setValueFunc(attrName, GetAttribute(elem, attrName, engine));
@@ -551,7 +573,7 @@ namespace taskt.Core.Automation.Commands
         /// <param name="setValueFunc"></param>
         public static void GetElementsAttribute(List<IWebElement> elems, string attributeValue, Engine.AutomationEngineInstance engine, Action<int, string, string> setValueFunc)
         {
-            var attr = attributeValue.ConvertToUserVariable(engine);
+            var attr = attributeValue.ExpandValueOrUserVariable(engine);
             for (int i = 0; i < elems.Count; i++)
             {
                 setValueFunc(i, attr, GetAttribute(elems[i], attr, engine));
@@ -568,7 +590,7 @@ namespace taskt.Core.Automation.Commands
         /// <exception cref="Exception"></exception>
         public static string GetAttribute(IWebElement element, string attributeName, Engine.AutomationEngineInstance engine)
         {
-            attributeName = attributeName.ConvertToUserVariable(engine);
+            attributeName = attributeName.ExpandValueOrUserVariable(engine);
             if (string.IsNullOrEmpty(attributeName))
             {
                 throw new Exception("Attribute Name is empty.");
@@ -602,7 +624,7 @@ namespace taskt.Core.Automation.Commands
                     return sz.Width.ToString() + "," + sz.Height.ToString();
 
                 default:
-                    var attr = element.GetAttribute(attributeName);
+                    var attr = element.GetDomAttribute(attributeName) ?? element.GetDomProperty(attributeName);
                     if (attr != null)
                     {
                         return attr;
@@ -612,6 +634,66 @@ namespace taskt.Core.Automation.Commands
                         throw new Exception("Attribute '" + attributeName + "' does not exists.");
                     }
             }
+        }
+
+        #endregion
+
+        #region WebElement methods
+
+        public static string CreateXPath(IWebElement elem)
+        {
+            // MEMO: it's probably works fine. :-)
+
+            string path = "";
+
+            var curElem = elem;
+            var curElemId = curElem.ToString();
+
+            // DBG
+            //Debug.WriteLine($"curElem: {curElem.ToString()}, {curElem.GetHashCode()}");
+
+            var pElem = curElem.FindElement(By.XPath("parent::*"));
+            while (true)
+            {
+                var cElems = pElem.FindElements(By.XPath($"{curElem.TagName.ToLower()}"));
+                if (cElems.Count > 1)
+                {
+                    int index = 1;
+                    foreach (var e in cElems)
+                    {
+                        if (e.ToString() == curElemId)
+                        {
+                            break;
+                        }
+                        index++;
+                    }
+                    path = $"/{curElem.TagName.ToLower()}[{index}]{path}";
+                }
+                else
+                {
+                    path = $"/{curElem.TagName.ToLower()}{path}";
+                }
+
+                // DGB
+                //Debug.WriteLine($"totyu: {path}");
+
+                if (curElem.TagName.ToLower() == "body")
+                {
+                    path = $"/html{path}";
+                    break;
+                }
+                else
+                {
+                    curElem = pElem;
+                    curElemId = curElem.ToString();
+                    pElem = curElem.FindElement(By.XPath("parent::*"));
+                }
+            }
+
+            // DBG
+            //Debug.WriteLine($"XPath: {path}");
+
+            return path;
         }
 
         #endregion
@@ -642,12 +724,12 @@ namespace taskt.Core.Automation.Commands
         public static void SearchMethodComboBox_SelectionChangeCommitted(Dictionary<string, Control> controlsList, ComboBox searchMethodComboBox, string indexParameterName)
         {
             string item = searchMethodComboBox.SelectedItem?.ToString().ToLower() ?? "";
-            GeneralPropertyControls.SetVisibleParameterControlGroup(controlsList, indexParameterName, item.StartsWith("find elements"));
+            FormUIControls.SetVisibleParameterControlGroup(controlsList, indexParameterName, item.StartsWith("find elements"));
         }
 
         public static void ScrollToWebElement_SelectionChange(ComboBox scrollParameter, Dictionary<string, Control> controlsList, string instanceParameterName)
         {
-            GeneralPropertyControls.SetVisibleParameterControlGroup(controlsList, instanceParameterName, ((scrollParameter.SelectedItem?.ToString().ToLower() ?? "") != "no"));
+            FormUIControls.SetVisibleParameterControlGroup(controlsList, instanceParameterName, ((scrollParameter.SelectedItem?.ToString().ToLower() ?? "") != "no"));
         }
 
         #endregion

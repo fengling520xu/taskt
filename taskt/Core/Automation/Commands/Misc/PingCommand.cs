@@ -7,15 +7,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Misc Commands")]
+    [Attributes.ClassAttributes.Group("Misc")]
     [Attributes.ClassAttributes.SubGruop("Network/Internet")]
     [Attributes.ClassAttributes.CommandSettings("Ping")]
     [Attributes.ClassAttributes.Description("This command allows you to add an in-line comment to the script.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to add code comments or document code.  Usage of variables (ex. [vVar]) within the comment block will be parsed and displayed when running the script.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command is for visual purposes only")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class PingCommand : ScriptCommand
+    public sealed class PingCommand : ScriptCommand
     {
 
         [XmlAttribute]
@@ -44,12 +45,10 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             Ping ping = new Ping();
-            string hstname = v_HostName.ConvertToUserVariable(engine);
+            string hstname = v_HostName.ExpandValueOrUserVariable(engine);
 
             PingReply pingresult = ping.Send(hstname);
             var pingReply = ConvertObjectToJson(pingresult);

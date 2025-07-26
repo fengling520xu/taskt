@@ -6,27 +6,28 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("DataTable Commands")]
+    [Attributes.ClassAttributes.Group("DataTable")]
     [Attributes.ClassAttributes.SubGruop("Convert Row")]
     [Attributes.ClassAttributes.CommandSettings("Convert DataTable Row To List")]
     [Attributes.ClassAttributes.Description("This command allows you to convert DataTable Row to List")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to convert DataTable Row to List.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConvertDataTableRowToListCommand : ScriptCommand
+    public sealed class ConvertDataTableRowToListCommand : ADataTableGetFromDataTableRowCommands, IListResultProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_InputDataTableName))]
-        public string v_DataTableName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_InputDataTableName))]
+        //public string v_DataTable { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_RowIndex))]
-        public string v_DataRowIndex { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_RowIndex))]
+        //public string v_RowIndex { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_OutputListName))]
-        public string v_OutputVariableName { get; set; }
+        public override string v_Result { get; set; }
 
         public ConvertDataTableRowToListCommand()
         {
@@ -36,13 +37,12 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;         
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //(var srcDT, var index) = this.ExpandUserVariablesAsDataTableAndRowIndex(nameof(v_DataTable), nameof(v_RowIndex), engine);
+            (var srcDT, var index) = this.ExpandValueOrUserVariableAsDataTableAndRow(engine);
 
-            (var srcDT, var index) = this.GetDataTableVariableAndRowIndex(nameof(v_DataTableName), nameof(v_DataRowIndex), engine);
-
-            List<string> myList = new List<string>();
+            var myList = new List<string>();
 
             int cols = srcDT.Columns.Count;
             for (int i = 0; i < cols; i++)
@@ -50,7 +50,8 @@ namespace taskt.Core.Automation.Commands
                 myList.Add(srcDT.Rows[index][i]?.ToString() ?? "");
             }
 
-            myList.StoreInUserVariable(engine, v_OutputVariableName);
+            //myList.StoreInUserVariable(engine, v_Result);
+            this.StoreListInUserVariable(myList, engine);
         }
     }
 }

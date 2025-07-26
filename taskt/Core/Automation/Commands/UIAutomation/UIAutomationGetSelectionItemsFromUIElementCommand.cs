@@ -7,14 +7,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("UIAutomation Commands")]
+    [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("Get From UIElement")]
     [Attributes.ClassAttributes.CommandSettings("Get Selection Items From UIElement")]
     [Attributes.ClassAttributes.Description("This command allows you to get Selection Items Name from UIElement.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to get Selection Items Name from UIElement. Search for only Child Elements.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class UIAutomationGetSelectionItemsFromUIElementCommand : ScriptCommand
+    public sealed class UIAutomationGetSelectionItemsFromUIElementCommand : ScriptCommand, ICanHandleList
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -32,20 +33,19 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            var targetElement = v_TargetElement.GetUIElementVariable(engine);
+            var targetElement = v_TargetElement.ExpandUserVariableAsUIElement(engine);
 
             var items = UIElementControls.GetSelectionItems(targetElement);
 
-            List<string> res = new List<string>();
+            var res = new List<string>();
             foreach(var item in items)
             {
                 res.Add(item.Current.Name);
             }
-            res.StoreInUserVariable(engine, v_ListVariable);
+            //res.StoreInUserVariable(engine, v_ListVariable);
+            this.StoreListInUserVariable(res, nameof(v_ListVariable), engine);
         }
     }
 }

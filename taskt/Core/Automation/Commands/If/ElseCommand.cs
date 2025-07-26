@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using taskt.UI.CustomControls;
-using taskt.UI.Forms;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("If Commands")]
+    [Attributes.ClassAttributes.Group("If")]
     [Attributes.ClassAttributes.Description("This command declares the seperation between the actions based on the 'true' or 'false' condition.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to signify the exit point of your if scenario")]
     [Attributes.ClassAttributes.ImplementationDescription("TBD")]
-    public class ElseCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_else))]
+    public sealed class ElseCommand : ScriptCommand, IDelimitersOfStructuredCommands
     {
         public ElseCommand()
         {
@@ -21,7 +21,7 @@ namespace taskt.Core.Automation.Commands
             this.CommandEnabled = true;
             this.CustomRendering = true;
         }
-        public override List<Control> Render(frmCommandEditor editor)
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
 

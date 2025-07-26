@@ -6,15 +6,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Text Commands")]
+    [Attributes.ClassAttributes.Group("Text")]
     [Attributes.ClassAttributes.SubGruop("Action")]
     [Attributes.ClassAttributes.CommandSettings("RegEx Extraction Text")]
     [Attributes.ClassAttributes.Description("This command allows you to perform advanced string formatting using RegEx.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to perform an advanced RegEx extraction from a text or variable")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements actions against VariableList from the scripting engine.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class RegExExtractionTextCommand : ScriptCommand
+    public sealed class RegExExtractionTextCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_Text_MultiLine))]
@@ -60,10 +61,8 @@ namespace taskt.Core.Automation.Commands
             //v_MatchGroupIndex = "0";
         }
 
-        public override void RunCommand(object sender)
-        {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
+        { 
             ////get variablized strings
             //var variableInput = v_InputValue.ConvertToUserVariable(engine);
             //var variableExtractorPattern = v_RegExExtractor.ConvertToUserVariable(engine);
@@ -86,14 +85,14 @@ namespace taskt.Core.Automation.Commands
             //    matchedValue.StoreInUserVariable(sender, v_applyToVariableName);
             //}
 
-            var variableInput = v_InputValue.ConvertToUserVariable(engine);
-            var variableExtractorPattern = v_RegExExtractor.ConvertToUserVariable(engine);
+            var variableInput = v_InputValue.ExpandValueOrUserVariable(engine);
+            var variableExtractorPattern = v_RegExExtractor.ExpandValueOrUserVariable(engine);
 
             var regex = new Regex(variableExtractorPattern);
             var matches = regex.Match(variableInput);
             if (matches.Groups.Count > 0)
             {
-                var matchGroup = this.ConvertToUserVariableAsInteger(nameof(v_MatchGroupIndex), engine);
+                var matchGroup = this.ExpandValueOrUserVariableAsInteger(nameof(v_MatchGroupIndex), engine);
 
                 if (matchGroup < 0)
                 {

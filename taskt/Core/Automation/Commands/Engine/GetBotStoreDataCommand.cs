@@ -20,14 +20,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Engine Commands")]
+    [Attributes.ClassAttributes.Group("Engine")]
     [Attributes.ClassAttributes.CommandSettings("Get BotStore Data")]
     [Attributes.ClassAttributes.Description("This command allows you to get data from tasktServer.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to retrieve data from tasktServer")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_server))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class GetBotStoreDataCommand : ScriptCommand
+    public sealed class GetBotStoreDataCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -62,13 +63,11 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var keyName = v_KeyName.ExpandValueOrUserVariable(engine);
 
-            var keyName = v_KeyName.ConvertToUserVariable(engine);
-
-            var dataOption = this.GetUISelectionValue(nameof(v_DataOption), engine);
+            var dataOption = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_DataOption), engine);
             BotStoreRequest.RequestType requestType;
             if (dataOption == "Retrieve Entire Record")
             {

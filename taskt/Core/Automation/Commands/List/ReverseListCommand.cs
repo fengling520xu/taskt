@@ -6,26 +6,27 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("List Commands")]
+    [Attributes.ClassAttributes.Group("List")]
     [Attributes.ClassAttributes.SubGruop("List Actions")]
     [Attributes.ClassAttributes.CommandSettings("Reverse List")]
     [Attributes.ClassAttributes.Description("This command allows you to reverse list.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to reverse list.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ReverseListCommand : ScriptCommand
+    public sealed class ReverseListCommand : AListCreateFromListCommands
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
         [PropertyDescription("List Variable Name to Reverse")]
         [PropertyValidationRule("List to Reverse", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "List to Reverse")]
-        public string v_InputList { get; set; }
+        public override string v_TargetList { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_NewOutputListName))]
-        public string v_OutputList { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_NewOutputListName))]
+        //public string v_NewList { get; set; }
 
         public ReverseListCommand()
         {
@@ -35,15 +36,17 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //List<string> targetList = v_TargetList.ExpandUserVariableAsList(engine);
+            var targetList = this.ExpandUserVariableAsList(engine);
 
-            List<string> targetList = v_InputList.GetListVariable(engine);
+            //List<string> newList = new List<string>(targetList);
+            var newList = new List<string>(targetList);
 
-            List<string> newList = new List<string>(targetList);
             newList.Reverse();
-            newList.StoreInUserVariable(engine, v_OutputList);
+            //newList.StoreInUserVariable(engine, v_NewList);
+            this.StoreListInUserVariable(newList, engine);
         }
     }
 }

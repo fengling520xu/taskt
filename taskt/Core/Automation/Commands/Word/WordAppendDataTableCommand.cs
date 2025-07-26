@@ -6,14 +6,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Word Commands")]
+    [Attributes.ClassAttributes.Group("Word")]
     [Attributes.ClassAttributes.Description("This command appends a datatable to a word document.")]
     [Attributes.ClassAttributes.CommandSettings("Append DataTable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to append a datatable to a specific document.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Word Interop to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class WordAppendDataTableCommand : ScriptCommand
+    public sealed class WordAppendDataTableCommand : ScriptCommand, ICanHandleDataTable
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(WordControls), nameof(WordControls.v_InstanceName))]
@@ -31,26 +32,25 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            (var _, var wordDocument) = v_InstanceName.ExpandValueOrUserVariableAsWordInstanceAndDocument(engine);
 
-            (var _, var wordDocument) = v_InstanceName.GetWordInstanceAndDocument(engine);
-
-            var dataTable = v_DataTableName.GetDataTableVariable(engine);
+            //var myDT = v_DataTableName.ExpandUserVariableAsDataTable(engine);
+            var myDT = this.ExpandUserVariableAsDataTable(nameof(v_DataTableName), engine);
 
             //converting System DataTable to Word DataTable
-            int RowCount = dataTable.Rows.Count; 
-            int ColumnCount = dataTable.Columns.Count;
+            int RowCount = myDT.Rows.Count; 
+            int ColumnCount = myDT.Columns.Count;
             Object[,] DataArray = new object[RowCount + 1, ColumnCount + 1];
            
             int r = 0;
             for (int c = 0; c <= ColumnCount - 1; c++)
             {
-                DataArray[r, c] = dataTable.Columns[c].ColumnName;
+                DataArray[r, c] = myDT.Columns[c].ColumnName;
                 for (r = 0; r <= RowCount - 1; r++)
                 {
-                    DataArray[r, c] = dataTable.Rows[r][c];
+                    DataArray[r, c] = myDT.Rows[r][c];
                 } //end row loop
             } //end column loop
 
@@ -92,7 +92,7 @@ namespace taskt.Core.Automation.Commands
             //Adding header row manually
             for (int c = 0; c <= ColumnCount - 1; c++)
             {
-                wordDocument.Application.Selection.Tables[1].Cell(1, c + 1).Range.Text = dataTable.Columns[c].ColumnName;
+                wordDocument.Application.Selection.Tables[1].Cell(1, c + 1).Range.Text = myDT.Columns[c].ColumnName;
             }
 
             //Formatting header row

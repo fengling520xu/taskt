@@ -6,14 +6,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Folder Operation Commands")]
+    [Attributes.ClassAttributes.Group("Folder Operation")]
     [Attributes.ClassAttributes.CommandSettings("Move Folder")]
     [Attributes.ClassAttributes.Description("This command moves a folder to a specified destination")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to move a folder to a new destination.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements '' to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class MoveFolderCommand : ScriptCommand
+    public sealed class MoveFolderCommand : AFolderCopyMoveFolderCommands
     {
         //[XmlAttribute]
         //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -24,47 +25,47 @@ namespace taskt.Core.Automation.Commands
         //[PropertyDisplayText(true, "Folder Action")]
         //public string v_OperationType { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        [PropertyDescription("Target Folder")]
-        [PropertyValidationRule("Target Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Target Folder")]
-        public string v_SourceFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //[PropertyDescription("Target Folder")]
+        //[PropertyValidationRule("Target Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Target Folder")]
+        //public string v_TargetFolderPath { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        [PropertyDescription("Destination Folder for Move")]
-        [PropertyValidationRule("Destination Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Destination Folder")]
-        public string v_DestinationDirectory { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //[PropertyDescription("Destination Folder for Move")]
+        //[PropertyValidationRule("Destination Folder", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Destination Folder")]
+        //public string v_DestinationFolderPath { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(SelectionControls), nameof(SelectionControls.v_YesNoComboBox))]
-        [PropertyDescription("Create Folder when the Destination Folder does not Exists")]
-        [PropertyIsOptional(true, "No")]
-        public string v_CreateDirectory { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        //[PropertyDescription("Create Folder when the Destination Folder does not Exists")]
+        //[PropertyIsOptional(true, "No")]
+        //public string v_CreateDirectory { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(SelectionControls), nameof(SelectionControls.v_YesNoComboBox))]
-        [PropertyDescription("Delete Folder when it already Exists")]
-        [PropertyIsOptional(true, "No")]
-        public string v_DeleteExisting { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        //[PropertyDescription("Delete Folder when it already Exists")]
+        //[PropertyIsOptional(true, "No")]
+        //public string v_WhenDestinationExists { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
-        [PropertyDescription("Wait Time for the Target Folder to Exist (sec)")]
-        [PropertyDisplayText(false, "")]
-        public string v_WaitForTargetFolder { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_WaitTime))]
+        //[PropertyDescription("Wait Time for the Target Folder to Exist (sec)")]
+        //[PropertyDisplayText(false, "")]
+        //public string v_WaitTimeForFolder { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
-        [PropertyDescription("Variable Name to Store Folder Path After Move")]
-        public string v_ResultPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPathResult))]
+        //[PropertyDescription("Variable Name to Store Folder Path Before Move")]
+        //public string v_BeforeFolderPathResult { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
-        [PropertyDescription("Variable Name to Store Folder Path After Move")]
-        public string v_AfterFilePathResult { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
+        //[PropertyDescription("Variable Name to Store Folder Path After Move")]
+        //public string v_AfterFolderPathResult { get; set; }
 
         public MoveFolderCommand()
         {
@@ -74,10 +75,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             ////apply variable logic
             //var sourceFolder = FolderPathControls.WaitForFolder(this, nameof(v_SourceFolderPath), nameof(v_WaitForTargetFolder), engine);
 
@@ -113,41 +112,45 @@ namespace taskt.Core.Automation.Commands
             //    finalPath.StoreInUserVariable(engine, v_AfterFilePathResult);
             //}
 
-            FolderPathControls.FolderAction(this, engine,
-                new Action<string>(path =>
-                {
-                    var destinationFolder = v_DestinationDirectory.ConvertToUserVariableAsFolderPath(engine);
+            //FolderPathControls.FolderAction(this, engine,
+            //    new Action<string>(path =>
+            //    {
+            //        var destinationFolder = v_DestinationFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
 
-                    if (!Directory.Exists(destinationFolder))
-                    {
-                        if (this.GetYesNoSelectionValue(nameof(v_CreateDirectory), engine))
-                        {
-                            Directory.CreateDirectory(destinationFolder);
-                        }
-                    }
+            //        if (!Directory.Exists(destinationFolder))
+            //        {
+            //            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_CreateDirectory), engine))
+            //            {
+            //                Directory.CreateDirectory(destinationFolder);
+            //            }
+            //        }
 
-                    //get source folder name and info
-                    DirectoryInfo sourceFolderInfo = new DirectoryInfo(path);
+            //        //get source folder name and info
+            //        DirectoryInfo sourceFolderInfo = new DirectoryInfo(path);
 
-                    //create final path
-                    var finalPath = Path.Combine(destinationFolder, sourceFolderInfo.Name);
+            //        //create final path
+            //        var finalPath = Path.Combine(destinationFolder, sourceFolderInfo.Name);
 
-                    //delete if it already exists per user
-                    if (Directory.Exists(finalPath))
-                    {
-                        if (this.GetYesNoSelectionValue(nameof(v_DeleteExisting), engine))
-                        {
-                            Directory.Delete(finalPath, true);
-                        }
-                    }
+            //        //delete if it already exists per user
+            //        if (Directory.Exists(finalPath))
+            //        {
+            //            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_DeleteExisting), engine))
+            //            {
+            //                Directory.Delete(finalPath, true);
+            //            }
+            //        }
 
-                    Directory.Move(path, finalPath);
+            //        Directory.Move(path, finalPath);
 
-                    if (!string.IsNullOrEmpty(v_AfterFilePathResult))
-                    {
-                        finalPath.StoreInUserVariable(engine, v_AfterFilePathResult);
-                    }
-                })
+            //        if (!string.IsNullOrEmpty(v_AfterFolderPathResult))
+            //        {
+            //            finalPath.StoreInUserVariable(engine, v_AfterFolderPathResult);
+            //        }
+            //    })
+            //);
+
+            this.FolderAction(engine,
+                this.CreateActionFunc(Directory.Move, engine)
             );
 
             //switch (this.GetUISelectionValue(nameof(v_OperationType), engine))

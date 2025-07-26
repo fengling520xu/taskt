@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
@@ -14,47 +10,49 @@ namespace taskt.Core.Automation.Commands
     internal static class BooleanControls
     {
         /// <summary>
-        /// output variable property
+        /// output boolean variable property
         /// </summary>
         [XmlAttribute]
-        [PropertyDescription("Variable Name to Store Result")]
-        [InputSpecification("")]
-        [PropertyDetailSampleUsage("**vResult**", "Specify Variable Name **vResult**")]
-        [PropertyDetailSampleUsage("**{{{vResult}}}**", "Specify Variable Name **vResult**")]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyIsVariablesList(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
-        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Result")]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.Boolean, true)]
+        //[PropertyDescription("Variable Name to Store Result")]
+        //[InputSpecification("")]
+        //[PropertyDetailSampleUsage("**vResult**", "Specify Variable Name **vResult**")]
+        //[PropertyDetailSampleUsage("**{{{vResult}}}**", "Specify Variable Name **vResult**")]
+        //[Remarks("")]
+        //[PropertyShowSampleUsageInDescription(true)]
+        //[PropertyIsVariablesList(true)]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        //[PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        //[PropertyDisplayText(true, "Result")]
+        //[PropertyParameterOrder(5000)]
         public static string v_Result { get; }
 
         /// <summary>
-        /// Convert variable to Boolean Value
+        /// expand value or user variable as Boolean Value
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="value"></param>
         /// <param name="parameterName"></param>
-        /// <param name="sender"></param>
+        /// <param name="engine"></param>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public static bool ConvertToUserVariableAsBool(this string str, string parameterName, object sender)
+        /// <exception cref="Exception">value is not Boolean</exception>
+        public static bool ExpandValueOrUserVariableAsBool(this string value, string parameterName, Core.Automation.Engine.AutomationEngineInstance engine)
         {
-            string convertedText = str.ConvertToUserVariable(sender);
+            string convertedText = value.ExpandValueOrUserVariable(engine);
             if (bool.TryParse(convertedText, out bool v))
             {
                 return v;
             }
             else
             {
-                throw new Exception(parameterName + " '" + str + "' is not a boolean.");
+                throw new Exception(parameterName + " '" + value + "' is not a boolean.");
             }
         }
 
-        public static void StoreInUserVariable(this bool value, Core.Automation.Engine.AutomationEngineInstance sender, string targetVariable)
+        public static void StoreInUserVariable(this bool value, Engine.AutomationEngineInstance engine, string targetVariable)
         {
-            ExtensionMethods.StoreInUserVariable(targetVariable, value ? "TRUE" : "FALSE", sender, false);
+            ExtensionMethods.StoreInUserVariable(targetVariable, value ? "TRUE" : "FALSE", engine, false);
         }
     }
 }

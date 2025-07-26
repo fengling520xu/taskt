@@ -6,20 +6,20 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
-
     [Serializable]
-    [Attributes.ClassAttributes.Group("Folder Operation Commands")]
+    [Attributes.ClassAttributes.Group("Folder Operation")]
     [Attributes.ClassAttributes.CommandSettings("Extraction Folder Path")]
     [Attributes.ClassAttributes.Description("This command allows you to extract from folder path.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to extract from folder path.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ExtractionFolderPathCommand : ScriptCommand
+    public sealed class ExtractionFolderPathCommand : AFolderFolderPathCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
-        public string v_SourceFolderPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FolderPathControls), nameof(FolderPathControls.v_FolderPath))]
+        //public string v_TargetFolderPath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -29,10 +29,12 @@ namespace taskt.Core.Automation.Commands
         [PropertyCustomUIHelper("Format Checker", nameof(lnkFormatChecker_Click))]
         [PropertyValidationRule("Format", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Format")]
+        [PropertyParameterOrder(6000)]
         public string v_Format { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyParameterOrder(7000)]
         public string v_Result { get; set; }
 
         public ExtractionFolderPathCommand()
@@ -43,22 +45,21 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (taskt.Core.Automation.Engine.AutomationEngineInstance)sender;
+            //string folderPath = v_TargetFolderPath.ExpandValueOrUserVariableAsFolderPath(engine);
+            var folderPath = this.ExpandValueOrUserVariableAsFolderPath(engine);
 
-            string folderPath = v_SourceFolderPath.ConvertToUserVariableAsFolderPath(engine);
+            var format = v_Format.ExpandValueOrUserVariable(engine);
 
-            string format = v_Format.ConvertToUserVariable(engine);
-
-            string result = FilePathControls.FormatFileFolderPath(folderPath, format);
+            var result = FilePathControls.FormatFileFolderPath(folderPath, format);
             result.StoreInUserVariable(engine, v_Result);
         }
 
         private void lnkFormatChecker_Click(object sender, EventArgs e)
         {
             ComboBox cmb = (ComboBox)((CommandItemControl)sender).Tag;
-            UI.Forms.Supplement_Forms.frmFormatChecker.ShowFormatCheckerFormLinkClicked(cmb, "File Folder");
+            UI.Forms.ScriptBuilder.CommandEditor.Supplemental.frmFormatChecker.ShowFormatCheckerFormLinkClicked(cmb, "File Folder");
         }
     }
 }

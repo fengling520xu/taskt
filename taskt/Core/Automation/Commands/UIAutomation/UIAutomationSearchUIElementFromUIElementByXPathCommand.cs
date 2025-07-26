@@ -6,14 +6,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("UIAutomation Commands")]
+    [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("Search UIElement")]
     [Attributes.ClassAttributes.CommandSettings("Search UIElement From UIElement By XPath")]
     [Attributes.ClassAttributes.Description("This command allows you to get UIElement from UIElement using by XPath.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to get UIElement from UIElement. XPath does not support to use parent and sibling for root element.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class UIAutomationSearchUIElementFromUIElementByXPathCommand : ScriptCommand
+    public sealed class UIAutomationSearchUIElementFromUIElementByXPathCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -44,10 +45,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var elem = UIElementControls.SearchGUIElementByXPath(this, engine);
             elem.StoreInUserVariable(engine, v_AutomationElementVariable);
         }

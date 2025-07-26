@@ -9,15 +9,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Scraping")]
     [Attributes.ClassAttributes.CommandSettings("Get A WebElement Values As Dictionary")]
     [Attributes.ClassAttributes.Description("This command allows you to get Attributes value for a WebElement As Dictionary.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get Attributes value for a WebElement As Dictionary.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserGetAWebElementValuesAsDictionaryCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetAWebElementValuesAsDictionaryCommand : ScriptCommand, ICanHandleDictionary, IHaveDataTableElements
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -56,12 +57,10 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //(var _, var trgElem) = SeleniumBrowserControls.GetSeleniumBrowserInstanceAndElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), engine);
-            (var _, var trgElem) = SeleniumBrowserControls.GetSeleniumBrowserInstanceAndElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), nameof(v_WaitTime), engine);
+            (var _, var trgElem) = SeleniumBrowserControls.ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), nameof(v_WaitTime), engine);
 
             Dictionary<string, string> newDic = new Dictionary<string, string>();
 
@@ -78,7 +77,8 @@ namespace taskt.Core.Automation.Commands
                 })
             );
 
-            newDic.StoreInUserVariable(engine, v_DictionaryVariableName);
+            //newDic.StoreInUserVariable(engine, v_DictionaryVariableName);
+            this.StoreDictionaryInUserVariable(newDic, nameof(v_DictionaryVariableName), engine);
         }
 
         private void SearchMethodComboBox_SelectionChangeCommitted(object sender, EventArgs e)

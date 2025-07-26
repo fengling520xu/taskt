@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Misc Commands")]
+    [Attributes.ClassAttributes.Group("Misc")]
     [Attributes.ClassAttributes.SubGruop("Other")]
     [Attributes.ClassAttributes.CommandSettings("Create Shortcut")]
     [Attributes.ClassAttributes.Description("This command allow to create shortcut file")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to create shortcut file")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class CreateShortcutCommand : ScriptCommand
+    public sealed class CreateShortcutCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlElement]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -21,10 +22,10 @@ namespace taskt.Core.Automation.Commands
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFileSelectionHelper)]
         [PropertyUIHelper(PropertyUIHelper.UIAdditionalHelperType.ShowFolderSelectionHelper)]
         [InputSpecification("File, Folder, or URL", true)]
-        [PropertyDetailSampleUsage("**C:\\temp\\target.txt", PropertyDetailSampleUsage.ValueType.Value, "Target File")]
-        [PropertyDetailSampleUsage("**C:\\temp\\", PropertyDetailSampleUsage.ValueType.Value, "Target Folder")]
-        [PropertyDetailSampleUsage("**http://example.com", PropertyDetailSampleUsage.ValueType.Value, "Target URL")]
-        [PropertyDetailSampleUsage("**{{{vPath}}}", PropertyDetailSampleUsage.ValueType.VariableValue, "Target File, Folder, or URL")]
+        [PropertyDetailSampleUsage("**C:\\temp\\target.txt**", PropertyDetailSampleUsage.ValueType.Value, "Target File")]
+        [PropertyDetailSampleUsage("**C:\\temp\\**", PropertyDetailSampleUsage.ValueType.Value, "Target Folder")]
+        [PropertyDetailSampleUsage("**http://example.com**", PropertyDetailSampleUsage.ValueType.Value, "Target URL")]
+        [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Target File, Folder, or URL")]
         [PropertyValidationRule("Target", PropertyValidationRule.ValidationRuleFlags.Empty)]
         public string v_TargetPath { get; set; }
 
@@ -61,14 +62,12 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            string targetPath = v_TargetPath.ConvertToUserVariable(engine);
+            string targetPath = v_TargetPath.ExpandValueOrUserVariable(engine);
             //bool isURL = (targetPath.StartsWith("http:") || (targetPath.StartsWith("https:")));
 
-            if (!FilePathControls.IsURL(targetPath))
+            if (!EM_CanHandleFilePathExtentionMethods.IsURL(targetPath))
             {
                 //if (FilePathControls.ContainsFileCounter(v_SavePath, engine))
                 //{
@@ -78,9 +77,10 @@ namespace taskt.Core.Automation.Commands
                 //{
                 //    savePath = FilePathControls.FormatFilePath_NoFileCounter(v_SavePath, engine, "lnk");
                 //}
-                var savePath = v_SavePath.ConvertToUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "lnk"), engine);
+                //var savePath = v_SavePath.ExpandValueOrUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "lnk"), engine);
+                var savePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_SavePath), new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "lnk"), engine);
 
-                string description = v_Description.ConvertToUserVariable(engine);
+                string description = v_Description.ExpandValueOrUserVariable(engine);
 
                 // WshShell
                 Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));
@@ -104,7 +104,8 @@ namespace taskt.Core.Automation.Commands
                 //{
                 //    savePath = FilePathControls.FormatFilePath_NoFileCounter(v_SavePath, engine, "url");
                 //}
-                var savePath = v_SavePath.ConvertToUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "url"), engine);
+                //var savePath = v_SavePath.ExpandValueOrUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "url"), engine);
+                var savePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_SavePath), new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "url"), engine);
 
                 string outputText = "[InternetShortcut]\nURL=" + targetPath;
                 WriteTextFileCommand writeText = new WriteTextFileCommand

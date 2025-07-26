@@ -7,19 +7,20 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("List Commands")]
+    [Attributes.ClassAttributes.Group("List")]
     [Attributes.ClassAttributes.SubGruop("Convert")]
     [Attributes.ClassAttributes.CommandSettings("Convert List To Dictionary")]
     [Attributes.ClassAttributes.Description("This command convert a List to Dictionary.")]
     [Attributes.ClassAttributes.UsesDescription("")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConvertListToDictionaryCommand : ScriptCommand
+    public sealed class ConvertListToDictionaryCommand : AListGetFromListCommands, IDictionaryResultProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
-        public string v_InputList { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
+        //public string v_List { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_AType))]
@@ -28,6 +29,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true, "Key Prefix")]
         [PropertyDisplayText(true, "Dictionary Keys Type")]
         [PropertyDetailSampleUsage("**item**", "When Select **Key Prefix** and Enter **item**, Key Name is item0, item1, item2, ...")]
+        [PropertyParameterOrder(6000)]
         public string v_KeyType { get; set; }
 
         [XmlAttribute]
@@ -40,22 +42,25 @@ namespace taskt.Core.Automation.Commands
         [PropertyIsOptional(true)]
         [PropertyInstanceType(PropertyInstanceType.InstanceType.List)]
         [PropertyDisplayText(true, "Dictionary Keys Name List")]
+        [PropertyParameterOrder(6001)]
         public string v_Keys { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_ANotEnough))]
         [PropertyDescription("When the number of items in the List is greater than the number of Keys")]
         [PropertyUISelectionOption("Try Create Keys")]
+        [PropertyParameterOrder(6002)]
         public string v_KeysNotEnough { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_ListItemNotEnough))]
         [PropertyDescription("When the number of Keys is greater than the number of items in the List")]
+        [PropertyParameterOrder(6003)]
         public string v_ListItemNotEnough { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_OutputDictionaryName))]
-        public string v_applyToVariableName { get; set; }
+        public override string v_Result { get; set; }
 
         public ConvertListToDictionaryCommand()
         {
@@ -65,28 +70,27 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //List<string> targetList = v_List.ExpandUserVariableAsList(engine);
+            var targetList = this.ExpandUserVariableAsList(engine);
 
-            List<string> targetList = v_InputList.GetListVariable(engine);
+            var keyType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_KeyType), "Key Type", engine);
 
-            var keyType = this.GetUISelectionValue(nameof(v_KeyType), "Key Type", engine);
+            var myDic = new Dictionary<string, string>();
 
-            Dictionary<string, string> myDic = new Dictionary<string, string>();
-
-            Action<List<string>> dicUseKeys = new Action<List<string>>((targetKeys) =>
+            var dicUseKeys = new Action<List<string>>((targetKeys) =>
             {
-                string keysNotEnough = this.GetUISelectionValue(nameof(v_KeysNotEnough), "Keys Not Enough", engine);
-                string listItemNotEnough = this.GetUISelectionValue(nameof(v_ListItemNotEnough), "List Item Not Enough", engine);
+                string keysNotEnough = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_KeysNotEnough), "Keys Not Enough", engine);
+                string listItemNotEnough = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ListItemNotEnough), "List Item Not Enough", engine);
 
                 if ((keysNotEnough == "error") && (targetList.Count > targetKeys.Count))
                 {
-                    throw new Exception("The number of keys in " + v_Keys + " is not enough");
+                    throw new Exception($"The number of keys in '{v_Keys}' is not enough");
                 }
                 if ((listItemNotEnough == "error") && (targetKeys.Count > targetList.Count))
                 {
-                    throw new Exception("The number of List items in " + v_InputList + " is not enough");
+                    throw new Exception($"The number of List items in '{v_List}' is not enough");
                 }
 
                 if (targetList.Count == targetKeys.Count)
@@ -148,34 +152,35 @@ namespace taskt.Core.Automation.Commands
             switch (keyType)
             {
                 case "list":
-                    keysList = v_Keys.GetListVariable(engine);
+                    //keysList = v_Keys.ExpandUserVariableAsList(engine);
+                    keysList = this.ExpandUserVariableAsList(nameof(v_Keys), engine);
                     dicUseKeys(keysList);
                     break;
                 case "comma separated":
-                    keysList = v_Keys.ConvertToUserVariable(engine).Split(',').ToList();
+                    keysList = v_Keys.ExpandValueOrUserVariable(engine).Split(',').ToList();
                     dicUseKeys(keysList);
                     break;
                 case "space separated":
-                    keysList = v_Keys.ConvertToUserVariable(engine).Split(' ').ToList();
+                    keysList = v_Keys.ExpandValueOrUserVariable(engine).Split(' ').ToList();
                     dicUseKeys(keysList);
                     break;
                 case "tab separated":
-                    keysList = v_Keys.ConvertToUserVariable(engine).Split('\t').ToList();
+                    keysList = v_Keys.ExpandValueOrUserVariable(engine).Split('\t').ToList();
                     dicUseKeys(keysList);
                     break;
                 case "newline separated":
-                    keysList = v_Keys.ConvertToUserVariable(engine).Replace("\r\n", "\n").Replace("\r", "\n").Split('\n').ToList();
+                    keysList = v_Keys.ExpandValueOrUserVariable(engine).Replace("\r\n", "\n").Replace("\r", "\n").Split('\n').ToList();
                     dicUseKeys(keysList);
                     break;
                 case "key prefix":
                     string prefix;
-                    if (String.IsNullOrEmpty(v_Keys))
+                    if (string.IsNullOrEmpty(v_Keys))
                     {
                         prefix = "item";
                     }
                     else
                     {
-                        prefix = v_Keys.ConvertToUserVariable(engine);
+                        prefix = v_Keys.ExpandValueOrUserVariable(engine);
                     }
                     for (int i = 0; i < targetList.Count; i++)
                     {
@@ -183,7 +188,9 @@ namespace taskt.Core.Automation.Commands
                     }
                     break;
             }
-            myDic.StoreInUserVariable(engine, v_applyToVariableName);
+
+            //myDic.StoreInUserVariable(engine, v_Result);
+            this.StoreDictionaryInUserVariable(myDic, engine);
         }
     }
 }

@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("List Commands")]
+    [Attributes.ClassAttributes.Group("List")]
     [Attributes.ClassAttributes.SubGruop("List Item")]
     [Attributes.ClassAttributes.CommandSettings("Set List Item")]
     [Attributes.ClassAttributes.Description("This command allows you want to set an item in a List")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to set an item in a List.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SetListItemCommand : ScriptCommand
+    public sealed class SetListItemCommand : AListIndexCommands
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_BothListName))]
-        public string v_ListName { get; set; }
+        public override string v_List { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_ListIndex))]
-        public string v_ItemIndex { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_ListIndex))]
+        //public string v_Index { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_OneLineTextBox))]
@@ -31,6 +31,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Value to Set")]
         [PropertyValidationRule("Value", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Value")]
+        [PropertyParameterOrder(7000)]
         public string v_NewValue { get; set; }
 
         public SetListItemCommand()
@@ -41,10 +42,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //var listVariable = v_ListName.GetRawVariable(engine);
             //if (listVariable == null)
             //{
@@ -76,16 +75,20 @@ namespace taskt.Core.Automation.Commands
             //    index = targetList.Count + index;
             //}
 
-            (var list, var index) = this.GetListVariableAndIndex(nameof(v_ListName), nameof(v_ItemIndex), engine);
+            //(var list, var index) = this.ExpandUserVariablesAsListAndIndex(nameof(v_List), nameof(v_Index), engine);
 
-            if ((index >= 0) && (index < list.Count))
-            {
-                list[index] = v_NewValue.ConvertToUserVariable(engine);
-            }
-            else
-            {
-                throw new Exception("Strange index " + v_ItemIndex + ", parsed " + index);
-            }
+            //if ((index >= 0) && (index < list.Count))
+            //{
+            //    list[index] = v_NewValue.ExpandValueOrUserVariable(engine);
+            //}
+            //else
+            //{
+            //    throw new Exception("Strange index " + v_Index + ", parsed " + index);
+            //}
+
+            (var list, var index, _) = this.ExpandValueOrUserVariableAsListAndIndexAndValue(engine);
+
+            list[index] = v_NewValue.ExpandValueOrUserVariable(engine);
         }
     }
 }

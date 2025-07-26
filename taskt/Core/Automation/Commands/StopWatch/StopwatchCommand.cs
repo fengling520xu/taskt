@@ -6,14 +6,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("StopWatch Commands")]
+    [Attributes.ClassAttributes.Group("StopWatch")]
     [Attributes.ClassAttributes.CommandSettings("StopWatch")]
     [Attributes.ClassAttributes.Description("This command allows you to stop a program or a process.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to close an application by its name such as 'chrome'. Alternatively, you may use the Close Window or Thick App Command instead.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'Process.CloseMainWindow'.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class StopwatchCommand : ScriptCommand
+    public sealed class StopwatchCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyDescription("Stopwatch Instance Name")]
@@ -41,7 +42,6 @@ namespace taskt.Core.Automation.Commands
         [PropertyValidationRule("Action", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Action")]
         public string v_StopwatchAction { get; set; }
-
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
@@ -72,41 +72,40 @@ namespace taskt.Core.Automation.Commands
             //this.v_StopwatchAction = "Start Stopwatch";
         }
 
-        public override void RunCommand(object sender)
-        {
-            var engine = (Engine.AutomationEngineInstance)sender;   
-            var instanceName = v_StopwatchName.ConvertToUserVariable(engine);
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
+        { 
+            var instanceName = v_StopwatchName.ExpandValueOrUserVariable(engine);
             
-            var action = this.GetUISelectionValue(nameof(v_StopwatchAction), engine);
+            var action = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_StopwatchAction), engine);
             System.Diagnostics.Stopwatch stopwatch;
             switch (action)
             {
-                case "Start Stopwatch":
+                case "start stopwatch":
                     //start a new stopwatch
                     stopwatch = new System.Diagnostics.Stopwatch();
                     engine.AddAppInstance(instanceName, stopwatch);
                     stopwatch.Start();
                     break;
 
-                case "Stop Stopwatch":
+                case "stop stopwatch":
                     //stop existing stopwatch
                     stopwatch = (System.Diagnostics.Stopwatch)engine.AppInstances[instanceName];
                     stopwatch.Stop();
                     break;
 
-                case "Restart Stopwatch":
+                case "restart stopwatch":
                     //restart which sets to 0 and automatically starts
                     stopwatch = (System.Diagnostics.Stopwatch)engine.AppInstances[instanceName];
-                    stopwatch.Restart();
+                    stopwatch.Start();
                     break;
 
-                case "Reset Stopwatch":
+                case "reset stopwatch":
                     //reset which sets to 0
                     stopwatch = (System.Diagnostics.Stopwatch)engine.AppInstances[instanceName];
                     stopwatch.Reset();
                     break;
 
-                case "Measure Stopwatch":
+                case "measure stopwatch":
                     //check elapsed which gives measure
                     stopwatch = (System.Diagnostics.Stopwatch)engine.AppInstances[instanceName];
                     string elapsedTime;
@@ -116,7 +115,7 @@ namespace taskt.Core.Automation.Commands
                     }
                     else
                     {
-                        var format = v_ToStringFormat.ConvertToUserVariable(sender);
+                        var format = v_ToStringFormat.ExpandValueOrUserVariable(engine);
                         elapsedTime = stopwatch.Elapsed.ToString(format);
                     }
 
@@ -130,13 +129,13 @@ namespace taskt.Core.Automation.Commands
             var selectedAction = ((ComboBox)sender).SelectedItem?.ToString() ?? "";
             if (selectedAction == "Measure Stopwatch")
             {
-                GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_userVariableName), true);
-                GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ToStringFormat), true);
+                FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_userVariableName), true);
+                FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ToStringFormat), true);
             }
             else
             {
-                GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_userVariableName), false);
-                GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ToStringFormat), false);
+                FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_userVariableName), false);
+                FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ToStringFormat), false);
             }
         }
     }

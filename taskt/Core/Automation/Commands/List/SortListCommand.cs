@@ -6,22 +6,23 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("List Commands")]
+    [Attributes.ClassAttributes.Group("List")]
     [Attributes.ClassAttributes.SubGruop("List Actions")]
     [Attributes.ClassAttributes.CommandSettings("Sort List")]
     [Attributes.ClassAttributes.Description("This command allows you to sort list.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to sort list.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SortListCommand : ScriptCommand
+    public sealed class SortListCommand : AListCreateFromListCommands
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_InputListName))]
         [PropertyDescription("List Variable Name to Sort")]
         [PropertyValidationRule("List to Sort", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "List to Sort")]
-        public string v_InputList { get; set; }
+        public override string v_TargetList { get; set; }
 
         [XmlAttribute]
         [PropertyDescription("Sort Order")]
@@ -33,6 +34,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Ascending")]
         [PropertyUISelectionOption("Descending")]
         [PropertyDisplayText(true, "Order")]
+        [PropertyParameterOrder(6000)]
         public string v_SortOrder { get; set; }
 
         [XmlAttribute]
@@ -45,11 +47,12 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Text")]
         [PropertyUISelectionOption("Number")]
         [PropertyDisplayText(true, "Type")]
+        [PropertyParameterOrder(7000)]
         public string v_TargetType { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_NewOutputListName))]
-        public string v_OutputList { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ListControls), nameof(ListControls.v_NewOutputListName))]
+        //public string v_NewList { get; set; }
 
         public SortListCommand()
         {
@@ -59,31 +62,32 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            string sortOrder = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_SortOrder), "Sort Order", engine);
 
-            string sortOrder = this.GetUISelectionValue(nameof(v_SortOrder), "Sort Order", engine);
-
-            string targetType = this.GetUISelectionValue(nameof(v_TargetType), "Target Type", engine);
+            string targetType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_TargetType), "Target Type", engine);
 
             switch (targetType)
             {
                 case "text":
-                    List<string> targetList = v_InputList.GetListVariable(engine);
-                    List<string> newList = new List<string>(targetList);
+                    //var targetList = v_TargetList.ExpandUserVariableAsList(engine);
+                    var targetList = this.ExpandUserVariableAsList(engine);
+                    var newList = new List<string>(targetList);
 
                     newList.Sort();
                     if (sortOrder == "descending")
                     {
                         newList.Reverse();
                     }
-                    newList.StoreInUserVariable(engine, v_OutputList);
+                    //newList.StoreInUserVariable(engine, v_NewList);
+                    this.StoreListInUserVariable(newList, engine);
                     break;
 
                 case "number":
-                    List<decimal> targetValueList = v_InputList.GetDecimalListVariable(false, engine);
-                    List<decimal> valueList = new List<decimal>(targetValueList);
+                    //var targetValueList = v_TargetList.ExpandUserVariableAsDecimalList(false, engine);
+                    var targetValueList = this.ExpandUserVariableAsDecimalList(nameof(v_TargetList), false, engine);
+                    var valueList = new List<decimal>(targetValueList);
 
                     valueList.Sort();
                     if (sortOrder == "descending")
@@ -91,12 +95,13 @@ namespace taskt.Core.Automation.Commands
                         valueList.Reverse();
                     }
 
-                    List<string> newList2 = new List<string>();
+                    var newValueList = new List<string>();
                     foreach(var v in valueList)
                     {
-                        newList2.Add(v.ToString());
+                        newValueList.Add(v.ToString());
                     }
-                    newList2.StoreInUserVariable(engine, v_OutputList);
+                    //newList2.StoreInUserVariable(engine, v_NewList);
+                    this.StoreListInUserVariable(newValueList, engine);
 
                     break;
             }

@@ -8,15 +8,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Get From WebElement")]
     [Attributes.ClassAttributes.CommandSettings("Get Options From WebElement")]
     [Attributes.ClassAttributes.Description("This command allows you to Get Options Value from WebElement.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Get Options Value from WebElement.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserGetOptionsFromWebElementCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetOptionsFromWebElementCommand : ScriptCommand, IListResultProperties
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputWebElementName))]
@@ -59,13 +60,11 @@ namespace taskt.Core.Automation.Commands
         {
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var elem = v_WebElement.ExpandUserVariableAsWebElement("WebElement", engine);
 
-            var elem = v_WebElement.ConvertToUserVariableAsWebElement("WebElement", engine);
-
-            if (this.GetYesNoSelectionValue(nameof(v_ScrollToElement), engine))
+            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_ScrollToElement), engine))
             {
                 var scrollCommand = new SeleniumBrowserScrollToWebElementCommand()
                 {
@@ -84,9 +83,9 @@ namespace taskt.Core.Automation.Commands
             var sel = new SelectElement(elem);
             var options = sel.Options;
 
-            var attributeName = v_AttributeName.ConvertToUserVariable(engine);
+            var attributeName = v_AttributeName.ExpandValueOrUserVariable(engine);
 
-            var throwError = (this.GetUISelectionValue(nameof(v_WhenNoAttribute), engine) == "error");
+            var throwError = (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenNoAttribute), engine) == "error");
 
             var lst = new List<string>();
             foreach(var opt in options)
@@ -108,7 +107,8 @@ namespace taskt.Core.Automation.Commands
                     lst.Add(a);
                 }
             }
-            lst.StoreInUserVariable(engine, v_Result);
+            //lst.StoreInUserVariable(engine, v_Result);
+            this.StoreListInUserVariable(lst, engine);
         }
 
         private void cmbScrollToElement_SelectionChange(object sender, EventArgs e)

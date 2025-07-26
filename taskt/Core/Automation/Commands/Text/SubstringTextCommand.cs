@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Text Commands")]
+    [Attributes.ClassAttributes.Group("Text")]
     [Attributes.ClassAttributes.SubGruop("Action")]
     [Attributes.ClassAttributes.CommandSettings("Substring Text")]
     [Attributes.ClassAttributes.Description("This command allows you to trim a Text")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to select a subset of text or variable")]
     [Attributes.ClassAttributes.ImplementationDescription("This command uses the String.Substring method to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SubstringTextCommand : ScriptCommand
+    public sealed class SubstringTextCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_Text_MultiLine))]
@@ -25,8 +26,9 @@ namespace taskt.Core.Automation.Commands
         [InputSpecification("Start Position", true)]
         [PropertyDetailSampleUsage("**0**", "Specify **First Charactor** for Start Position")]
         [PropertyDetailSampleUsage("**1**", PropertyDetailSampleUsage.ValueType.Value, "Start Position")]
+        [PropertyDetailSampleUsage("**-1**", "Specify **Last Charactor** for Start Position")]
         [PropertyDetailSampleUsage("**{{{vStart}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Start Position")]
-        [PropertyValidationRule("Start Position", PropertyValidationRule.ValidationRuleFlags.Empty | PropertyValidationRule.ValidationRuleFlags.LessThanZero)]
+        [PropertyValidationRule("Start Position", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Start")]
         public string v_startIndex { get; set; }
 
@@ -46,6 +48,18 @@ namespace taskt.Core.Automation.Commands
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
         public string v_applyToVariableName { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("When Specified Invalid Position")]
+        [PropertyUISelectionOption("Rise A Error")]
+        [PropertyUISelectionOption("Get Empty Text")]
+        [PropertyDetailSampleUsage("Rise A Error", "Rise A Error")]
+        [PropertyDetailSampleUsage("Get Empty Text", "Get Empty Text")]
+        [PropertyIsOptional(true, "Get Empty Text")]
+        [PropertyFirstValue("Get Empty Text")]
+        [PropertyDisplayText(false, "")]
+        public string v_WhenInvalidIndex { get; set; }
+
         public SubstringTextCommand()
         {
             //this.CommandName = "SubstringTextCommand";
@@ -55,26 +69,54 @@ namespace taskt.Core.Automation.Commands
             //v_stringLength = "-1";
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var targetText = v_userVariableName.ExpandValueOrUserVariable(engine);
+            var targetTextLength = targetText.Length;
 
-            var variableName = v_userVariableName.ConvertToUserVariable(engine);
-
-            var startIndex = this.ConvertToUserVariableAsInteger(nameof(v_startIndex), engine);
-            var stringLength = this.ConvertToUserVariableAsInteger(nameof(v_stringLength), engine);
-
-            //apply substring
-            string subStr;
-            if (stringLength >= 0)
+            var startIndex = this.ExpandValueOrUserVariableAsInteger(nameof(v_startIndex), engine);
+            if (startIndex < 0)
             {
-                subStr = variableName.Substring(startIndex, stringLength);
+                startIndex += targetTextLength;
+            }
+
+            if (string.IsNullOrEmpty(v_stringLength))
+            {
+                v_stringLength = "-1";
+            }
+            var stringLength = this.ExpandValueOrUserVariableAsInteger(nameof(v_stringLength), engine);
+
+            string subStr = "";
+            if (startIndex < 0 || startIndex >= targetTextLength)
+            {
+                // invalid start index
+                switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenInvalidIndex), engine))
+                {
+                    case "rise a error":
+                        throw new Exception($"Invalid Start Index. Value: '{v_startIndex}', Expand Value: '{startIndex}'");
+
+                    case "get empty text":
+                        subStr = "";
+                        break;
+                }
+            }
+            else if (stringLength >= 0)
+            {
+                // substring range
+                if (startIndex + stringLength >= targetTextLength)
+                {
+                    subStr = targetText.Substring(startIndex);
+                }
+                else
+                {
+                    subStr = targetText.Substring(startIndex, stringLength);
+                }
             }
             else
-            {
-                subStr = variableName.Substring(startIndex);
+            {   // (stringLength < 0)
+                // substring after...
+                subStr = targetText.Substring(startIndex);
             }
-
             subStr.StoreInUserVariable(engine, v_applyToVariableName);
         }
     }

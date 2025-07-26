@@ -5,24 +5,26 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Excel Commands")]
+    [Attributes.ClassAttributes.Group("Excel")]
     [Attributes.ClassAttributes.SubGruop("File/Book")]
     [Attributes.ClassAttributes.CommandSettings("Open Workbook")]
     [Attributes.ClassAttributes.Description("This command opens an Excel Workbook.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to open an existing Excel Workbook.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Excel Interop to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ExcelOpenWorkbookCommand : ScriptCommand
+    public sealed class ExcelOpenWorkbookCommand : AExcelInstanceCommands, IFileExistsFilePathProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
-        public string v_InstanceName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
+        //public string v_InstanceName { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_OpenFilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "xlsx,xlsm,xls,xlm,csv,ods")]
-        public string v_FilePath { get; set; }
+        [PropertyParameterOrder(6000)]
+        public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -33,6 +35,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vPassword}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Password")]
         [PropertyIsOptional(true)]
         [PropertyDisplayText(false, "")]
+        [PropertyParameterOrder(6001)]
         public string v_Password { get; set; }
 
         [XmlAttribute]
@@ -47,29 +50,25 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Ignore")]
         [PropertyUISelectionOption("Open")]
         [PropertyIsOptional(true, "Error")]
+        [PropertyParameterOrder(6002)]
         public string v_IfWorksheetExists { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        [PropertyParameterOrder(6003)]
+        public string v_WaitTimeForFile { get; set; }
 
         public ExcelOpenWorkbookCommand()
         {
-            //this.CommandName = "ExcelOpenWorkbookCommand";
-            //this.SelectionName = "Open Workbook";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var excelInstance = this.ExpandValueOrVariableAsExcelInstance(engine);
 
-            var excelInstance = v_InstanceName.GetExcelInstance(engine);
+            var excelFilePath = this.WaitForFile(engine);
 
-            var vFilePath = FilePathControls.WaitForFile(this, nameof(v_FilePath), nameof(v_WaitForFile), engine);
-
-            var pass = v_Password.ConvertToUserVariable(sender);
+            var pass = v_Password.ExpandValueOrUserVariable(engine);
 
             int worksheets;
             try
@@ -83,13 +82,13 @@ namespace taskt.Core.Automation.Commands
 
             Action openFileProcess = () =>
             {
-                if (String.IsNullOrEmpty(pass))
+                if (string.IsNullOrEmpty(pass))
                 {
-                    excelInstance.Workbooks.Open(vFilePath);
+                    excelInstance.Workbooks.Open(excelFilePath);
                 }
                 else
                 {
-                    excelInstance.Workbooks.Open(vFilePath, Password: pass);
+                    excelInstance.Workbooks.Open(excelFilePath, Password: pass);
                 }
             };
 
@@ -99,10 +98,10 @@ namespace taskt.Core.Automation.Commands
             }
             else
             {
-                switch(this.GetUISelectionValue(nameof(v_IfWorksheetExists), "If Worksheet Exists", engine))
+                switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfWorksheetExists), "If Worksheet Exists", engine))
                 {
                     case "error":
-                        throw new Exception("Excel Instance '" + v_InstanceName + "' has Worksheets.");
+                        throw new Exception($"Excel Instance '{v_InstanceName}' has Worksheets.");
                         
                     case "ignore":
                         // nothing

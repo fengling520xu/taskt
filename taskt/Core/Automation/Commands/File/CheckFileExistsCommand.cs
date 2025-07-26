@@ -5,64 +5,53 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("File Operation Commands")]
+    [Attributes.ClassAttributes.Group("File Operation")]
     [Attributes.ClassAttributes.CommandSettings("Check File Exists")]
     [Attributes.ClassAttributes.Description("This command returns a existence of file paths from a specified location")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to return a existence of file paths from a specific location.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class CheckFileExistsCommand : ScriptCommand
+    public sealed class CheckFileExistsCommand : AFileExistsFilePathPathResultCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
-        [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.AllowNoExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport)]
-        public string v_TargetFileName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
+        //[PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.AllowNoExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport)]
+        //public string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(BooleanControls), nameof(BooleanControls.v_Result))]
         [Remarks("When the File Exists, Result is **TRUE**")]
-        public string v_UserVariableName { get; set; }
+        [PropertyParameterOrder(6000)]
+        public string v_Result { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
+        [PropertyValidationRule("Wait Time", PropertyValidationRule.ValidationRuleFlags.Empty | PropertyValidationRule.ValidationRuleFlags.LessThanZero)]
         [PropertyFirstValue("0")]
         [PropertyIsOptional(true, "0")]
-        public string v_WaitTime { get; set; }
+        public override string v_WaitTimeForFile { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
-        public string v_ResultPath { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePathResult))]
+        //public string v_ResultPath { get; set; }
 
         public CheckFileExistsCommand()
         {
-            //this.CommandName = "CheckFileExistsCommand";
-            //this.SelectionName = "Check File Exists";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            //try
-            //{
-            //    FilePathControls.WaitForFile(this, nameof(v_TargetFileName), nameof(v_WaitTime), engine);
-            //    true.StoreInUserVariable(engine, v_UserVariableName);
-            //}
-            //catch
-            //{
-            //    false.StoreInUserVariable(engine, v_UserVariableName);
-            //}
-            FilePathControls.FileAction(this, engine,
-                new Action<string>(path =>
+            this.FileAction(engine,
+                new Func<string, string>(path =>
                 {
-                    true.StoreInUserVariable(engine, v_UserVariableName);
+                    true.StoreInUserVariable(engine, v_Result);
+                    return path;
                 }),
                 new Action<Exception>(ex =>
                 {
-                    false.StoreInUserVariable(engine, v_UserVariableName);
+                    false.StoreInUserVariable(engine, v_Result);
                 })
             );
         }

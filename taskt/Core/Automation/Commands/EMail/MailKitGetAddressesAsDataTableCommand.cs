@@ -8,15 +8,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("EMail Commands")]
+    [Attributes.ClassAttributes.Group("EMail")]
     [Attributes.ClassAttributes.SubGruop("")]
     [Attributes.ClassAttributes.CommandSettings("Get Addresses As DataTable")]
     [Attributes.ClassAttributes.Description("This command allows you to get Addresses from EMail.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get Addresses from EMail.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class MailKitGetAddressesAsDataTableCommand : ScriptCommand
+    public sealed class MailKitGetAddressesAsDataTableCommand : ScriptCommand, ICanHandleDataTable
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(EMailControls), nameof(EMailControls.v_InputEMailName))]
@@ -38,10 +39,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var lst = this.GetMailKitEMailAddresses(nameof(v_MailName), nameof(v_AddressesType), engine);
 
             DataTable addresses = new DataTable();
@@ -51,7 +50,8 @@ namespace taskt.Core.Automation.Commands
             {
                 addresses.Rows.Add(new object[] { item.Name, item.Address });
             }
-            addresses.StoreInUserVariable(engine, v_AddressesDataTable);
+            //addresses.StoreInUserVariable(engine, v_AddressesDataTable);
+            this.StoreDataTableInUserVariable(addresses, nameof(v_AddressesDataTable), engine);
         }
     }
 }

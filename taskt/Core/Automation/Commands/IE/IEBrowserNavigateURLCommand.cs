@@ -4,17 +4,17 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Linq;
 using taskt.UI.CustomControls;
-using taskt.UI.Forms;
 
 namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("IE Browser Commands")]
+    [Attributes.ClassAttributes.Group("IE Browser")]
     [Attributes.ClassAttributes.Description("This command allows you to navigate a IE web browser session to a given URL or resource.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to navigate an existing IE instance to a known URL or web resource")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements the 'InternetExplorer' application object from SHDocVw.dll to achieve automation.")]
-    public class IEBrowserNavigateURLCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
+    public sealed class IEBrowserNavigateURLCommand : ScriptCommand
     {
         [XmlAttribute]
         [Attributes.PropertyAttributes.PropertyDescription("Please Enter the instance name")]
@@ -42,24 +42,22 @@ namespace taskt.Core.Automation.Commands
             this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             object browserObject = null;
 
-            var engine = (Core.Automation.Engine.AutomationEngineInstance)sender;
-
-            var vInstance = v_InstanceName.ConvertToUserVariable(engine);
+            var vInstance = v_InstanceName.ExpandValueOrUserVariable(engine);
 
             browserObject = engine.GetAppInstance(vInstance);
 
             var browserInstance = (SHDocVw.InternetExplorer)browserObject;
 
-            browserInstance.Navigate(v_URL.ConvertToUserVariable(sender));
+            browserInstance.Navigate(v_URL.ExpandValueOrUserVariable(engine));
 
             IEBrowserCreateCommand.WaitForReadyState(browserInstance);
 
         }
-        public override List<Control> Render(frmCommandEditor editor)
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
 
@@ -70,7 +68,7 @@ namespace taskt.Core.Automation.Commands
 
             RenderedControls.AddRange(CommandControls.CreateDefaultInputGroupFor("v_URL", this, editor));
 
-            if (editor.creationMode == frmCommandEditor.CreationMode.Add)
+            if (editor.creationMode == UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor.CreationMode.Add)
             {
                 this.v_InstanceName = editor.appSettings.ClientSettings.DefaultBrowserInstanceName;
             }

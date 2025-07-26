@@ -7,14 +7,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("JSON Commands")]
+    [Attributes.ClassAttributes.Group("JSON")]
     [Attributes.ClassAttributes.SubGruop("Get/Set")]
     [Attributes.ClassAttributes.Description("This command allows you to parse a JSON object into a list.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to extract data from a JSON object")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class GetMultiJSONValueListCommand : ScriptCommand
+    public sealed class GetMultiJSONValueListCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyDescription("Please Supply the JSON value or variable")]
@@ -27,7 +28,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyInstanceType(PropertyInstanceType.InstanceType.JSON)]
         [PropertyValidationRule("JSON", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "JSON")]
-        public string v_InputValue { get; set; }
+        public string v_Json { get; set; }
 
         [XmlElement]
         [PropertyDescription("Please Assign Objects for Parsing.")]
@@ -68,10 +69,8 @@ namespace taskt.Core.Automation.Commands
 
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             ////get variablized input
             //var variableInput = v_InputValue.ConvertToUserVariable(sender);
 
@@ -130,11 +129,18 @@ namespace taskt.Core.Automation.Commands
             var table = DataTableControls.GetFieldValues(v_ParseObjects, "Json Selector", "Output Variable", false);
             foreach(var row in table)
             {
-                new GetJSONValueListCommand
+                //new GetJSONValueListCommand
+                //{
+                //    v_Json = this.v_Json,
+                //    v_JsonExtractor = row.Key,
+                //    v_Result = row.Value
+                //}.RunCommand(engine);
+
+                new ConvertJSONToListCommand
                 {
-                    v_InputValue = this.v_InputValue,
+                    v_Json = this.v_Json,
                     v_JsonExtractor = row.Key,
-                    v_applyToVariableName = row.Value
+                    v_Result = row.Value
                 }.RunCommand(engine);
             }
         }

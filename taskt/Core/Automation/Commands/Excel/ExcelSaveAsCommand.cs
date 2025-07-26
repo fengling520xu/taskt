@@ -5,24 +5,26 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Excel Commands")]
+    [Attributes.ClassAttributes.Group("Excel")]
     [Attributes.ClassAttributes.SubGruop("File/Book")]
     [Attributes.ClassAttributes.CommandSettings("Save Workbook As")]
     [Attributes.ClassAttributes.Description("This command allows you to save an Excel workbook.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to save a workbook to a file.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Excel Interop to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ExcelSaveAsCommand : ScriptCommand
+    public sealed class ExcelSaveAsCommand : AExcelInstanceCommands, ICanHandleFilePath
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
-        public string v_InstanceName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_InputInstanceName))]
+        //public string v_InstanceName { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(ExcelControls), nameof(ExcelControls.v_SaveFilePath))]
         [PropertyDescription("Excel File Path to Save")]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "xlsx")]
+        [PropertyParameterOrder(6000)]
         public string v_FileName { get; set; }
 
         [XmlAttribute]
@@ -38,38 +40,23 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Overwrite")]
         [PropertyUISelectionOption("Ignore")]
         [PropertyIsOptional(true, "Error")]
+        [PropertyParameterOrder(6001)]
         public string v_IfExcelFileExists { get; set; }
 
         public ExcelSaveAsCommand()
         {
-            //this.CommandName = "ExcelSaveAsCommand";
-            //this.SelectionName = "Save Workbook As";
-            //this.CommandEnabled = true;
-            //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //get engine context
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var excelInstance = this.ExpandValueOrVariableAsExcelInstance(engine);
 
-            var excelInstance = v_InstanceName.GetExcelInstance(engine);
-
-            //string fileName;
-            //if (FilePathControls.ContainsFileCounter(v_FileName, engine))
-            //{
-            //    fileName = FilePathControls.FormatFilePath_ContainsFileCounter(v_FileName, engine, "xlsx");
-            //}
-            //else
-            //{
-            //    fileName = FilePathControls.FormatFilePath_NoFileCounter(v_FileName, engine, "xlsx");
-            //}
-            string fileName = this.ConvertToUserVariableAsFilePath(nameof(v_FileName), engine);
+            string fileName = this.ExpandValueOrUserVariableAsFilePath(nameof(v_FileName), engine);
 
 			// TODO: support xlsm
             Action saveAsProcess = () =>
             {
-                //overwrite and save
+                // overwrite and save
                 excelInstance.DisplayAlerts = false;
                 excelInstance.ActiveWorkbook.SaveAs(fileName);
                 excelInstance.DisplayAlerts = true;
@@ -83,10 +70,10 @@ namespace taskt.Core.Automation.Commands
                 }
                 else
                 {
-                    switch(this.GetUISelectionValue(nameof(v_IfExcelFileExists), "If Excel File Exists", engine))
+                    switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfExcelFileExists), "If Excel File Exists", engine))
                     {
                         case "error":
-                            throw new Exception("Excel file '" + v_FileName + "' is already exists.");
+                            throw new Exception($"Excel file '{v_FileName}' is already exists.");
                             
                         case "overwrite":
                             saveAsProcess();
@@ -99,7 +86,7 @@ namespace taskt.Core.Automation.Commands
             }
             else
             {
-                throw new Exception("Excel Instance '" + v_InstanceName + "' has no Workbook.");
+                throw new Exception($"Excel Instance '{v_InstanceName}' has Worksheets.");
             }
         }
     }

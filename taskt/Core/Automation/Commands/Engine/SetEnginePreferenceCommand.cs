@@ -6,13 +6,14 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Engine Commands")]
+    [Attributes.ClassAttributes.Group("Engine")]
     [Attributes.ClassAttributes.CommandSettings("Set Engine Preference")]
     [Attributes.ClassAttributes.Description("This command allows you to set preferences for engine behavior.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to change the engine behavior.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
-    public class SetEnginePreferenceCommand : ScriptCommand
+    public sealed class SetEnginePreferenceCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -22,7 +23,6 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Start Variable Marker")]
         [PropertyUISelectionOption("End Variable Marker")]
         [PropertyUISelectionOption("Engine Delay")]
-        [PropertyUISelectionOption("Current Window Keyword")]
         [PropertyValidationRule("Parameter Type", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Parameter Type")]
         [PropertySelectionChangeEvent(nameof(cmbPreferenceCombobox_SelectedChanged))]
@@ -43,13 +43,11 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var preference = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_PreferenceType), engine);
 
-            var preference = this.GetUISelectionValue(nameof(v_PreferenceType), engine);
-
-            var parameterValue = v_ParameterValue.ConvertToUserVariable(engine);
+            var parameterValue = v_ParameterValue.ExpandValueOrUserVariable(engine);
 
             switch (preference)
             {
@@ -61,10 +59,12 @@ namespace taskt.Core.Automation.Commands
                     break;
 
                 case "start variable marker":
-                    engine.engineSettings.VariableStartMarker = parameterValue;
+                    //engine.engineSettings.VariableStartMarker = parameterValue;
+                    engine.GetAutomationEngineInstanceEngineSettings().VariableStartMarker = parameterValue;
                     break;
                 case "end variable marker":
-                    engine.engineSettings.VariableEndMarker = parameterValue;
+                    //engine.engineSettings.VariableEndMarker = parameterValue;
+                    engine.GetAutomationEngineInstanceEngineSettings().VariableEndMarker = parameterValue;
                     break;
 
                 case "engine delay":
@@ -72,7 +72,8 @@ namespace taskt.Core.Automation.Commands
                     {
                         if (delay >= 1)
                         {
-                            engine.engineSettings.DelayBetweenCommands = delay;
+                            //engine.engineSettings.DelayBetweenCommands = delay;
+                            engine.GetAutomationEngineInstanceEngineSettings().DelayBetweenCommands = delay;
                         }
                         else
                         {
@@ -84,10 +85,6 @@ namespace taskt.Core.Automation.Commands
                         throw new Exception("Engine Delay is not Number. Value: '" + parameterValue + "'");
                     }
                     break;
-
-                case "current window keyword":
-                    engine.engineSettings.CurrentWindowKeyword = parameterValue;
-                    break;
             }
         }
 
@@ -98,11 +95,11 @@ namespace taskt.Core.Automation.Commands
             {
                 case "Enable Automatic Calculations":
                 case "Disable Automatic Calculations":
-                    GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ParameterValue), false);
+                    FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ParameterValue), false);
                     break;
 
                 default:
-                    GeneralPropertyControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ParameterValue), true);
+                    FormUIControls.SetVisibleParameterControlGroup(ControlsList, nameof(v_ParameterValue), true);
                     break;
             }
         }

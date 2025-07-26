@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
@@ -12,12 +11,6 @@ namespace taskt.Core.Automation.Commands
     /// </summary>
     internal static class PropertyControls
     {
-        public const string LabelPrefix = "lbl_";
-        public const string Label2ndPrefix = "lbl2_";
-        public const string HelperInfix = "_helper_";
-        public const string CustomHelperInfix = "_customhelper_";
-        public const string GroupPrefix = "group_";
-
         #region Property methods
         /// <summary>
         /// get parameters property info
@@ -27,14 +20,16 @@ namespace taskt.Core.Automation.Commands
         public static List<PropertyInfo> GetParameterProperties(this ScriptCommand command, bool containsComment = false)
         {
             var props = command.GetType().GetProperties();
+            IEnumerable<PropertyInfo> ps;
             if (containsComment)
             {
-                return props.Where(p => (p.Name.StartsWith("v_"))).ToList();
+                ps = props.Where(p => (p.Name.StartsWith("v_")));
             }
             else
             {
-                return props.Where(p => (p.Name.StartsWith("v_") && (p.Name != "v_Comment"))).ToList();
+                ps = props.Where(p => (p.Name.StartsWith("v_") && (p.Name != "v_Comment")));
             }
+            return ps.OrderBy(p => p.GetCustomAttribute<PropertyParameterOrder>()?.order ?? new PropertyParameterOrder().order).ToList();
         }
 
 
@@ -61,14 +56,7 @@ namespace taskt.Core.Automation.Commands
             return props.Where(p =>
             {
                 var vp = p.GetCustomAttribute<PropertyVirtualProperty>();
-                //if (vp != null)
-                //{
-                //    return vp.Equals(vProp);
-                //}
-                //else
-                //{
-                //    return false;
-                //}
+
                 return vp?.Equals(vProp) ?? false;
             }).FirstOrDefault();
         }
@@ -85,6 +73,16 @@ namespace taskt.Core.Automation.Commands
             {
                 return p.GetCustomAttribute<PropertyVirtualProperty>()?.Equals(vProp) ?? false;
             }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get Property Full Name, 'ClassName+PropertyName'
+        /// </summary>
+        /// <param name="prop"></param>
+        /// <returns></returns>
+        public static string GetPropertyFullName(PropertyInfo prop)
+        {
+            return $"{prop.DeclaringType.FullName}+{prop.Name}";
         }
 
         /// <summary>
@@ -122,10 +120,42 @@ namespace taskt.Core.Automation.Commands
         /// <param name="propInfo"></param>
         /// <param name="virtualPropInfo"></param>
         /// <returns></returns>
-        public static T GetCustomAttributeWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo)
-            where T : System.Attribute
+        public static T GetCustomAttributeWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo = null)
+            where T : ASingleComamndPropertyAttribute
         {
-            return propInfo.GetCustomAttribute<T>() ?? virtualPropInfo?.GetCustomAttribute<T>() ?? null;
+            //return propInfo.GetCustomAttribute<T>() ?? virtualPropInfo?.GetCustomAttribute<T>() ?? null;
+
+            var searchedProps = new List<string>();
+            var currentProp = propInfo;
+            while (true)
+            {
+                var fullName = GetPropertyFullName(currentProp);
+                if (!searchedProps.Contains(fullName))
+                {
+                    searchedProps.Add(fullName);
+                    var attr = currentProp.GetCustomAttribute<T>();
+                    if (attr != null)
+                    {
+                        return attr;
+                    }
+                    else
+                    {
+                        var vPropInfo = currentProp.GetVirtualProperty();
+                        if (vPropInfo != null)
+                        {
+                            currentProp = vPropInfo;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Property is cycled. Property: '{typeof(T).Name}', PropertyName: '{currentProp.Name}'");
+                }
+            }
         }
 
         /// <summary>
@@ -136,8 +166,8 @@ namespace taskt.Core.Automation.Commands
         /// <param name="virtualPropInfo"></param>
         /// <param name="margeAttributes">when the value is true, return value is merged attribute get from two PropertyInfo. when the value is false, return value is propInfo attribute has priority.</param>
         /// <returns></returns>
-        public static List<T> GetCustomAttributesWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo)
-            where T : System.Attribute
+        public static List<T> GetCustomAttributesWithVirtual<T>(PropertyInfo propInfo, PropertyInfo virtualPropInfo = null)
+            where T : AMultiCommandPropertyAttribute
         {
             // DBG
             //Console.WriteLine("### wv : " + typeof(T).Name);
@@ -160,161 +190,98 @@ namespace taskt.Core.Automation.Commands
                 case nameof(PropertyUISelectionOption):
                     behavior = GetCustomAttributeWithVirtual<PropertyUISelectionOptionBehavior>(propInfo, virtualPropInfo)?.behavior ?? MultiAttributesBehavior.Merge;
                     break;
+                case nameof(PropertyAvailableSystemVariable):
+                    behavior = GetCustomAttributeWithVirtual<PropertyAvailableSystemVariableBehavior>(propInfo, virtualPropInfo)?.behavior ?? MultiAttributesBehavior.Merge;
+                    break;
             }
 
             if (behavior == MultiAttributesBehavior.Merge)
             {
                 var a = new List<T>();
-                var attrV = virtualPropInfo?.GetCustomAttributes<T>().ToList() ?? new List<T>();
-                if (attrV.Count > 0)
+                //var attrV = virtualPropInfo?.GetCustomAttributes<T>().ToList() ?? new List<T>();
+                //if (attrV.Count > 0)
+                //{
+                //    a.AddRange(attrV);
+                //}
+                //var attrP = propInfo.GetCustomAttributes<T>().ToList();
+                //if (attrP.Count > 0)
+                //{
+                //    a.AddRange(attrP);
+                //}
+
+                var searchedProps = new List<string>();
+                var currentProp = propInfo;
+                while (true)
                 {
-                    a.AddRange(attrV);
+                    var fullName = GetPropertyFullName(currentProp);
+                    if (!searchedProps.Contains(fullName))
+                    {
+                        searchedProps.Add(fullName);
+                        var attrs = currentProp.GetCustomAttributes<T>().ToList() ?? new List<T>();
+                        if (attrs.Count > 0)
+                        {
+                            a.AddRange(attrs);
+                        }
+
+                        var vPropInfo = currentProp.GetVirtualProperty();
+                        if (vPropInfo != null)
+                        {
+                            currentProp = vPropInfo;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Property is cycled. Property: '{typeof(T).Name}', PropertyName: '{currentProp.Name}'");
+                    }
                 }
-                var attrP = propInfo.GetCustomAttributes<T>().ToList();
-                if (attrP.Count > 0)
-                {
-                    a.AddRange(attrP);
-                }
+
                 return a;
             }
             else
             {
-                var a = propInfo.GetCustomAttributes<T>().ToList();
-                if (a.Count == 0)
+                //var a = propInfo.GetCustomAttributes<T>().ToList();
+                //if (a.Count == 0)
+                //{
+                //    return virtualPropInfo?.GetCustomAttributes<T>().ToList() ?? new List<T>();
+                //}
+                //else
+                //{
+                //    return a;
+                //}
+                var searchedProps = new List<string>();
+                var currentProp = propInfo;
+                while (true)
                 {
-                    return virtualPropInfo?.GetCustomAttributes<T>().ToList() ?? new List<T>();
-                }
-                else
-                {
-                    return a;
-                }
-            }
-        }
-        #endregion
+                    var fullName = GetPropertyFullName(currentProp);
+                    if (!searchedProps.Contains(fullName))
+                    {
+                        searchedProps.Add(fullName);
+                        var attrs = currentProp.GetCustomAttributes<T>().ToList() ?? new List<T>();
+                        if (attrs.Count > 0)
+                        {
+                            return attrs;
+                        }
 
-        #region control search method
-        public static List<Control> GetControlGroup(this List<Control> ctrls, string parameterName, string nextParameterName = "")
-        {
-            List<Control> ret = new List<Control>();
-
-            int index;
-            index = ctrls.FindIndex(t => (t.Name == GroupPrefix + parameterName));
-            if (index >= 0)
-            {
-                ret.Add(ctrls[index]);
-            }
-            else
-            {
-                index = ctrls.FindIndex(t => (t.Name == LabelPrefix + parameterName));
-                int last = (nextParameterName == "") ? ctrls.Count : ctrls.FindIndex(t => (t.Name == LabelPrefix + nextParameterName));
-
-                for (int i = index; i < last; i++)
-                {
-                    ret.Add(ctrls[i]);
-                }
-            }
-
-            return ret;
-        }
-
-        public static T GetPropertyControl<T>(this Dictionary<string, Control> controls, string propertyName) where T : Control
-        {
-            if (controls.ContainsKey(propertyName))
-            {
-                return (T)controls[propertyName];
-            }
-            else
-            {
-                throw new Exception("Control '" + propertyName + "' does not exists.");
-            }
-        }
-
-        public static Label GetPropertyControlLabel(this Dictionary<string, Control> controls, string propertyName)
-        {
-            if (controls.ContainsKey(LabelPrefix + propertyName))
-            {
-                return (Label)controls[LabelPrefix + propertyName];
-            }
-            else
-            {
-                throw new Exception("Label '" + LabelPrefix + propertyName + "' does not exists.");
-            }
-        }
-
-        public static Label GetPropertyControl2ndLabel(this Dictionary<string, Control> controls, string propertyName)
-        {
-            if (controls.ContainsKey(Label2ndPrefix + propertyName))
-            {
-                return (Label)controls[Label2ndPrefix + propertyName];
-            }
-            else
-            {
-                throw new Exception("2nd Label '" + Label2ndPrefix + propertyName + "' does not exists.");
-            }
-        }
-
-        public static (T body, Label label, Label label2nd) GetAllPropertyControl<T>(this Dictionary<string, Control> controls, string propertyName, bool throwWhenLabelNotExists = true, bool throwWhen2ndLabelNotExists = false) where T : Control
-        {
-            T body = controls.GetPropertyControl<T>(propertyName);
-
-            Label label;
-            try
-            {
-                label = controls.GetPropertyControlLabel(propertyName);
-            }
-            catch (Exception ex)
-            {
-                if (throwWhenLabelNotExists)
-                {
-                    throw ex;
-                }
-                else
-                {
-                    label = null;
+                        var vPropInfo = currentProp.GetVirtualProperty();
+                        if (vPropInfo != null)
+                        {
+                            currentProp = vPropInfo;
+                        }
+                        else
+                        {
+                            return new List<T>();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Property is cycled. Property: '{typeof(T).Name}', PropertyName: '{currentProp.Name}'");
+                    }
                 }
             }
-            Label label2nd;
-            try
-            {
-                label2nd = controls.GetPropertyControl2ndLabel(propertyName);
-            }
-            catch (Exception ex)
-            {
-                if (throwWhen2ndLabelNotExists)
-                {
-                    throw ex;
-                }
-                else
-                {
-                    label2nd = null;
-                }
-            }
-            return (body, label, label2nd);
-        }
-
-        public static Dictionary<string, string> Get2ndLabelText(this Dictionary<string, Control> controls, string propertyName)
-        {
-            return controls.GetPropertyControlLabel(propertyName).Get2ndLabelTexts();
-        }
-
-        public static Dictionary<string, string> Get2ndLabelTexts(this Label lbl)
-        {
-            if (lbl.Tag is Dictionary<string, string> dic)
-            {
-                return dic;
-            }
-            else
-            {
-                throw new Exception(lbl.Name + " does not has Dictionary item for 2nd-Label");
-            }
-        }
-
-        public static void SecondLabelProcess(this Dictionary<string, Control> controls, string labelTextName, string label2ndName, string key)
-        {
-            var dic = controls.Get2ndLabelText(labelTextName);
-            var lbl = controls.GetPropertyControl2ndLabel(label2ndName);
-
-            lbl.Text = dic.ContainsKey(key) ? dic[key] : "";
         }
         #endregion
     }

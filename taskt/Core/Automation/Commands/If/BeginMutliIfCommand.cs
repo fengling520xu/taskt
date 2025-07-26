@@ -4,17 +4,17 @@ using System.Xml.Serialization;
 using System.Data;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using taskt.UI.Forms;
 using taskt.UI.CustomControls;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("If Commands")]
+    [Attributes.ClassAttributes.Group("If")]
     [Attributes.ClassAttributes.Description("This command allows you to evaluate a logical statement to determine if the statement is true.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to check if a statement is 'true' or 'false' and subsequently take an action based on either condition. Any 'BeginIf' command must have a following 'EndIf' command.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command evaluates supplied arguments and if evaluated to true runs sub elements")]
-    public class BeginMultiIfCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_begin_multi_if))]
+    public sealed class BeginMultiIfCommand : ScriptCommand, IHaveDataTableElements, IHaveIfAdditionalCommands
     {
         [XmlElement]
         [Attributes.PropertyAttributes.PropertyDescription("Multiple If Conditions - All Must Be True")]
@@ -31,7 +31,7 @@ namespace taskt.Core.Automation.Commands
 
         [XmlIgnore]
         [NonSerialized]
-        private ApplicationSettings appSetting;
+        private SafeApplicationSettings appSetting;
 
         [XmlIgnore]
         private List<Script.ScriptVariable> ScriptVariables { get; set; }
@@ -50,10 +50,8 @@ namespace taskt.Core.Automation.Commands
         }
 
        
-        public override void RunCommand(object sender, Core.Script.ScriptAction parentCommand)
+        public override void RunCommand(Engine.AutomationEngineInstance engine, Core.Script.ScriptAction parentCommand)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             bool isTrueStatement = true;
             foreach (DataRow rw in v_IfConditionsTable.Rows)
             {
@@ -115,7 +113,7 @@ namespace taskt.Core.Automation.Commands
             }
         }
 
-        public override List<Control> Render(frmCommandEditor editor)
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
             
@@ -169,12 +167,12 @@ namespace taskt.Core.Automation.Commands
 
                     var ifCommand = Newtonsoft.Json.JsonConvert.DeserializeObject<Commands.BeginIfCommand>(commandData);
 
-                    var automationCommands = taskt.UI.CustomControls.CommandControls.GenerateCommandsandControls().Where(f => f.Command is BeginIfCommand).ToList();
-                    frmCommandEditor editor = new frmCommandEditor(automationCommands, null);
+                    var automationCommands = taskt.UI.CustomControls.CommandControls.GenerateCommandsAndControls().Where(f => f.Command is BeginIfCommand).ToList();
+                    var editor = new UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor(automationCommands, null);
                     editor.selectedCommand = ifCommand;
                     editor.editingCommand = ifCommand;
                     editor.originalCommand = ifCommand;
-                    editor.creationMode = frmCommandEditor.CreationMode.Edit;
+                    editor.creationMode = UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor.CreationMode.Edit;
                     editor.scriptVariables = ScriptVariables;
                     editor.appSettings = this.appSetting;
 
@@ -202,9 +200,9 @@ namespace taskt.Core.Automation.Commands
 
         private void CreateIfCondition(object sender, EventArgs e)
         {
-            var automationCommands = taskt.UI.CustomControls.CommandControls.GenerateCommandsandControls().Where(f => f.Command is BeginIfCommand).ToList();
+            var automationCommands = taskt.UI.CustomControls.CommandControls.GenerateCommandsAndControls().Where(f => f.Command is BeginIfCommand).ToList();
 
-            frmCommandEditor editor = new frmCommandEditor(automationCommands, null);
+            var editor = new UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor(automationCommands, null);
             editor.selectedCommand = new BeginIfCommand();
             editor.appSettings = this.appSetting;
             var res = editor.ShowDialog();

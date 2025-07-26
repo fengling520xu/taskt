@@ -5,15 +5,15 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Linq;
 using taskt.UI.CustomControls;
-using taskt.UI.Forms;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("IE Browser Commands")]
+    [Attributes.ClassAttributes.Group("IE Browser")]
     [Attributes.ClassAttributes.Description("This command allows you to find and attach to an existing IE web browser session.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements the 'InternetExplorer' application object from SHDocVw.dll to achieve automation.")]
-    public class IEBrowserFindBrowserCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
+    public sealed class IEBrowserFindBrowserCommand : ScriptCommand
     {
         [XmlAttribute]
         [Attributes.PropertyAttributes.PropertyDescription("Please Enter the instance name")]
@@ -37,11 +37,9 @@ namespace taskt.Core.Automation.Commands
             this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Core.Automation.Engine.AutomationEngineInstance)sender;
-
-            var instanceName = v_InstanceName.ConvertToUserVariable(sender);
+            var instanceName = v_InstanceName.ExpandValueOrUserVariable(engine);
 
             bool browserFound = false;
             var shellWindows = new ShellWindows();
@@ -75,7 +73,7 @@ namespace taskt.Core.Automation.Commands
             }
         }
 
-        public override List<Control> Render(frmCommandEditor editor)
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
 
@@ -103,7 +101,7 @@ namespace taskt.Core.Automation.Commands
 
             //RenderedControls.AddRange(ElementParameterControls);
 
-            if (editor.creationMode == frmCommandEditor.CreationMode.Add)
+            if (editor.creationMode == UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor.CreationMode.Add)
             {
                 this.v_InstanceName = editor.appSettings.ClientSettings.DefaultBrowserInstanceName;
             }

@@ -5,14 +5,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Word Commands")]
+    [Attributes.ClassAttributes.Group("Word")]
     [Attributes.ClassAttributes.Description("This command returns existance of Word instance.")]
     [Attributes.ClassAttributes.CommandSettings("Check Word Instance Exists")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to check Word instance.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Word Interop to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class WordCheckWordInstanceExistsCommand : ScriptCommand
+    public sealed class WordCheckWordInstanceExistsCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(WordControls), nameof(WordControls.v_InstanceName))]
@@ -33,13 +34,11 @@ namespace taskt.Core.Automation.Commands
             //this.v_InstanceName = "";
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             try
             {
-                var _ = v_InstanceName.GetWordInstance(engine);
+                var _ = v_InstanceName.ExpandValueOrUserVariableAsWordInstance(engine);
                 true.StoreInUserVariable(engine, v_applyToVariableName);
             }
             catch

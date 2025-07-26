@@ -7,14 +7,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("UIAutomation Commands")]
+    [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("UIElement Action")]
     [Attributes.ClassAttributes.CommandSettings("Scroll UIElement")]
     [Attributes.ClassAttributes.Description("This command allows you to Scroll UIElement.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to Scroll UIElement.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class UIAutomationScrollUIElementCommand : ScriptCommand
+    public sealed class UIAutomationScrollUIElementCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -52,14 +53,14 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var targetElement = v_TargetElement.ExpandUserVariableAsUIElement(engine);
+            //var scrollbarType = v_ScrollBarType.ExpandValueOrUserVariableAsSelectionItem("v_ScrollBarType", this, engine);
+            var scrollbarType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ScrollBarType), engine);
 
-            var targetElement = v_TargetElement.GetUIElementVariable(engine);
-            var scrollbarType = v_ScrollBarType.GetUISelectionValue("v_ScrollBarType", this, engine);
-
-            var dirAndAmo = v_DirectionAndAmount.GetUISelectionValue("v_DirectionAndAmount", this, engine);
+            //var dirAndAmo = v_DirectionAndAmount.ExpandValueOrUserVariableAsSelectionItem("v_DirectionAndAmount", this, engine);
+            var dirAndAmo = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_DirectionAndAmount), engine);
             ScrollAmount amount = ScrollAmount.NoAmount;
             switch (dirAndAmo)
             {

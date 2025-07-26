@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Text Commands")]
+    [Attributes.ClassAttributes.Group("Text")]
     [Attributes.ClassAttributes.SubGruop("Action")]
     [Attributes.ClassAttributes.CommandSettings("Replace Text")]
     [Attributes.ClassAttributes.Description("This command allows you to replace text")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to replace existing text within text or a variable with new text")]
     [Attributes.ClassAttributes.ImplementationDescription("This command uses the String.Substring method to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ReplaceTextCommand : ScriptCommand
+    public sealed class ReplaceTextCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_Text_MultiLine))]
@@ -53,16 +54,14 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //get full text
-            string targetText = v_userVariableName.ConvertToUserVariable(engine);
+            string targetText = v_userVariableName.ExpandValueOrUserVariable(engine);
 
             //get replacement text and value
-            string replacementText = v_replacementText.ConvertToUserVariable(engine);
-            string replacementValue = v_replacementValue.ConvertToUserVariable(engine);
+            string replacementText = v_replacementText.ExpandValueOrUserVariable(engine);
+            string replacementValue = v_replacementValue.ExpandValueOrUserVariable(engine);
 
             //perform replacement
             targetText = targetText.Replace(replacementText, replacementValue);

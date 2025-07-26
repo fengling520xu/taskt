@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Xml.Serialization;
 using System.Data;
-using System.Drawing;
 using System.Collections.Generic;
-using taskt.Core.Automation.Attributes.PropertyAttributes;
 using System.Windows.Forms;
+using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Color Commands")]
+    [Attributes.ClassAttributes.Group("Color")]
     [Attributes.ClassAttributes.SubGruop("")]
     [Attributes.ClassAttributes.CommandSettings("Convert Color")]
     [Attributes.ClassAttributes.Description("This command allows you to get convert Color Value.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get convert Color Value.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConvertColorCommand : ScriptCommand
+    public sealed class ConvertColorCommand : ScriptCommand, ICanHandleColor, IDictionaryResultProperties, IDataTableResultProperties
     {
         [XmlAttribute]
         [PropertyDescription("Color Variable Name")]
@@ -53,12 +53,14 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("CMYK")]
         [PropertyUISelectionOption("RGBA Dictionary")]
         [PropertyUISelectionOption("RGBA DataTable")]
+        [PropertyUISelectionOption("ARGB Number")]
         [PropertyAddtionalParameterInfo("Hex", "Convert to Hex value, like **11FFAA**")]
         [PropertyAddtionalParameterInfo("CSS RGB", "Convert to CSS RGB value, like **rgb(255, 64, 0)**")]
         [PropertyAddtionalParameterInfo("CSS RGBA", "Convert to CSS RGB value, like **rgba(255, 64, 0, 0.6)**")]
         [PropertyAddtionalParameterInfo("Excel Color", "Convert to Excel Color Value like **25312**")]
         [PropertyAddtionalParameterInfo("RGBA Dictionary", "Convert to Dictionary. Key names are R, G, B, A.")]
         [PropertyAddtionalParameterInfo("RGBA DataTable", "Convert to DataTable. Column names are R, G, B, A.")]
+        [PropertyAddtionalParameterInfo("ARGB Number", "Convert to Int32. Call ToARGB() method.")]
         [PropertySelectionChangeEvent(nameof(cmbFormatSelectionChange))]
         [PropertyValidationRule("Format", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Format")]
@@ -76,13 +78,12 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //get sending instance
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //Color co = v_Color.ExpandUserVariableAsColor(engine);
+            var co = this.ExpandUserVariableAsColor(nameof(v_Color), engine);
 
-            Color co = v_Color.GetColorVariable(engine);
-            string format = this.GetUISelectionValue(nameof(v_Format), engine);
+            string format = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_Format), engine);
 
             string res = "";
             switch (format)
@@ -119,7 +120,9 @@ namespace taskt.Core.Automation.Commands
                         { "S", co.GetSaturation().ToString() },
                         { "L", co.GetBrightness().ToString() }
                     };
-                    hsl.StoreInUserVariable(engine, v_Result);
+                    //hsl.StoreInUserVariable(engine, v_Result);
+                    //this.StoreDictionaryInUserVariable(hsl, nameof(v_Result), engine);
+                    this.StoreDictionaryInUserVariable(hsl, engine);
                     return;
 
                 case "cmyk":
@@ -150,7 +153,9 @@ namespace taskt.Core.Automation.Commands
                         { "Y", y.ToString()  },
                         { "K", k.ToString() }
                     };
-                    cmyk.StoreInUserVariable(engine, v_Result);
+                    //cmyk.StoreInUserVariable(engine, v_Result);
+                    //this.StoreDictionaryInUserVariable(cmyk, nameof(v_Result), engine);
+                    this.StoreDictionaryInUserVariable(cmyk, engine);
                     return;
 
                 case "rgba dictionary":
@@ -161,7 +166,9 @@ namespace taskt.Core.Automation.Commands
                         { "B", co.B.ToString() },
                         { "A", co.A.ToString() }
                     };
-                    rgbaDic.StoreInUserVariable(engine, v_Result);
+                    //rgbaDic.StoreInUserVariable(engine, v_Result);
+                    //this.StoreDictionaryInUserVariable(rgbaDic, nameof(v_Result), engine);
+                    this.StoreDictionaryInUserVariable(rgbaDic, engine);
                     return;
 
                 case "rgba datatable":
@@ -175,7 +182,12 @@ namespace taskt.Core.Automation.Commands
                     rgbaDT.Rows[0][1] = co.G;
                     rgbaDT.Rows[0][2] = co.B;
                     rgbaDT.Rows[0][3] = co.A;
-                    rgbaDT.StoreInUserVariable(engine, v_Result);
+                    //rgbaDT.StoreInUserVariable(engine, v_Result);
+                    this.StoreDataTableInUserVariable(rgbaDT, engine);
+                    return;
+
+                case "argb number":
+                    co.ToArgb().StoreInUserVariable(engine, v_Result);
                     return;
             }
             res.StoreInUserVariable(engine, v_Result);
@@ -207,7 +219,7 @@ namespace taskt.Core.Automation.Commands
         public override void AddInstance(InstanceCounter counter)
         {
             var co = (string.IsNullOrEmpty(v_Color)) ? "" : v_Color;
-            counter.addInstance(co, new PropertyInstanceType(PropertyInstanceType.InstanceType.Color, true), true);
+            counter.AddInstance(co, new PropertyInstanceType(PropertyInstanceType.InstanceType.Color, true), true);
 
             var format = (string.IsNullOrEmpty(v_Format) ? "" : v_Format.ToLower());
             var ins = (string.IsNullOrEmpty(v_Result) ? "" : v_Result);
@@ -217,13 +229,13 @@ namespace taskt.Core.Automation.Commands
                 case "cmyk":
                 case "rgba dictioanry":
                     var dicProp = new PropertyInstanceType(PropertyInstanceType.InstanceType.Dictionary, true);
-                    counter.addInstance(ins, dicProp, false);
-                    counter.addInstance(ins, dicProp, true);
+                    counter.AddInstance(ins, dicProp, false);
+                    counter.AddInstance(ins, dicProp, true);
                     break;
                 case "rgba datatable":
                     var dtProp = new PropertyInstanceType(PropertyInstanceType.InstanceType.DataTable, true);
-                    counter.addInstance(ins, dtProp, false);
-                    counter.addInstance(ins, dtProp, true);
+                    counter.AddInstance(ins, dtProp, false);
+                    counter.AddInstance(ins, dtProp, true);
                     break;
             }
         }
@@ -231,7 +243,7 @@ namespace taskt.Core.Automation.Commands
         public override void RemoveInstance(InstanceCounter counter)
         {
             var co = (string.IsNullOrEmpty(v_Color)) ? "" : v_Color;
-            counter.removeInstance(co, new PropertyInstanceType(PropertyInstanceType.InstanceType.Color, true), true);
+            counter.RemoveInstance(co, new PropertyInstanceType(PropertyInstanceType.InstanceType.Color, true), true);
 
             var format = (string.IsNullOrEmpty(v_Format) ? "" : v_Format.ToLower());
             var ins = (string.IsNullOrEmpty(v_Result) ? "" : v_Result);
@@ -241,13 +253,13 @@ namespace taskt.Core.Automation.Commands
                 case "cmyk":
                 case "rgba dictioanry":
                     var dicProp = new PropertyInstanceType(PropertyInstanceType.InstanceType.Dictionary, true);
-                    counter.removeInstance(ins, dicProp, false);
-                    counter.removeInstance(ins, dicProp, true);
+                    counter.RemoveInstance(ins, dicProp, false);
+                    counter.RemoveInstance(ins, dicProp, true);
                     break;
                 case "rgba datatable":
                     var dtProp = new PropertyInstanceType(PropertyInstanceType.InstanceType.DataTable, true);
-                    counter.removeInstance(ins, dtProp, false);
-                    counter.removeInstance(ins, dtProp, true);
+                    counter.RemoveInstance(ins, dtProp, false);
+                    counter.RemoveInstance(ins, dtProp, true);
                     break;
             }
         }

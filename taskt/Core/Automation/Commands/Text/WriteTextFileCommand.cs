@@ -5,18 +5,19 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Text Commands")]
+    [Attributes.ClassAttributes.Group("Text")]
     [Attributes.ClassAttributes.SubGruop("File")]
     [Attributes.ClassAttributes.CommandSettings("Write Text File")]
     [Attributes.ClassAttributes.Description("This command writes specified data to a text file")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to write data to text files.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements '' to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_files))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class WriteTextFileCommand : ScriptCommand
+    public sealed class WriteTextFileCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_FilePath))]
+        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_FilePath))]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "txt")]
         public string v_FilePath { get; set; }
 
@@ -31,6 +32,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Append")]
         [PropertyUISelectionOption("Overwrite")]
         [PropertyIsOptional(true, "Overwrite")]
+        [PropertyDisplayText(false, "Overwrite")]
         public string v_Overwrite { get; set; }
 
         [XmlAttribute]
@@ -39,7 +41,17 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Yes")]
         [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
+        [PropertyValidationRule("Expand Variables", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Replace [crLF]")]
         public string v_ReplaceToLineBreak { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        [PropertyDescription("Expand taskt Variables In Text")]
+        [PropertyIsOptional(true, "Yes")]
+        [PropertyValidationRule("Expand Variables", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Expand Variables")]
+        public string v_ReplaceScriptVariables { get; set; }
 
         public WriteTextFileCommand()
         {
@@ -49,10 +61,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //convert variables
             //string filePath;
             //if (FilePathControls.ContainsFileCounter(v_FilePath, engine))
@@ -63,17 +73,26 @@ namespace taskt.Core.Automation.Commands
             //{
             //    filePath = FilePathControls.FormatFilePath_NoFileCounter(v_FilePath, engine, "txt");
             //}
-            var filePath = this.ConvertToUserVariableAsFilePath(nameof(v_FilePath), engine);
+            var filePath = this.ExpandValueOrUserVariableAsFilePath(nameof(v_FilePath), engine);
 
-            //var outputText = v_TextToWrite.ConvertToUserVariable(sender).ToString().Replace("[crLF]",Environment.NewLine);
-            var outputText = v_TextToWrite.ConvertToUserVariable(engine);
-            if (this.GetUISelectionValue(nameof(v_ReplaceToLineBreak), engine) == "yes")
+            // text to write
+            string outputText;
+            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_ReplaceScriptVariables), engine)) 
+            {
+                outputText = v_TextToWrite.ExpandValueOrUserVariable(engine);
+            }
+            else
+            {
+                outputText = v_TextToWrite;
+            }
+
+            // replace [crLF] to new-line
+            if (this.ExpandValueOrUserVariableAsYesNo(nameof(v_ReplaceToLineBreak), engine))
             {
                 outputText = outputText.Replace("[crLF]", Environment.NewLine);
             }
 
-            var isOverwrite = this.GetUISelectionValue(nameof(v_Overwrite), engine);
-            //append or overwrite as necessary
+            var isOverwrite = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_Overwrite), engine);
             if (isOverwrite == "append")
             {
                 System.IO.File.AppendAllText(filePath, outputText);

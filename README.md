@@ -21,13 +21,13 @@ taskt allows you to automate the boring stuff and create efficienies by giving y
 ![Recorder](https://i.imgur.com/EpiwkPj.gif)
 
 ![How does taskt work?](https://i.imgur.com/TxrH6YH.png)
-taskt works by allowing a bot developer to design a bot configuration known as a script.  The bot configuration is then intepreted by a script engine at run-time and executes against the bot developer's selected parameter inputs.  Each command contains the definitions for the required inputs as well as the required logic at run-time.  Please check out the [Wiki](https://github.com/saucepleez/taskt/wiki) for basic documenation surrounding the application and the available commands
+taskt works by allowing a bot developer to design a bot configuration known as a script.  The bot configuration is then intepreted by a script engine at run-time and executes against the bot developer's selected parameter inputs.  Each command contains the definitions for the required inputs as well as the required logic at run-time.
 
 ![Configuring Tasks](https://i.imgur.com/ufvgfn2.gif)
 
 
 ![What can taskt do?](https://i.imgur.com/FTMRTi8.png)
-taskt can perform automation on both web and desktop applications, simulating the actions a person would do.  From swivel-chair data entry to report generation, taskt can handle your automation needs.  Prefer to write and implement code?  taskt can use your existing .NET DLLs and services additionally with the ability to compile code on the fly using the Custom Code command! taskt can start and stop processes, launch VB and PowerShell scripts, work directly with Excel workbooks, and perform OCR (OneNote installation required) among many other functions.  You can review all the automation commands by clicking [here](https://github.com/saucepleez/taskt/wiki/Automation-Commands).
+taskt can perform automation on both web and desktop applications, simulating the actions a person would do.  From swivel-chair data entry to report generation, taskt can handle your automation needs.  Prefer to write and implement code?  taskt can use your existing .NET DLLs and services additionally with the ability to compile code on the fly using the Custom Code command! taskt can start and stop processes, launch VB and PowerShell scripts, work directly with Excel workbooks, and perform OCR (OneNote installation required) among many other functions.  You can review all the automation commands by clicking [here](https://github.com/rcktrncn/taskt-wiki/blob/master/automation-commands.md).
 
 ![Manage Your Workforce](https://i.imgur.com/KQVqN9v.png)
 **CURRENTLY IN ALPHA** Manage and orchestrate your digital workforce with taskt's optional [server component](https://github.com/saucepleez/tasktServer) that allows you to publish and execute tasks remotely as well as monitor the overall health of your bots and discover metrics around your robot workers.
@@ -37,7 +37,7 @@ taskt can perform automation on both web and desktop applications, simulating th
 
 
 ![How can I get started?](https://i.imgur.com/CkESBRT.png)
-Find and download the latest signed release by clicking [HERE](https://github.com/saucepleez/taskt/releases/). Extract to any folder and double-click 'taskt.exe'.  taskt will ask if you want to create a scripts folder to store your scripts as well as copy and deploy sample files.  You can also build directly from source -- take the latest from the master branch!
+Find and download the latest signed release by clicking [HERE](https://github.com/rcktrncn/taskt/releases/). Extract to any folder and double-click 'taskt.exe'.  taskt will ask if you want to create a scripts folder to store your scripts as well as copy and deploy sample files.  You can also build directly from source -- take the latest from the master branch!
 
 
 ![What does taskt Cost?](https://i.imgur.com/fzliKyN.png)
@@ -48,18 +48,26 @@ Feel free to open up a feature request or report a bug/issue.
 
 # System specifications
 Please note whatever software that taskt is automating can affect the minimum software requirements. 
+
 ## Minimum
- * Windows 7/8.1/10/Server 2012/Server 2016
+ * Windows 7/8.1/10/11/Server 2012/2016/2019 (32bit and 64bit)
  * 1GB ram
  * 200MB disk space
  * 1 vCPU
  * .NET Framework 4.8
+ * (We think it will probably work in Windows Server 2022/2025 :-)
+
+**Attension**: Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2016 are no longer supported.
+
 ## Recommended
- * Windows 10/Server 2012/Server 2016/Server 2019
+ * Windows 10/11/Server 2019 (32bit and 64bit)
  * 4GB ram
  * 1GB disk space
  * 2 CPU
  * .NET Framework 4.8
+ * (We think it will probably work in Windows Server 2022 :-)
+
+**Attention**: After windows 10 support ends, windows 10 will be removed from the recommended environment.
 
 [![Open New Issue](https://img.shields.io/badge/Open-New&nbsp;Issue-blue.svg)](https://github.com/saucepleez/taskt/issues/new)
 [![Chat on Gitter](https://img.shields.io/badge/Chat-On&nbsp;Gitter-green.svg)](https://gitter.im/taskt-rpa/Lobby)

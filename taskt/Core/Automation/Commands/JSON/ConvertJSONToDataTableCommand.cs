@@ -1,29 +1,33 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
+using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
-using Newtonsoft.Json.Linq;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("JSON Commands")]
+    [Attributes.ClassAttributes.Group("JSON")]
     [Attributes.ClassAttributes.SubGruop("Convert")]
     [Attributes.ClassAttributes.CommandSettings("Convert JSON To DataTable")]
     [Attributes.ClassAttributes.Description("This command allows you to convert JSON to DataTable.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to convert JSON to DataTable")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConvertJSONToDataTableCommand : ScriptCommand
+    public sealed class ConvertJSONToDataTableCommand : AJSONGetFromJContainerCommands, IDataTableResultProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_InputJSONName))]
-        public string v_InputValue { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_InputJSONName))]
+        //public string v_Json { get; set; }
+
+        //[XmlAttribute]
+        //public string v_JsonExtractor { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_OutputDataTableName))]
-        public string v_applyToVariableName { get; set; }
+        public override string v_Result { get; set; }
 
         public ConvertJSONToDataTableCommand()
         {
@@ -33,40 +37,71 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //Action<JObject> objFunc = new Action<JObject>((obj) =>
+            //{
+            //    var resultDT = new DataTable();
 
-            Action<JObject> objFunc = new Action<JObject>((obj) =>
+            //    resultDT.Rows.Add();
+            //    int i = 0;
+            //    foreach (var result in obj)
+            //    {
+            //        resultDT.Columns.Add(result.Key);
+            //        resultDT.Rows[0][i] = result.Value.ToString();
+            //        i++;
+            //    }
+            //    //resultDT.StoreInUserVariable(engine, v_applyToVariableName);
+            //    this.StoreDataTableInUserVariable(resultDT, nameof(v_Result), engine);
+            //});
+            //Action<JArray> aryFunc = new Action<JArray>((ary) =>
+            //{
+            //    var resultDT = new DataTable();
+            //    //parseJSONArrayAsDataTable(ary, resultDT).StoreInUserVariable(engine, v_applyToVariableName);
+            //    this.StoreDataTableInUserVariable(parseJSONArrayAsDataTable(ary, resultDT), nameof(v_Result), engine);
+            //});
+            //this.JSONProcess(nameof(v_Json), objFunc, aryFunc, engine);
+
+            //(_, var jCon, _) = this.ExpandValueOrUserVariableAsJSON(engine);
+            (_, var jCon, _) = this.ExpandUserVariableAsJSONByJSONPath(engine);
+
+            var res = this.CreateEmptyDataTable();
+            if (jCon is JObject obj) 
             {
-                DataTable resultDT = new DataTable();
-
-                resultDT.Rows.Add();
+                res.Rows.Add();
                 int i = 0;
-                foreach (var result in obj)
+                foreach(var item in obj)
                 {
-                    resultDT.Columns.Add(result.Key);
-                    resultDT.Rows[0][i] = result.Value.ToString();
+                    res.Columns.Add(item.Key);
+                    res.Rows[0][i] = item.Value.ToString();
                     i++;
                 }
-                resultDT.StoreInUserVariable(engine, v_applyToVariableName);
-            });
-            Action<JArray> aryFunc = new Action<JArray>((ary) =>
+            }
+            else if (jCon is JArray ary)
             {
-                DataTable resultDT = new DataTable();
-                parseJSONArrayAsDataTable(ary, resultDT).StoreInUserVariable(engine, v_applyToVariableName);
-            });
-            this.JSONProcess(nameof(v_InputValue), objFunc, aryFunc, engine);
+                ParseJSONArrayAsDataTable(ary, res);
+            }
+            else if (jCon is JValue va)
+            {
+                res.Columns.Add("column0");
+                res.Rows.Add();
+                res.Rows[0][0] = va.ToString();
+            }
+            else
+            {
+                throw new Exception($"Extraction Result is NOT Supported Type. Result: '{jCon}', JSONPath: '{v_JsonExtractor}'");
+            }
+            this.StoreDataTableInUserVariable(res, engine);
         }
 
-        private static DataTable parseJSONArrayAsDataTable(JArray arr, DataTable DT)
+        private static DataTable ParseJSONArrayAsDataTable(JArray arr, DataTable DT)
         {
             var arr0 = arr[0].ToString();
             if (arr0.StartsWith("{") && arr0.EndsWith("}"))
             {
                 // Object
                 JObject col = JObject.Parse(arr[0].ToString());
-                int colSize = col.Count;
+                //int colSize = col.Count;
                 DT.Rows.Add();
                 foreach (var co in col)
                 {
@@ -113,7 +148,7 @@ namespace taskt.Core.Automation.Commands
                 DT.Rows.Add();
                 for (int i = 0; i < arr.Count; i++)
                 {
-                    DT.Columns.Add("column" + i.ToString());
+                    DT.Columns.Add($"column{i}");
                     DT.Rows[0][i] = arr[i].ToString();
                 }
             }

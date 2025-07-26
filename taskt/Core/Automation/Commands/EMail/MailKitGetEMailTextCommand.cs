@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("EMail Commands")]
+    [Attributes.ClassAttributes.Group("EMail")]
     [Attributes.ClassAttributes.SubGruop("")]
     [Attributes.ClassAttributes.CommandSettings("Get EMail Text")]
     [Attributes.ClassAttributes.Description("This command allows you to get Text from EMail.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get Text from EMail.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class MailKitGetEMailTextCommand : ScriptCommand
+    public sealed class MailKitGetEMailTextCommand : ScriptCommand, ICanHandleDateTime
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(EMailControls), nameof(EMailControls.v_InputEMailName))]
@@ -41,19 +42,17 @@ namespace taskt.Core.Automation.Commands
 
         public MailKitGetEMailTextCommand()
         {
-            this.CommandName = "MailKitGetEMailTextCommand";
-            this.SelectionName = "Get EMail Text";
-            this.CommandEnabled = true;
-            this.CustomRendering = true;
+            //this.CommandName = "MailKitGetEMailTextCommand";
+            //this.SelectionName = "Get EMail Text";
+            //this.CommandEnabled = true;
+            //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var mail = v_MailName.ExpandUserVariableAsEmail(engine);
 
-            var mail = v_MailName.GetMailKitEMailVariable(engine);
-
-            var textType = this.GetUISelectionValue(nameof(v_TextType), engine);
+            var textType = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_TextType), engine);
 
             string res = "";
             switch (textType)
@@ -93,11 +92,13 @@ namespace taskt.Core.Automation.Commands
 
                 // Date
                 case "date":
-                    (mail.Date.DateTime).StoreInUserVariable(engine, v_ResultVariable);
+                    //(mail.Date.DateTime).StoreInUserVariable(engine, v_ResultVariable);
+                    this.StoreDateTimeInUserVariable((mail.Date.DateTime), nameof(v_ResultVariable), engine);
                     return;
 
                 case "resent-date":
-                    (mail.ResentDate.DateTime).StoreInUserVariable(engine, v_ResultVariable);
+                    //(mail.ResentDate.DateTime).StoreInUserVariable(engine, v_ResultVariable);
+                    this.StoreDateTimeInUserVariable((mail.ResentDate.Date), nameof(v_ResultVariable), engine);
                     return;
             }
 
@@ -108,7 +109,7 @@ namespace taskt.Core.Automation.Commands
         {
             var mail = (string.IsNullOrEmpty(v_MailName)) ? "" : v_MailName;
 
-            counter.addInstance(mail, new PropertyInstanceType(PropertyInstanceType.InstanceType.MailKitEMail, true), true);
+            counter.AddInstance(mail, new PropertyInstanceType(PropertyInstanceType.InstanceType.MailKitEMail, true), true);
 
             var tp = (string.IsNullOrEmpty(v_TextType)) ? "" : v_TextType.ToLower();
             switch (tp)
@@ -118,8 +119,8 @@ namespace taskt.Core.Automation.Commands
                     var ins = new PropertyInstanceType(PropertyInstanceType.InstanceType.DateTime, true);
                     var name = (string.IsNullOrEmpty(v_ResultVariable)) ? "" : v_ResultVariable;
 
-                    counter.addInstance(name, ins, false);
-                    counter.addInstance(name, ins, true);
+                    counter.AddInstance(name, ins, false);
+                    counter.AddInstance(name, ins, true);
 
                     break;
             }
@@ -129,7 +130,7 @@ namespace taskt.Core.Automation.Commands
         {
             var mail = (string.IsNullOrEmpty(v_MailName)) ? "" : v_MailName;
 
-            counter.removeInstance(mail, new PropertyInstanceType(PropertyInstanceType.InstanceType.MailKitEMail, true), true);
+            counter.RemoveInstance(mail, new PropertyInstanceType(PropertyInstanceType.InstanceType.MailKitEMail, true), true);
 
             var tp = (string.IsNullOrEmpty(v_TextType)) ? "" : v_TextType.ToLower();
             switch (tp)
@@ -139,8 +140,8 @@ namespace taskt.Core.Automation.Commands
                     var ins = new PropertyInstanceType(PropertyInstanceType.InstanceType.DateTime, true);
                     var name = (string.IsNullOrEmpty(v_ResultVariable)) ? "" : v_ResultVariable;
 
-                    counter.removeInstance(name, ins, false);
-                    counter.removeInstance(name, ins, true);
+                    counter.RemoveInstance(name, ins, false);
+                    counter.RemoveInstance(name, ins, true);
 
                     break;
             }

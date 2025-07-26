@@ -6,14 +6,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("Variable Commands")]
+    [Attributes.ClassAttributes.Group("Variable")]
     [Attributes.ClassAttributes.CommandSettings("New Variable")]
     [Attributes.ClassAttributes.Description("This command allows you to explicitly add a variable if you are not using **Set Variable* with the setting **Create Missing Variables** at runtime.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to modify the value of variables.  You can even use variables to modify other variables.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements actions against VariableList from the scripting engine.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class NewVariableCommand : ScriptCommand
+    public sealed class NewVariableCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(VariableNameControls), nameof(VariableNameControls.v_VariableName))]
@@ -44,14 +45,11 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            //get sending instance
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var variableValue = v_Input.ExpandValueOrUserVariable(engine);
 
-            var variableValue = v_Input.ConvertToUserVariable(engine);
-
-            var ifExists = this.GetUISelectionValue(nameof(v_IfExists), engine);
+            var ifExists = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfExists), engine);
             var variableName = VariableNameControls.GetVariableName(v_userVariableName, engine);
             if (VariableNameControls.IsVariableExists(variableName, engine))
             {

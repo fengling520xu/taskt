@@ -7,14 +7,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("UIAutomation Commands")]
+    [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("UIElement Action")]
     [Attributes.ClassAttributes.CommandSettings("Expand Collapse Items In UIElement")]
     [Attributes.ClassAttributes.Description("This command allows you to Expand or Collapse Items in UIElement.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to Expand or Collapse Items in UIElement.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class UIAutomationExpandCollapseItemsInUIElementCommand : ScriptCommand
+    public sealed class UIAutomationExpandCollapseItemsInUIElementCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -40,12 +41,11 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            var targetElement = v_TargetElement.GetUIElementVariable(engine);
-            var state = v_ItemsState.GetUISelectionValue("v_ItemsState", this, engine);
+            var targetElement = v_TargetElement.ExpandUserVariableAsUIElement(engine);
+            //var state = v_ItemsState.ExpandValueOrUserVariableAsSelectionItem("v_ItemsState", this, engine);
+            var state = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ItemsState), engine);
 
             if (targetElement.TryGetCurrentPattern(ExpandCollapsePattern.Pattern, out object exColPtn))
             {

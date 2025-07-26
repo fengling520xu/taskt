@@ -8,15 +8,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("EMail Commands")]
+    [Attributes.ClassAttributes.Group("EMail")]
     [Attributes.ClassAttributes.SubGruop("")]
     [Attributes.ClassAttributes.CommandSettings("Get Addresses As List")]
     [Attributes.ClassAttributes.Description("This command allows you to get Addresses from EMail.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get Addresses from EMail.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class MailKitGetAddressesAsListCommand : ScriptCommand
+    public sealed class MailKitGetAddressesAsListCommand : ScriptCommand, ICanHandleList
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(EMailControls), nameof(EMailControls.v_InputEMailName))]
@@ -38,18 +39,17 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var lst = this.GetMailKitEMailAddresses(nameof(v_MailName), nameof(v_AddressesType), engine);
 
-            List<string> addresses = new List<string>();
+            var addresses = new List<string>();
             foreach(MimeKit.MailboxAddress item in lst.Cast<MailboxAddress>())
             {
                 addresses.Add(item.Address);
             }
-            addresses.StoreInUserVariable(engine, v_AddressesList);
+            //addresses.StoreInUserVariable(engine, v_AddressesList);
+            this.StoreListInUserVariable(addresses, nameof(v_AddressesList), engine);
         }
     }
 }

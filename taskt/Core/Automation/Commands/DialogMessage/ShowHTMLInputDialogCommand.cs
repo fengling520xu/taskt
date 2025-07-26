@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Dialog/Message Commands")]
+    [Attributes.ClassAttributes.Group("Dialog/Message")]
     [Attributes.ClassAttributes.CommandSettings("Show HTML Input Dialog")]
     [Attributes.ClassAttributes.Description("Allows the entry of data into a web-enabled form")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want a fancy data collection.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'WebBrowser Control' to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_input))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ShowHTMLInputDialogCommand : ScriptCommand
+    public sealed class ShowHTMLInputDialogCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_MultiLinesTextBox))]
@@ -36,45 +39,47 @@ namespace taskt.Core.Automation.Commands
   </nav>
   <br />
   <div>
-    <h5><b>Directions:</b> This a sample data collection form that can be presented to a user.  You can add and implement as many fields as you need or choose standard form inputs. Note, each field will require a <b>v_applyToVariable</b> attribute specifying which variable should contain the respective value for the input field.</h5>
-
+<h1>Directions</h1>
+<p>This a sample data collection form that can be presented to a user.  You can add and implement as many fields as you need or choose standard form inputs. Note, each field will require a <b>data-variable</b> or <b>v_applyToVariable</b> attribute specifying which variable should contain the respective value for the input field.<br>
+<b>DO NOT USE</b> form tags to enclose the element. The variable information will not be retrieved correctly.</p>
+<p>The <b>OK</b> button should call <b>chrome.webview.hostObjects.fm.OK();</b> with onclick attribute, etc.<br>
+Similarly, The <b>Cancel</b> button should call <b>chrome.webview.hostObjects.fm.Cancel();</b> with onclick attribute, etc.</p> 
     <hr />
-    <form>
       <div>
         <div>
           <label for=""inputEmail4"">Email</label>
-          <input type=""email"" id=""inputEmail4"" v_applyToVariable=""vInput"" placeholder=""Email"">
+          <input type=""email"" id=""inputEmail4"" data-variable=""vInput"" placeholder=""Email"">
         </div>
         <div>
           <label for=""inputPassword4"">Password</label>
-          <input type=""password"" id=""inputPassword4"" v_applyToVariable=""vPass"" placeholder=""Password"">
+          <input type=""password"" id=""inputPassword4"" data-variable=""vPass"" placeholder=""Password"">
         </div>
       </div>
       <div>
         <label for=""inputAddress"">Address</label>
-        <input type=""text"" id=""inputAddress"" v_applyToVariable=""vAddress"" placeholder=""1234 Main St"">
+        <input type=""text"" id=""inputAddress"" data-variable=""vAddress"" placeholder=""1234 Main St"">
       </div>
       <div>
         <label for=""inputAddress2"">Address 2</label>
-        <input type=""text"" id=""inputAddress2"" v_applyToVariable=""vAddress2"" placeholder=""Apartment, studio, or floor"">
+        <input type=""text"" id=""inputAddress2"" data-variable=""vAddress2"" placeholder=""Apartment, studio, or floor"">
       </div>
       <div>
         <div>
           <label for=""inputCity"">City</label>
-          <input type=""text"" id=""inputCity"" v_applyToVariable=""vCity"">
+          <input type=""text"" id=""inputCity"" data-variable=""vCity"">
         </div>
         <div>
           <label for=""inputState"">State</label>
-          <input type=""text"" id=""inputState"" v_applyToVariable=""vState"">
+          <input type=""text"" id=""inputState"" data-variable=""vState"">
         </div>
         <div>
           <label for=""inputZip"">Zip</label>
-          <input type=""text"" id=""inputZip"" v_applyToVariable=""vZip"">
+          <input type=""text"" id=""inputZip"" data-variable=""vZip"">
         </div>
       </div>
       <div>
         <div>
-          <input type=""checkbox"" id=""gridCheck"" v_applyToVariable=""vCheck"">
+          <input type=""checkbox"" id=""gridCheck"" data-variable=""vCheck"">
           <label for=""gridCheck"">
               Check me out
           </label>
@@ -82,7 +87,7 @@ namespace taskt.Core.Automation.Commands
       </div>
       <div>
         <label for=""exampleFormControlSelect1"">Example select</label>
-        <select id=""exampleFormControlSelect1"" v_applyToVariable=""vSelected"">
+        <select id=""exampleFormControlSelect1"" data-variable=""vSelected"">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -90,9 +95,12 @@ namespace taskt.Core.Automation.Commands
           <option>5</option>
         </select>
       </div>
-      <p><button onclick=""window.external.Ok();"">Ok</button><br />
-      <button onclick=""window.external.Cancel();"">Close</button></p>
-    </form>
+      <div>
+        <p>Free input area</p>
+        <textarea id=""freeInput"" data-variable=""vFree""></textarea>
+      </div>
+      <p><button onclick=""chrome.webview.hostObjects.fm.OK();"">Ok</button><br />
+      <button onclick=""chrome.webview.hostObjects.fm.Cancel();"">Close</button></p>
   </div>
 </body>
 </html>")]
@@ -114,10 +122,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             if (engine.tasktEngineUI == null)
             {
                 engine.ReportProgress("HTML UserInput Supported With UI Only");
@@ -127,40 +133,70 @@ namespace taskt.Core.Automation.Commands
 
             //invoke ui for data collection
             var result = engine.tasktEngineUI.Invoke(new Action(() =>
+            {
+                //sample for temp testing
+                var htmlInput = v_InputHTML.ExpandValueOrUserVariable(engine);
+
+                var errorOnClose = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ErrorOnClose), engine);
+
+                var variables = engine.tasktEngineUI.ShowHTMLInput(htmlInput);
+
+                //if user selected Ok then process variables
+                //null result means user cancelled/closed
+                if (variables != null)
                 {
-                    //sample for temp testing
-                    var htmlInput = v_InputHTML.ConvertToUserVariable(sender);
+                    ////store each one into context
+                    //foreach (var variable in variables)
+                    //{
+                    //    variable.VariableValue.ToString().StoreInUserVariable(engine, variable.VariableName);
+                    //}
 
-                    var errorOnClose = this.GetUISelectionValue(nameof(v_ErrorOnClose), engine);
-
-                    var variables = engine.tasktEngineUI.ShowHTMLInput(htmlInput);
-
-                    //if user selected Ok then process variables
-                    //null result means user cancelled/closed
-                    if (variables != null)
+                    Action<ScriptVariable> newVariableAction;
+                    if (engine.engineSettings.CreateMissingVariablesDuringExecution)
                     {
-                        //store each one into context
-                        foreach (var variable in variables)
+                        newVariableAction = new Action<ScriptVariable>((v) =>
                         {
-                            variable.VariableValue.ToString().StoreInUserVariable(sender, variable.VariableName);
+                            engine.VariableList.Add(v);
+                        });
+                    }
+                    else
+                    {
+                        newVariableAction = new Action<ScriptVariable>((v) => {
+                            // nothing
+                        });
+                    }
+
+                    foreach(var v in variables)
+                    {
+                        var existsVar = engine.VariableList.FirstOrDefault(t => v.VariableName == t.VariableName);
+                        if (existsVar != null)
+                        {
+                            existsVar.VariableValue = v.VariableValue;
+                        }
+                        else
+                        {
+                            newVariableAction(v);
                         }
                     }
-                    else if (errorOnClose == "Error On Close")
-                    {
-                        throw new Exception("Input Form was closed by the user");
-                    }
+
+                    // DBG
+                    //var x = engine.VariableList;
                 }
-            ));
+                else if (errorOnClose == "Error On Close")
+                {
+                    throw new Exception("Input Form was closed by the user");
+                }
+            }));
         }
 
         private void ShowHTMLBuilder(object sender, EventArgs e)
         {
-            using (var htmlForm = new UI.Forms.Supplemental.frmHTMLBuilder())
+            using (var htmlForm = new UI.Forms.ScriptBuilder.CommandEditor.Supplemental.frmHTMLBuilder())
             {
                 var htmlInput = (TextBox)ControlsList[nameof(v_InputHTML)];
                 htmlForm.rtbHTML.Text = htmlInput.Text;
 
-                if (htmlForm.ShowDialog() == DialogResult.OK)
+                if (htmlForm.ShowDialog(((Control)sender).FindForm()) == DialogResult.OK)
                 {
                     htmlInput.Text = htmlForm.rtbHTML.Text;
                 }

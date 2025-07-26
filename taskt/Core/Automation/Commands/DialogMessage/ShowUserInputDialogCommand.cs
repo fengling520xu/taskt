@@ -8,14 +8,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Dialog/Message Commands")]
+    [Attributes.ClassAttributes.Group("Dialog/Message")]
     [Attributes.ClassAttributes.CommandSettings("Show User Input Dialog")]
     [Attributes.ClassAttributes.Description("Sends keystrokes to a targeted window")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to send keystroke inputs to a window.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'Windows.Forms.SendKeys' method to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_input))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ShowUserInputDialogCommand : ScriptCommand
+    public sealed class ShowUserInputDialogCommand : ScriptCommand, IHaveDataTableElements
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -64,10 +65,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-               
             if (engine.tasktEngineUI == null)
             {
                 engine.ReportProgress("UserInput Supported With UI Only");
@@ -76,17 +75,18 @@ namespace taskt.Core.Automation.Commands
             }
 
             //create clone of original
-            var clonedCommand = Common.Clone(this);
+            //var clonedCommand = Common.Clone(this);
+            var clonedCommand = (ShowUserInputDialogCommand)this.Clone();
 
             //translate variable
-            clonedCommand.v_InputHeader = clonedCommand.v_InputHeader.ConvertToUserVariable(engine);
-            clonedCommand.v_InputDirections = clonedCommand.v_InputDirections.ConvertToUserVariable(engine);
+            clonedCommand.v_InputHeader = clonedCommand.v_InputHeader.ExpandValueOrUserVariable(engine);
+            clonedCommand.v_InputDirections = clonedCommand.v_InputDirections.ExpandValueOrUserVariable(engine);
 
             //translate variables for each label
             foreach (DataRow rw in clonedCommand.v_UserInputConfig.Rows)
             {
                 //rw["DefaultValue"] = rw["DefaultValue"].ToString().ConvertToUserVariable(engine);
-                rw["DefaultValue"] = (rw.Field<string>("DefaultValue") ?? "").ConvertToUserVariable(engine);
+                rw["DefaultValue"] = (rw.Field<string>("DefaultValue") ?? "").ExpandValueOrUserVariable(engine);
 
                 var targetVariable = rw["ApplyToVariable"] as string;
 
@@ -134,7 +134,7 @@ namespace taskt.Core.Automation.Commands
             v_UserInputConfig.Rows.Add(newRow);
         }
 
-        public override bool IsValidate(frmCommandEditor editor)
+        public override bool IsValidate(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.IsValidate(editor);
 
@@ -142,12 +142,12 @@ namespace taskt.Core.Automation.Commands
             {
                 var row = v_UserInputConfig.Rows[i];
                 
-                if (String.IsNullOrEmpty(row.Field<string>("Type")))
+                if (string.IsNullOrEmpty(row.Field<string>("Type")))
                 {
                     this.validationResult += "Input Type #" + (i + 1) + " is empty.\n";
                     this.IsValid = false;
                 }
-                if (String.IsNullOrEmpty(row.Field<string>("Size")))
+                if (string.IsNullOrEmpty(row.Field<string>("Size")))
                 {
                     this.validationResult += "Input Size #" + (i + 1) + " is empty.\n";
                     this.IsValid = false;
@@ -155,6 +155,12 @@ namespace taskt.Core.Automation.Commands
             }
 
             return this.IsValid;
+        }
+
+        public override void BeforeValidate()
+        {
+            base.BeforeValidate();
+            DataTableControls.BeforeValidate_NoRowAdding((DataGridView)ControlsList[nameof(v_UserInputConfig)], v_UserInputConfig);
         }
     }
 }

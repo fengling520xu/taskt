@@ -6,14 +6,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("UIAutomation Commands")]
+    [Attributes.ClassAttributes.Group("UIAutomation")]
     [Attributes.ClassAttributes.SubGruop("Search UIElement")]
     [Attributes.ClassAttributes.CommandSettings("Wait For UIElement To Exists By XPath")]
     [Attributes.ClassAttributes.Description("This command allows you to Wait until the UIElement exists using by XPath.")]
     [Attributes.ClassAttributes.ImplementationDescription("Use this command when you want to Wait until the UIElement exists using by XPath.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_window))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class UIAutomationWaitForUIElementToExistsByXPathCommand : ScriptCommand
+    public sealed class UIAutomationWaitForUIElementToExistsByXPathCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(UIElementControls), nameof(UIElementControls.v_InputUIElementName))]
@@ -35,10 +36,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             UIElementControls.SearchGUIElementByXPath(this, engine);
         }
     }

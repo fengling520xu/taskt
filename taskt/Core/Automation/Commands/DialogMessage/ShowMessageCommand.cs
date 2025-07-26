@@ -2,18 +2,20 @@
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.UI.Forms.General;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Dialog/Message Commands")]
+    [Attributes.ClassAttributes.Group("Dialog/Message")]
     [Attributes.ClassAttributes.CommandSettings("Show Message")]
     [Attributes.ClassAttributes.Description("This command allows you to show a message to the user.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to present or display a value on screen to the user.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'MessageBox' and invokes VariableCommand to find variable data.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_input))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ShowMessageCommand : ScriptCommand
+    public sealed class ShowMessageCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_MultiLinesTextBox))]
@@ -22,7 +24,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**Hello World**", PropertyDetailSampleUsage.ValueType.Value, "Message")]
         [PropertyDetailSampleUsage("**{{{vText}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Message")]
         [PropertyShowSampleUsageInDescription(true)]
-        [PropertyValidationRule("Massage", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyValidationRule("Message", PropertyValidationRule.ValidationRuleFlags.None)]
         [PropertyDisplayText(true, "Message")]
         public string v_Message { get; set; }
 
@@ -40,6 +42,68 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(false, "")]
         public string v_AutoCloseAfter { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
+        [PropertyDescription("Font Name")]
+        [PropertyShowSampleUsageInDescription(true)]
+        [PropertyDetailSampleUsage("**MS Gothic**", "Specify MS Gothic")]
+        [PropertyIsOptional(true)]
+        [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "")]
+        public string v_FontName { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
+        [PropertyDescription("Font Size")]
+        [PropertyShowSampleUsageInDescription(true)]
+        [PropertyDetailSampleUsage("**12**", PropertyDetailSampleUsage.ValueType.Value, "Font Size")]
+        [PropertyDetailSampleUsage("**{{{vFont}}}**", PropertyDetailSampleUsage.ValueType.VariableName, "Font Size")]
+        [PropertyIsOptional(true)]
+        [PropertyValidationRule("", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "")]
+        public string v_FontSize { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Dialog Type")]
+        [PropertyUISelectionOption("OkOnly")]
+        [PropertyUISelectionOption("YesNo")]
+        [PropertyUISelectionOption("OkCancel")]
+        [PropertyUISelectionOption("Close")]
+        [PropertyUISelectionOption("Nothing")]
+        [PropertyValidationRule("Dialog Type", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(true, "Dialog Type")]
+        [PropertyIsOptional(true, "OkOnly")]
+        public string v_DialogType { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
+        [PropertyDescription("Dialog Title")]
+        [InputSpecification("Text")]
+        [PropertyIsOptional(true, "ShowMessage Command")]
+        [PropertyValidationRule("DialogTitle", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyFirstValue("ShowMessage Command")]
+        [PropertyDisplayText(false, "Dialog Title")]
+        public string v_DialogTitle { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Wait for answer")]
+        [PropertyUISelectionOption("Yes")]
+        [PropertyUISelectionOption("No")]
+        [PropertyIsOptional(true, "Yes")]
+        [PropertyFirstValue("Yes")]
+        [PropertyDisplayText(false, "Wait For Answer")]
+        public string v_WaitForAnswer { get; set; }
+
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_Result))]
+        [PropertyDescription("Variable Name to Store Dialog Result")]
+        [PropertyIsOptional(true)]
+        [PropertyValidationRule("Dialog Result", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "Dialog Result")]
+        public string v_DialogResult { get; set; }
+
         public ShowMessageCommand()
         {
             //this.CommandName = "MessageBoxCommand";
@@ -49,10 +113,9 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-            string variableMessage = v_Message.ConvertToUserVariable(engine);
+            string variableMessage = v_Message.ExpandValueOrUserVariable(engine);
 
             variableMessage = variableMessage.Replace("\\n", Environment.NewLine);
 
@@ -63,20 +126,54 @@ namespace taskt.Core.Automation.Commands
                 return;
             }
 
-            var closeAfter = this.ConvertToUserVariableAsInteger(nameof(v_AutoCloseAfter), engine);
+            var closeAfter = this.ExpandValueOrUserVariableAsInteger(nameof(v_AutoCloseAfter), engine);
 
-            //automatically close messageboxes for server requests
+            // automatically close messageboxes for server requests
             if (engine.serverExecution && closeAfter <= 0)
             {
                 closeAfter = 10;
             }
 
-            // TODO: support OK/cancel etc buttons
-            var result = engine.tasktEngineUI.Invoke(new Action(() =>
+            string fontName = "";
+            if (!string.IsNullOrEmpty(v_FontName))
             {
-                engine.tasktEngineUI.ShowMessage(variableMessage, "MessageBox Command", UI.Forms.Supplemental.frmDialog.DialogType.OkOnly, closeAfter);
+                fontName = this.ExpandValueOrUserVariable(nameof(v_FontName), "Font Name", engine);
             }
-            ));
+            float fontSize = 0F;
+            if (!string.IsNullOrEmpty(v_FontSize))
+            {
+                fontSize = (float)this.ExpandValueOrUserVariableAsDecimal(nameof(v_FontSize), engine);
+            }
+            if (string.IsNullOrEmpty(v_DialogType))
+            {
+                v_DialogType = "OkOnly";
+            }
+            var dialogType = (frmDialog.DialogType)Enum.Parse(typeof(frmDialog.DialogType), this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_DialogType), engine), true);
+
+            if (string.IsNullOrEmpty(v_DialogTitle))
+            {
+                v_DialogTitle = "ShowMessage Command";
+            }
+            var dialogTitle = v_DialogTitle.ExpandValueOrUserVariable(engine);
+
+            //// TODO: support OK/cancel etc buttons
+            //var result = engine.tasktEngineUI.Invoke(new Action(() =>
+            //{
+            //    engine.tasktEngineUI.ShowMessage(variableMessage, "MessageBox Command", dialogType, closeAfter);
+            //}
+            //));
+
+            engine.tasktEngineUI.Invoke(new Action(() =>
+            {
+                using (var confirmationForm = new frmDialog(variableMessage, dialogTitle, dialogType, closeAfter, true, fontName, fontSize))
+                {
+                    var res = confirmationForm.ShowDialog();
+                    if (!string.IsNullOrEmpty(v_DialogResult))
+                    {
+                        res.ToString().StoreInUserVariable(engine, v_DialogResult);
+                    }
+                }
+            }));
         }
 
         //public override List<Control> Render(frmCommandEditor editor)

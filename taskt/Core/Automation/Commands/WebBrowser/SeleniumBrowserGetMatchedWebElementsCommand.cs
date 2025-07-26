@@ -6,15 +6,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Search WebElement")]
     [Attributes.ClassAttributes.CommandSettings("Get Matched WebElements")]
     [Attributes.ClassAttributes.Description("This command allows you to get Matched WebElements HTML.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get Matched WebElements HTML.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserGetMatchedWebElementsCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetMatchedWebElementsCommand : ScriptCommand, IListResultProperties
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -40,18 +41,17 @@ namespace taskt.Core.Automation.Commands
         {
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            (var _, var trgElem) = SeleniumBrowserControls.GetSeleniumBrowserInstanceAndElements(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_WaitTime), engine);
+            (var _, var trgElem) = SeleniumBrowserControls.ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElements(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_WaitTime), engine);
 
             var lst = new List<string>();
             foreach(var elem in trgElem)
             {
                 lst.Add(elem.GetAttribute("outerHTML"));
             }
-            lst.StoreInUserVariable(engine, v_Result);
+            //lst.StoreInUserVariable(engine, v_Result);
+            this.StoreListInUserVariable(lst, engine);
         }
     }
 }

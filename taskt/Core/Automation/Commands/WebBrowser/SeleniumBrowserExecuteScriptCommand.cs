@@ -6,14 +6,15 @@ namespace taskt.Core.Automation.Commands
 {
 
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Web Browser Actions")]
     [Attributes.ClassAttributes.CommandSettings("Execute Script")]
     [Attributes.ClassAttributes.Description("This command allows you to execute a script in a Selenium web browser session.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements Selenium to achieve automation.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserExecuteScriptCommand : ScriptCommand
+    public sealed class SeleniumBrowserExecuteScriptCommand : ScriptCommand, ICanHandleFilePath
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -89,27 +90,26 @@ namespace taskt.Core.Automation.Commands
             //this.v_CodeType = "Code";
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
-            var codeType = SelectionControls.GetUISelectionValue(this, nameof(v_CodeType), engine);
+            var codeType = SelectionItemsControls.ExpandValueOrUserVariableAsSelectionItem(this, nameof(v_CodeType), engine);
 
             string script = "";
             if (codeType == "code")
             {
-                script = v_ScriptCode.ConvertToUserVariable(sender);
+                script = v_ScriptCode.ExpandValueOrUserVariable(engine);
             }
             else if (codeType == "file")
             {
                 //string scriptFiile = FilePathControls.FormatFilePath_NoFileCounter(v_ScriptCode, engine, "js", true);
-                var scriptFile = v_ScriptCode.ConvertToUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "js"), engine);
+                //var scriptFile = v_ScriptCode.ExpandValueOrUserVariableAsFilePath(new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "js"), engine);
+                var scriptFile = this.ExpandValueOrUserVariableAsFilePath(nameof(v_ScriptCode), new PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtensionAndExists, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "js"), engine);
                 script = System.IO.File.ReadAllText(scriptFile);
             }
 
-            var args = v_Args.ConvertToUserVariable(sender);
+            var args = v_Args.ExpandValueOrUserVariable(engine);
             
-            var seleniumInstance = v_InstanceName.GetSeleniumBrowserInstance(engine);
+            var seleniumInstance = v_InstanceName.ExpandValueOrUserVariableAsSeleniumBrowserInstance(engine);
 
             //configure timeout
             //var inputTimeout = v_TimeOut.ConvertToUserVariable(sender);
@@ -118,7 +118,7 @@ namespace taskt.Core.Automation.Commands
             //{
             //    timeOut = -1;
             //}
-            var timeOut = this.ConvertToUserVariableAsInteger(nameof(v_TimeOut), engine);
+            var timeOut = this.ExpandValueOrUserVariableAsInteger(nameof(v_TimeOut), engine);
 
             //set driver timeout
             if (timeOut > 0)
@@ -130,7 +130,7 @@ namespace taskt.Core.Automation.Commands
             OpenQA.Selenium.IJavaScriptExecutor js = (OpenQA.Selenium.IJavaScriptExecutor)seleniumInstance;
 
             object result;
-            if (String.IsNullOrEmpty(args))
+            if (string.IsNullOrEmpty(args))
             {
                 if (timeOut > 1)
                 {
@@ -156,7 +156,7 @@ namespace taskt.Core.Automation.Commands
             //apply result to variable
             if ((result != null) && (!string.IsNullOrEmpty(v_userVariableName)))
             {   
-                result.ToString().StoreInUserVariable(sender, v_userVariableName);
+                result.ToString().StoreInUserVariable(engine, v_userVariableName);
             }
         }
     }

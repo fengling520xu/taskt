@@ -9,11 +9,12 @@ using taskt.UI.Forms;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Data Commands")]
+    [Attributes.ClassAttributes.Group("Data")]
     [Attributes.ClassAttributes.Description("")]
     [Attributes.ClassAttributes.UsesDescription("")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
-    public class PDFTextExtractionCommand : ScriptCommand
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
+    public sealed class PDFTextExtractionCommand : ScriptCommand
     {
         [XmlAttribute]
         [Attributes.PropertyAttributes.PropertyDescription("Please indicate the PDF file path or PDF file URL")]
@@ -53,13 +54,12 @@ namespace taskt.Core.Automation.Commands
             this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-
             //get variable path or URL to source file
-            var vSourceFilePath = v_FilePath.ConvertToUserVariable(sender);
+            var vSourceFilePath = v_FilePath.ExpandValueOrUserVariable(engine);
             // get source type of file either from a physical file or from a URL
-            var vSourceFileType = v_FileSourceType.ConvertToUserVariable(sender);
+            var vSourceFileType = v_FileSourceType.ExpandValueOrUserVariable(engine);
             if (String.IsNullOrEmpty(vSourceFileType))
             {
                 vSourceFileType = "FilePath";
@@ -68,7 +68,8 @@ namespace taskt.Core.Automation.Commands
             if (vSourceFileType == "File URL")
             {
                 //create temp directory
-                var tempDir = Core.IO.Folders.GetFolder(Folders.FolderType.TempFolder);
+                //var tempDir = Core.IO.Folders.GetFolder(Folders.FolderType.TempFolder);
+                var tempDir = Folders.GetUserTemporaryFolderPath();
                 var tempFile = System.IO.Path.Combine(tempDir, $"{ Guid.NewGuid()}.pdf");
 
                 //check if directory does not exist then create directory
@@ -110,9 +111,9 @@ namespace taskt.Core.Automation.Commands
             var result = javaInterface.ExtractPDFText(vSourceFilePath);
 
             //apply to variable
-            result.StoreInUserVariable(sender, v_applyToVariableName);
+            result.StoreInUserVariable(engine, v_applyToVariableName);
         }
-        public override List<Control> Render(frmCommandEditor editor)
+        public override List<Control> Render(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.Render(editor);
 
@@ -137,7 +138,7 @@ namespace taskt.Core.Automation.Commands
             return base.GetDisplayValue() + " [Extract From '" + v_FilePath + "' and apply result to '" + v_applyToVariableName + "'" ;
         }
 
-        public override bool IsValidate(frmCommandEditor editor)
+        public override bool IsValidate(UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor editor)
         {
             base.IsValidate(editor);
 

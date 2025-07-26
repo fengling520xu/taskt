@@ -32,12 +32,12 @@
             // 
             // ThemedForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 290);
+            this.ClientSize = new System.Drawing.Size(521, 335);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "ThemedForm";
             this.Text = "ThemedForm";
-            this.Load += new System.EventHandler(this.ThemedForm_Load);
             this.ResumeLayout(false);
 
         }

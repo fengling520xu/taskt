@@ -2,27 +2,29 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("DataTable Commands")]
+    [Attributes.ClassAttributes.Group("DataTable")]
     [Attributes.ClassAttributes.SubGruop("Row Action")]
     [Attributes.ClassAttributes.CommandSettings("Set DataTable Row Values By Dictionary")]
     [Attributes.ClassAttributes.Description("This command allows you to set a DataTable Row values to a DataTable by a Dictionary")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to set a DataTable Row values to a DataTable by a Dictionary.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SetDataTableRowValuesByDictionaryCommand : ScriptCommand
+    public sealed class SetDataTableRowValuesByDictionaryCommand : ADataTableBothRowCommands, ICanHandleDictionary
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_BothDataTableName))]
-        public string v_DataTableName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_BothDataTableName))]
+        //public override string v_DataTable { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_RowIndex))]
-        public string v_RowIndex { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_RowIndex))]
+        //public string v_RowIndex { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
@@ -38,7 +40,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Ignore")]
         [PropertyUISelectionOption("Error")]
         [PropertyIsOptional(true, "Ignore")]
-        public string v_NotExistsKey { get; set; }
+        public string v_WhenColumnNotExists { get; set; }
 
         public SetDataTableRowValuesByDictionaryCommand()
         {
@@ -48,41 +50,74 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //(var myDT, var rowIndex) = this.ExpandUserVariablesAsDataTableAndRowIndex(nameof(v_DataTable), nameof(v_RowIndex), engine);
+            (var myDT, var rowIndex) = this.ExpandValueOrUserVariableAsDataTableAndRow(engine);
 
-            (var myDT, var rowIndex) = this.GetDataTableVariableAndRowIndex(nameof(v_DataTableName), nameof(v_RowIndex), engine);
+            //var myDic = v_RowValues.ExpandUserVariableAsDictinary(engine);
+            var myDic = this.ExpandUserVariableAsDictionary(nameof(v_RowValues), engine);
 
-            var myDic = v_RowValues.GetDictionaryVariable(engine);
+            string ifKeyNotExists = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_WhenColumnNotExists), "Key Not Exists", engine);
 
-            string ifKeyNotExists = this.GetUISelectionValue(nameof(v_NotExistsKey), "Key Not Exists", engine);
+            //// get columns list
+            //new GetDataTableColumnListCommand
+            //{
+            //    v_DataTable = this.v_DataTable,
+            //    v_Result = VariableNameControls.GetInnerVariableName(0, engine)
+            //}.RunCommand(engine);
+            //var columns = (List<string>)VariableNameControls.GetInnerVariable(0, engine).VariableValue;
 
-            // get columns list
-            new GetDataTableColumnListCommand
+            //if (ifKeyNotExists == "error")
+            //{
+            //    // check key and throw exception
+            //    foreach(var item in myDic)
+            //    {
+            //        if (!columns.Contains(item.Key))
+            //        {
+            //            throw new Exception("Column name " + item.Key + " does not exists");
+            //        }
+            //    }
+            //}
+
+            //foreach(var item in myDic)
+            //{
+            //    if (columns.Contains(item.Key))
+            //    {
+            //        myDT.Rows[rowIndex][item.Key] = item.Value;
+            //    }
+            //}
+
+            using (var myColumn = new InnerScriptVariable(engine))
             {
-                v_DataTableName = this.v_DataTableName,
-                v_OutputList = VariableNameControls.GetInnerVariableName(0, engine)
-            }.RunCommand(engine);
-            var columns = (List<string>)VariableNameControls.GetInnerVariable(0, engine).VariableValue;
-
-            if (ifKeyNotExists == "error")
-            {
-                // check key and throw exception
-                foreach(var item in myDic)
+                // get columns list
+                new GetDataTableColumnListCommand
                 {
-                    if (!columns.Contains(item.Key))
+                    v_DataTable = this.v_DataTable,
+                    v_Result = myColumn.VariableName,
+                }.RunCommand(engine);
+                //var columns = (List<string>)VariableNameControls.GetInnerVariable(0, engine).VariableValue;
+                //var columns = (List<string>)myColumn.VariableValue;
+                var columns = EM_CanHandleListExtensionMethods.ExpandUserVariableAsList(myColumn);
+
+                if (ifKeyNotExists == "error")
+                {
+                    // check key and throw exception
+                    foreach (var item in myDic)
                     {
-                        throw new Exception("Column name " + item.Key + " does not exists");
+                        if (!columns.Contains(item.Key))
+                        {
+                            throw new Exception($"Column name {item.Key} does not exists");
+                        }
                     }
                 }
-            }
 
-            foreach(var item in myDic)
-            {
-                if (columns.Contains(item.Key))
+                foreach (var item in myDic)
                 {
-                    myDT.Rows[rowIndex][item.Key] = item.Value;
+                    if (columns.Contains(item.Key))
+                    {
+                        myDT.Rows[rowIndex][item.Key] = item.Value;
+                    }
                 }
             }
         }

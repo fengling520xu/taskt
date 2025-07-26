@@ -6,23 +6,24 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Dictionary Commands")]
+    [Attributes.ClassAttributes.Group("Dictionary")]
     [Attributes.ClassAttributes.SubGruop("Convert")]
     [Attributes.ClassAttributes.CommandSettings("Convert Dictionary To DataTable")]
     [Attributes.ClassAttributes.Description("This command allows you to convert Dictionary to DataTable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to convert Dictionary to DataTable.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_dictionary))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class ConvertDictionaryToDataTableCommand : ScriptCommand
+    public sealed class ConvertDictionaryToDataTableCommand : ADictionaryGetFromDictionaryCommands, IDataTableResultProperties
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
-        public string v_InputData { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DictionaryControls), nameof(DictionaryControls.v_InputDictionaryName))]
+        //public string v_Dictionary { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_OutputDataTableName))]
-        public string v_OutputVariable { get; set; }
+        public override string v_Result { get; set; }
 
         public ConvertDictionaryToDataTableCommand()
         {
@@ -32,20 +33,21 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //var dic = v_Dictionary.ExpandUserVariableAsDictinary(engine);
+            var dic = this.ExpandUserVariableAsDictionary(engine);
 
-            var dic = v_InputData.GetDictionaryVariable(engine);
-
-            DataTable DT = new DataTable();
-            DT.Rows.Add();
+            DataTable myDT = new DataTable();
+            myDT.Rows.Add();
             foreach(var item in dic)
             {
-                DT.Columns.Add(item.Key);
-                DT.Rows[0][item.Key] = item.Value;
+                myDT.Columns.Add(item.Key);
+                myDT.Rows[0][item.Key] = item.Value;
             }
-            DT.StoreInUserVariable(engine, v_OutputVariable);
+
+            //DT.StoreInUserVariable(engine, v_Result);
+            this.StoreDataTableInUserVariable(myDT, engine);
         }
     }
 }

@@ -6,24 +6,25 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("JSON Commands")]
+    [Attributes.ClassAttributes.Group("JSON")]
     [Attributes.ClassAttributes.SubGruop("Action")]
     [Attributes.ClassAttributes.CommandSettings("Remove JSON Array Item")]
     [Attributes.ClassAttributes.Description("This command allows you to remove item to JSON Array.")]
     [Attributes.ClassAttributes.UsesDescription("")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_function))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class RemoveJSONArrayItemCommand : ScriptCommand
+    public sealed class RemoveJSONArrayItemCommand : AJSONJSONPathCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_BothJSONName))]
-        [PropertyDescription("JSON Array Variable Name")]
-        public string v_InputValue { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_BothJSONName))]
+        //[PropertyDescription("JSON Array Variable Name")]
+        //public string v_Json { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_JSONPath))]
-        public string v_JsonExtractor { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_JSONPath))]
+        //public string v_JsonExtractor { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(JSONControls), nameof(JSONControls.v_ArrayIndex))]
@@ -39,7 +40,8 @@ namespace taskt.Core.Automation.Commands
         //[PropertyShowSampleUsageInDescription(true)]
         //[PropertyDisplayText(true, "Index")]
         //[PropertyValidationRule("Index", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        public string v_RemoveIndex { get; set; }
+        [PropertyParameterOrder(8000)]
+        public string v_Index { get; set; }
 
         public RemoveJSONArrayItemCommand()
         {
@@ -49,28 +51,53 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //Action<JToken> removeItemFunc = new Action<JToken>((searchResult) =>
+            //{
+            //    if (!(searchResult is JArray))
+            //    {
+            //        throw new Exception("Extraction Result is not JSON Array and can not Add Item. Value: '" + searchResult.ToString() + "'");
+            //    }
+            //    JArray ary = (JArray)searchResult;
 
-            Action<JToken> removeItemFunc = new Action<JToken>((searchResult) =>
+            //    var index = this.ExpandValueOrUserVariableAsInteger(nameof(v_Index), engine);
+
+            //    if ((index < 0) && (index > ary.Count))
+            //    {
+            //        throw new Exception("Index is Out of Range. Value: " + index);
+            //    }
+
+            //    ary.RemoveAt(index);
+            //});
+            //this.JSONModifyByJSONPath(nameof(v_Json), nameof(v_JsonExtractor), removeItemFunc, removeItemFunc, engine);
+
+            (var root, var json, _) = this.ExpandUserVariableAsJSONByJSONPath(engine);
+            if (json is JArray ary)
             {
-                if (!(searchResult is JArray))
+                if (string.IsNullOrEmpty(v_Index))
                 {
-                    throw new Exception("Extraction Result is not JSON Array and can not Add Item. Value: '" + searchResult.ToString() + "'");
+                    v_Index = "-1";
                 }
-                JArray ary = (JArray)searchResult;
-
-                var index = this.ConvertToUserVariableAsInteger(nameof(v_RemoveIndex), engine);
-
-                if ((index < 0) && (index > ary.Count))
+                var index = this.ExpandValueOrUserVariableAsInteger(nameof(v_Index), "Index", engine);
+                if (index < 0)
                 {
-                    throw new Exception("Index is Out of Range. Value: " + index);
+                    index += ary.Count;
                 }
-
-                ary.RemoveAt(index);
-            });
-            this.JSONModifyByJSONPath(nameof(v_InputValue), nameof(v_JsonExtractor), removeItemFunc, removeItemFunc, engine);
+                if (index < 0 || index > ary.Count)
+                {
+                    throw new Exception($"Index is Out of Range. Value: '{v_Index}', Expand Value: '{index}'");
+                }
+                else
+                {
+                    ary.RemoveAt(index);
+                    this.StoreJSONInUserVariable(root, engine);
+                }
+            }
+            else
+            {
+                throw new Exception($"Extraction Result is NOT JSON Array. Result: '{json}', JSONPath: '{v_JsonExtractor}'");
+            }
         }
     }
 }

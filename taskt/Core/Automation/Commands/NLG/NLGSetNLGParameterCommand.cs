@@ -6,13 +6,14 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("NLG Commands")]
+    [Attributes.ClassAttributes.Group("NLG")]
     [Attributes.ClassAttributes.CommandSettings("Set NLG Parameter")]
     [Attributes.ClassAttributes.Description("This command allows you to define a NLG parameter")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to define NLG parameters")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_nlg))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class NLGSetNLGParameterCommand : ScriptCommand
+    public sealed class NLGSetNLGParameterCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(NLGControls), nameof(NLGControls.v_InstanceName))]
@@ -49,15 +50,14 @@ namespace taskt.Core.Automation.Commands
             //this.v_InstanceName = "";
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-            var vInstance = v_InstanceName.ConvertToUserVariable(engine);
+            var vInstance = v_InstanceName.ExpandValueOrUserVariable(engine);
             var p = (SPhraseSpec)engine.GetAppInstance(vInstance);
 
-            var userInput = v_Parameter.ConvertToUserVariable(sender);
+            var userInput = v_Parameter.ExpandValueOrUserVariable(engine);
 
-            switch (this.GetUISelectionValue(nameof(v_ParameterType), engine))
+            switch (this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_ParameterType), engine))
             {
                 case "set subject":
                     p.setSubject(userInput);

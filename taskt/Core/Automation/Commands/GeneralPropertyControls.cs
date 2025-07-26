@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+﻿
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
@@ -9,22 +8,9 @@ namespace taskt.Core.Automation.Commands
     /// </summary>
     internal static class GeneralPropertyControls
     {
-        /// <summary>
-        /// specify variable name to store result property
-        /// </summary>
-        [PropertyDescription("Variable Name to Store Result")]
-        [InputSpecification("")]
-        [PropertyDetailSampleUsage("**vResult**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [PropertyDetailSampleUsage("**{{{vResult}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
-        [Remarks("")]
-        [PropertyShowSampleUsageInDescription(true)]
-        [PropertyIsVariablesList(true)]
-        [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
-        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
-        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
-        [PropertyDisplayText(true, "Result")]
-        public static string v_Result { get; }
+        #region Virtual Property
 
+        #region Basics
         /// <summary>
         /// One line textbox property, new line not allow
         /// </summary>
@@ -35,6 +21,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyShowSampleUsageInDescription(true)]
         [PropertyTextBoxSetting(1, false)]
         [PropertyDisplayText(true, "Value")]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyParameterOrder(5000)]
         public static string v_DisallowNewLine_OneLineTextBox { get; }
 
         /// <summary>
@@ -46,6 +34,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.TextBox)]
         [PropertyShowSampleUsageInDescription(true)]
         [PropertyDisplayText(true, "Value")]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyParameterOrder(5000)]
         public static string v_OneLineTextBox { get; }
 
         /// <summary>
@@ -57,6 +47,8 @@ namespace taskt.Core.Automation.Commands
         [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.MultiLineTextBox)]
         [PropertyShowSampleUsageInDescription(true)]
         [PropertyDisplayText(true, "Value")]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyParameterOrder(5000)]
         public static string v_MultiLinesTextBox { get; }
 
         /// <summary>
@@ -67,23 +59,65 @@ namespace taskt.Core.Automation.Commands
         [Remarks("")]
         [PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
         [PropertyDisplayText(true, "Value")]
+        [PropertySelectionValueSensitive(false)]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyParameterOrder(5000)]
         public static string v_ComboBox { get; }
 
+        #endregion
+
         /// <summary>
-        /// show/hide Command parameter groups
+        /// specify variable name to store result property
         /// </summary>
-        /// <param name="controlsList"></param>
-        /// <param name="parameterName"></param>
-        /// <param name="visible"></param>
-        public static void SetVisibleParameterControlGroup(Dictionary<string, Control> controlsList, string parameterName, bool visible)
-        {
-            foreach (var ctrl in controlsList)
-            {
-                if (ctrl.Key.Contains(parameterName))
-                {
-                    ctrl.Value.Visible = visible;
-                }
-            }
-        }
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Variable Name to Store Result")]
+        [InputSpecification("Variable Name", true)]
+        [PropertyDetailSampleUsageBehavior(MultiAttributesBehavior.Overwrite)]
+        [PropertyDetailSampleUsage("**vResult**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyDetailSampleUsage("**{{{vResult}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyShowSampleUsageInDescription(true)]
+        [PropertyIsVariablesList(true)]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Output)]
+        [PropertyValidationRule("Result", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Result")]
+        //[InputSpecification("")]
+        //[Remarks("")]
+        //[PropertyRecommendedUIControl(PropertyRecommendedUIControl.RecommendeUIControlType.ComboBox)]
+        //[PropertyParameterOrder(5000)]
+        public static string v_Result { get; }
+
+        /// <summary>
+        /// input instance (variable) name for specify the variable
+        /// </summary>
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Variable Name")]
+        [InputSpecification("Variable Name", true)]
+        [PropertyDetailSampleUsage("**vValue**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyDetailSampleUsage("**{{{vValue}}}**", PropertyDetailSampleUsage.ValueType.VariableName)]
+        [PropertyDetailSampleUsageBehavior(MultiAttributesBehavior.Overwrite)]
+        [PropertyShowSampleUsageInDescription(true)]
+        [PropertyIsVariablesList(false)]
+        [PropertyParameterDirection(PropertyParameterDirection.ParameterDirection.Input)]
+        [PropertyValidationRule("Variable", PropertyValidationRule.ValidationRuleFlags.Empty)]
+        [PropertyDisplayText(true, "Variable")]
+        public static string v_InputInstanceName { get; }
+
+        ///// <summary>
+        ///// combobox has Error
+        ///// </summary>
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        //[PropertyUISelectionOption("Error")]
+        //[PropertyDetailSampleUsage("**Error**", "Rise an Error")]
+        //public static string v_ComboBoxHasError { get; }
+
+        ///// <summary>
+        ///// combobox has Error and Ignore
+        ///// </summary>
+        //[PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBoxHasError))]
+        //[PropertyUISelectionOption("Ignore")]
+        //[PropertyDetailSampleUsage("**Ignore**", "Nothing To Do")]
+        //public static string v_ComboBoxHasErrorIgnore { get; }
+
+        #endregion
     }
 }

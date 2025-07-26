@@ -6,26 +6,27 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("DataTable Commands")]
+    [Attributes.ClassAttributes.Group("DataTable")]
     [Attributes.ClassAttributes.SubGruop("DataTable Action")]
     [Attributes.ClassAttributes.CommandSettings("Copy DataTable")]
     [Attributes.ClassAttributes.Description("This command allows you to copy a DataTable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to copy a DataTable.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class CopyDataTableCommand : ScriptCommand
+    public sealed class CopyDataTableCommand : ADataTableCreateFromDataTableCommands
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_InputDataTableName))]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_InputDataTableName))]
         [PropertyDescription("DataTable Variable Name to Copy")]
         [PropertyValidationRule("DataTable to Copy", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "DataTable to Copy")]
-        public string v_DataTableName { get; set; }
+        public override string v_TargetDataTable { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_NewOutputDataTableName))]
-        public string v_OutputVariableName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_NewOutputDataTableName))]
+        //public string v_NewDataTable { get; set; }
 
         public CopyDataTableCommand()
         {
@@ -35,13 +36,12 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //DataTable myDT = v_TargetDataTable.ExpandUserVariableAsDataTable(engine);
+            var myDT = this.ExpandUserVariableAsDataTable(engine);
 
-            DataTable myDT = v_DataTableName.GetDataTableVariable(engine);
-
-            DataTable newDT = new DataTable();
+            var newDT = new DataTable();
             foreach(DataColumn col in myDT.Columns)
             {
                 newDT.Columns.Add(col.ColumnName);
@@ -49,7 +49,7 @@ namespace taskt.Core.Automation.Commands
 
             foreach(DataRow row in myDT.Rows)
             {
-                DataRow newRow = newDT.NewRow();
+                var newRow = newDT.NewRow();
                 for (int i = 0; i < myDT.Columns.Count; i++)
                 {
                     newRow[i] = row[i];
@@ -57,7 +57,8 @@ namespace taskt.Core.Automation.Commands
                 newDT.Rows.Add(newRow);
             }
 
-            newDT.StoreInUserVariable(engine, v_OutputVariableName);
+            //newDT.StoreInUserVariable(engine, v_NewDataTable);
+            this.StoreDataTableInUserVariable(newDT, engine);
         }
     }
 }

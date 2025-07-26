@@ -5,15 +5,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Get From WebElement")]
     [Attributes.ClassAttributes.CommandSettings("Get HTML From WebElement")]
     [Attributes.ClassAttributes.Description("This command allows you to Get HTML from WebElement.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to Get HTML from WebElement.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserGetHTMLFromWebElementCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetHTMLFromWebElementCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputWebElementName))]
@@ -36,10 +37,8 @@ namespace taskt.Core.Automation.Commands
         {
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var getAttribute = new SeleniumBrowserGetAttributeFromWebElementCommand()
             {
                 v_WebElement = this.v_WebElement,

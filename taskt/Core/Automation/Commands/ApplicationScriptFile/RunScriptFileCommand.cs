@@ -4,38 +4,37 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using taskt.UI.Forms;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Application/Script Commands")]
+    [Attributes.ClassAttributes.Group("Application/Script")]
     [Attributes.ClassAttributes.SubGruop("taskt Script File")]
     [Attributes.ClassAttributes.CommandSettings("Run Script File")]
     [Attributes.ClassAttributes.Description("This command runs tasks.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to run another task.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_start_process))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class RunScriptFileCommand : ScriptCommand
+    public sealed class RunScriptFileCommand : AScriptFileCommands
     {
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_NoSample_FilePath))]
-        [PropertyDescription("Path to the Script File")]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_NoSample_FilePath))]
+        [PropertyDescription("Script File Path")]
         [PropertyDetailSampleUsage("**C:\\temp\\myscript.xml**", PropertyDetailSampleUsage.ValueType.Value, "Script File")]
         [PropertyDetailSampleUsage("**{{{vPath}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "Script File")]
         [PropertyFilePathSetting(false, PropertyFilePathSetting.ExtensionBehavior.RequiredExtension, PropertyFilePathSetting.FileCounterBehavior.NoSupport, "xml")]
-        public string v_taskPath { get; set; }
+        public override string v_TargetFilePath { get; set; }
 
         [XmlAttribute]
-        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
         [PropertyDescription("I want to assign Variables on Startup")]
-        [PropertyUISelectionOption("Yes")]
-        [PropertyUISelectionOption("No")]
         [PropertyIsOptional(true, "No")]
         [PropertyFirstValue("No")]
         [PropertySelectionChangeEvent(nameof(cmbAssignVariables_SelectedItemChanged))]
+        [PropertyParameterOrder(6000)]
         public string v_AssignVariables { get; set; }
 
         [XmlElement]
@@ -51,11 +50,12 @@ namespace taskt.Core.Automation.Commands
         [PropertyDataGridViewCellEditEvent(nameof(DataTableControls) + "+" + nameof(DataTableControls.FirstColumnReadonlySubsequentEditableDataGridView_CellBeginEdit), PropertyDataGridViewCellEditEvent.DataGridViewCellEvent.CellBeginEdit)]
         [PropertyDataGridViewCellEditEvent(nameof(DataTableControls) + "+" + nameof(DataTableControls.FirstColumnReadonlySubsequentEditableDataGridView_CellClick), PropertyDataGridViewCellEditEvent.DataGridViewCellEvent.CellClick)]
         [PropertyCustomUIHelper("Reload Variables", nameof(lnkReloadVariables_Click))]
+        [PropertyParameterOrder(7000)]
         public DataTable v_VariableAssignments { get; set; }
 
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
-        public string v_WaitForFile { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(FilePathControls), nameof(FilePathControls.v_WaitTime))]
+        //public string v_WaitTimeForFile { get; set; }
 
         public RunScriptFileCommand()
         {
@@ -79,13 +79,12 @@ namespace taskt.Core.Automation.Commands
             //AssignmentsGridViewHelper.Hide();
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //var startFile = v_taskPath.ConvertToUserVariable(sender);
             //string startFile = FilePathControls.FormatFilePath_NoFileCounter(v_taskPath, engine, "xml", true);
-            var startFile = FilePathControls.WaitForFile(this, nameof(v_taskPath), nameof(v_WaitForFile), engine);
+            //var startFile = FilePathControls.WaitForFile(this, nameof(v_TargetFilePath), nameof(v_WaitTimeForFile), engine);
+            var scriptFile = this.WaitForFile(engine);
 
             //create variable list
             var variableList = new List<Script.ScriptVariable>();
@@ -101,7 +100,7 @@ namespace taskt.Core.Automation.Commands
                 }
                 catch
                 {
-                    variableValue = rw.Field<string>("VariableValue").ConvertToUserVariable(engine);
+                    variableValue = rw.Field<string>("VariableValue").ExpandValueOrUserVariable(engine);
                 }
 
                 var variableReturn = "No";
@@ -124,7 +123,7 @@ namespace taskt.Core.Automation.Commands
                 }
             }
 
-            frmScriptEngine newEngine = new frmScriptEngine(startFile, null, variableList, true, engine.PreloadedTasks);
+            var newEngine = new UI.Forms.ScriptEngine.frmScriptEngine(scriptFile, null, variableList, true, engine.PreloadedTasks);
             
             engine.tasktEngineUI.Invoke((Action)delegate () { engine.tasktEngineUI.TopMost = false; });
             Application.Run(newEngine);
@@ -155,7 +154,7 @@ namespace taskt.Core.Automation.Commands
 
         private void lnkReloadVariables_Click(object sender, EventArgs e)
         {
-            ComboBox cmb = (ComboBox)ControlsList[nameof(v_AssignVariables)];
+            var cmb = (ComboBox)ControlsList[nameof(v_AssignVariables)];
             cmbAssignVariables_SelectedItemChanged(cmb, null);
         }
 
@@ -164,7 +163,7 @@ namespace taskt.Core.Automation.Commands
             var engine = new Engine.AutomationEngineInstance();
 
             var cmb = (ComboBox)sender;
-            var engineSettings = ((frmCommandEditor)cmb.FindForm()).appSettings.EngineSettings;
+            var engineSettings = ((UI.Forms.ScriptBuilder.CommandEditor.frmCommandEditor)cmb.FindForm()).appSettings.EngineSettings;
 
             bool isVisible = (cmb.SelectedItem?.ToString().Trim().ToLower() == "yes");
             foreach(var item in ControlsList.Where(c => (c.Key.Contains(nameof(v_VariableAssignments)))))
@@ -174,12 +173,13 @@ namespace taskt.Core.Automation.Commands
 
             //var startFile = v_taskPath.ConvertToUserVariable(engine);
             //var startFile = FilePathControls.FormatFilePath_NoFileCounter(v_taskPath, engine, "xml", true);
-            var startFile = this.ConvertToUserVariableAsFilePath(nameof(v_taskPath), engine);
+            //var startFile = this.ExpandValueOrUserVariableAsFilePath(nameof(v_TargetFilePath), engine);
+            var startFile = this.ExpandValueOrUserVariableAsFilePath(engine);
 
             // check file exists
             if (!System.IO.File.Exists(startFile))
             {
-                using(var fm = new taskt.UI.Forms.Supplemental.frmDialog("Script File Not Found. Name: " + startFile, "error", UI.Forms.Supplemental.frmDialog.DialogType.OkOnly, 0))
+                using(var fm = new UI.Forms.General.frmDialog($"Script File Not Found. Name: {startFile}", "error", UI.Forms.General.frmDialog.DialogType.OkOnly, 0))
                 {
                     fm.ShowDialog();
                 }
@@ -189,12 +189,12 @@ namespace taskt.Core.Automation.Commands
             //load variables if selected and file exists
             if (isVisible)
             {
-                Script.Script deserializedScript = Script.Script.DeserializeFile(startFile, engineSettings);
+                var deserializedScript = Script.Script.DeserializeFile(startFile, engineSettings);
 
                 v_VariableAssignments.Rows.Clear();
                 foreach (var variable in deserializedScript.Variables)
                 {
-                    DataRow[] foundVariables  = v_VariableAssignments.Select("VariableName = '" + variable.VariableName + "'");
+                    DataRow[] foundVariables  = v_VariableAssignments.Select($"VariableName = '{variable.VariableName}'");
                     if (foundVariables.Length == 0)
                     {
                         v_VariableAssignments.Rows.Add(variable.VariableName, variable.VariableValue);

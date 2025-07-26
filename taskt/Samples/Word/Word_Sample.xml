@@ -2,19 +2,19 @@
 <Script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Commands>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Word Sample" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="1" PauseBeforeExeucution="false" v_Comment="Word Sample" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="It may create &quot;test.docx&quot; and &quot;test.pdf&quot; in desktop." CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="2" PauseBeforeExeucution="false" v_Comment="It may create &quot;test.docx&quot; and &quot;test.pdf&quot; in desktop." CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" v_Comment="Create Word instance" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="3" PauseBeforeExeucution="false" v_Comment="Create Word instance" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="WordCreateApplicationCommand" CommandID="acd0ea34-7a8f-4746-a56a-fb5bf2418c23" CommandName="WordOpenApplicationCommand" IsCommented="false" SelectionName="Create Word Application" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" />
+      <ScriptCommand xsi:type="WordCreateWordInstanceCommand" CommandID="acd0ea34-7a8f-4746-a56a-fb5bf2418c23" CommandName="WordCreateWordInstanceCommand" IsCommented="false" SelectionName="Create Word Insntance" DefaultPause="0" LineNumber="4" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" v_Comment="Create document and write text" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="5" PauseBeforeExeucution="false" v_Comment="Create document and write text" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="WordAddDocumentCommand" CommandID="32e3b2ea-792d-434d-8b83-187a3c053108" CommandName="WordAddDocumentCommand" IsCommented="false" SelectionName="Add Document" DefaultPause="0" LineNumber="6" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" />
@@ -26,22 +26,22 @@
       <ScriptCommand xsi:type="WordAppendTextCommand" CommandID="92df4811-7c05-425c-8e58-5367c4e27743" CommandName="WordAppendTextCommand" IsCommented="false" SelectionName="Append Text" DefaultPause="0" LineNumber="8" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_TextToSet="Hello World Again" v_FontName="Calibri" v_FontSize="11" v_FontBold="No" v_FontItalic="No" v_FontUnderline="No" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" v_Comment="Save to desktop" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="9" PauseBeforeExeucution="false" v_Comment="Save to desktop" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="WordSaveAsCommand" CommandID="72a0cf8b-5097-48f1-9d97-f9a505ba63b3" CommandName="WordSaveAsCommand" IsCommented="false" SelectionName="Save Document As" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_FileName="⦃Folder.Desktop⦄\test.docx" />
+      <ScriptCommand xsi:type="WordSaveDocumentAsCommand" CommandID="72a0cf8b-5097-48f1-9d97-f9a505ba63b3" CommandName="WordSaveDocumentAsCommand" IsCommented="false" SelectionName="Save Document As" DefaultPause="0" LineNumber="10" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_FileName="⦃Folder.Desktop⦄\test.docx" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="WordAppendImageCommand" CommandID="a5c3363f-27f1-4e13-a5d1-081f25144c8a" CommandName="WordAppendImageCommand" IsCommented="true" SelectionName="Append Image" DefaultPause="0" LineNumber="11" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_ImagePath="C:\image.jpg" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" v_Comment="If you have image, please enable this command" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="12" PauseBeforeExeucution="false" v_Comment="If you have image, please enable this command" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" v_Comment="Insert table" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="13" PauseBeforeExeucution="false" v_Comment="Insert table" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CreateDataTableCommand" CommandID="3a130ee6-5c6e-46f2-bb26-1f21558b19d1" CommandName="CreateDataTableCommand" IsCommented="false" SelectionName="Create DataTable" DefaultPause="0" LineNumber="14" PauseBeforeExeucution="false" CommandEnabled="true" v_DataTableName="dataTable">
+      <ScriptCommand xsi:type="CreateDataTableCommand" CommandID="3a130ee6-5c6e-46f2-bb26-1f21558b19d1" CommandName="CreateDataTableCommand" IsCommented="false" SelectionName="Create DataTable" DefaultPause="0" LineNumber="14" PauseBeforeExeucution="false" CommandEnabled="true" v_DataTable="dataTable">
         <v_ColumnNameDataTable>
           <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
             <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="ColumnNamesDataTable031220.033538" msdata:UseCurrentLocale="true">
@@ -92,21 +92,20 @@
       </ScriptCommand>
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="AddDataRowCommand" CommandID="4b02484e-81c0-48b3-bbdd-4c2a52a8e63c" CommandName="AddDataRowCommand" IsCommented="false" SelectionName="Add DataRow" DefaultPause="0" LineNumber="15" PauseBeforeExeucution="false" CommandEnabled="true" v_DataTableName="dataTable">
+      <ScriptCommand xsi:type="AddDataTableRowCommand" CommandID="4b02484e-81c0-48b3-bbdd-4c2a52a8e63c" CommandName="AddDataTableRowCommand" IsCommented="false" SelectionName="Add DataTable Row" DefaultPause="0" LineNumber="15" PauseBeforeExeucution="false" CommandEnabled="true" v_DataTable="dataTable">
         <v_AddDataDataTable>
           <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-            <xs:element name="AddDataDataTable031220.033708">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="Column_x0020_Name" type="xs:string" minOccurs="0" />
-                  <xs:element name="Data" type="xs:string" minOccurs="0" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
             <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="AddDataDataTable031220.033708" msdata:UseCurrentLocale="true">
               <xs:complexType>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:element ref="AddDataDataTable031220.033708" />
+                  <xs:element name="AddDataDataTable031220.033708">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="Column_x0020_Name" type="xs:string" minOccurs="0" />
+                        <xs:element name="Data" type="xs:string" minOccurs="0" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
                 </xs:choice>
               </xs:complexType>
             </xs:element>
@@ -156,44 +155,45 @@
       <ScriptCommand xsi:type="WordAppendDataTableCommand" CommandID="f0a9419f-5dbd-4aa3-9ccb-29f1fde06428" CommandName="WordAppendDataTableCommand" IsCommented="false" SelectionName="Append Data Table" DefaultPause="0" LineNumber="16" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_DataTableName="dataTable" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="17" PauseBeforeExeucution="false" v_Comment="Replace &quot;Hello&quot; -&gt; &quot;Goodbye&quot;" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="17" PauseBeforeExeucution="false" v_Comment="Replace &quot;Hello&quot; -&gt; &quot;Goodbye&quot;" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="WordReplaceTextCommand" CommandID="cfcaedc7-cc52-49e6-bd07-4a7cba8f0acd" CommandName="WordReplaceTextCommand" IsCommented="false" SelectionName="Replace Text" DefaultPause="0" LineNumber="18" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_FindText="Hello" v_ReplaceWithText="Goodbye" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="WordSaveCommand" CommandID="06321e4d-64c3-4d14-b065-fd729d40872e" CommandName="WordSaveCommand" IsCommented="false" SelectionName="Save Document" DefaultPause="0" LineNumber="19" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" />
+      <ScriptCommand xsi:type="WordSaveDocumentCommand" CommandID="06321e4d-64c3-4d14-b065-fd729d40872e" CommandName="WordSaveDocumentCommand" IsCommented="false" SelectionName="Save Document" DefaultPause="0" LineNumber="19" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="20" PauseBeforeExeucution="false" v_Comment="Export PDF" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="20" PauseBeforeExeucution="false" v_Comment="Export PDF" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="WordExportToPDFCommand" CommandID="ed6f4210-23dc-4064-abfa-4476db560f96" CommandName="WordExportToPDFCommand" IsCommented="false" SelectionName="Export To PDF" DefaultPause="0" LineNumber="21" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_FileName="⦃Folder.Desktop⦄\test.pdf" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="22" PauseBeforeExeucution="false" v_Comment="Get text in document" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="22" PauseBeforeExeucution="false" v_Comment="Get text in document" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="AddVariableCommand" CommandID="27b6e9da-4772-4ffb-a644-6a86b3be7152" CommandName="AddVariableCommand" IsCommented="false" SelectionName="New Variable" DefaultPause="0" LineNumber="23" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="wordText" />
+      <ScriptCommand xsi:type="NewVariableCommand" CommandID="27b6e9da-4772-4ffb-a644-6a86b3be7152" CommandName="NewVariableCommand" IsCommented="false" SelectionName="New Variable" DefaultPause="0" LineNumber="23" PauseBeforeExeucution="false" CommandEnabled="true" v_userVariableName="wordText" />
     </ScriptAction>
     <ScriptAction>
       <ScriptCommand xsi:type="WordReadDocumentCommand" CommandID="cfdf6b55-fd34-407e-a507-01ed7c790d7f" CommandName="WordReadDocumentCommand" IsCommented="false" SelectionName="Read Document" DefaultPause="0" LineNumber="24" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_UserVariableName="wordText" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="MessageBoxCommand" CommandID="c7fea52d-5557-4511-bb85-5774efb80395" CommandName="MessageBoxCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="25" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="wordText" v_AutoCloseAfter="20" />
+      <ScriptCommand xsi:type="ShowMessageCommand" CommandID="c7fea52d-5557-4511-bb85-5774efb80395" CommandName="ShowMessageCommand" IsCommented="false" SelectionName="Show Message" DefaultPause="0" LineNumber="25" PauseBeforeExeucution="false" CommandEnabled="true" v_Message="wordText" v_AutoCloseAfter="20" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Add Code Comment" DefaultPause="0" LineNumber="26" PauseBeforeExeucution="false" v_Comment="Close Word" CommandEnabled="true" />
+      <ScriptCommand xsi:type="CommentCommand" CommandID="a15b8db5-bd0c-41f4-9ebc-f60f57e9ec1a" CommandName="CommentCommand" IsCommented="false" SelectionName="Comment" DefaultPause="0" LineNumber="26" PauseBeforeExeucution="false" v_Comment="Close Word" CommandEnabled="true" />
     </ScriptAction>
     <ScriptAction>
-      <ScriptCommand xsi:type="WordCloseApplicationCommand" CommandID="813d108c-a145-45f6-8c2c-e92e2fc79d13" CommandName="WordCloseApplicationCommand" IsCommented="false" SelectionName="Close Word Application" DefaultPause="0" LineNumber="27" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_WordSaveOnExit="false" />
+      <ScriptCommand xsi:type="WordCloseWordInstanceCommand" CommandID="813d108c-a145-45f6-8c2c-e92e2fc79d13" CommandName="WordCloseWordInstanceCommand" IsCommented="false" SelectionName="Close Word Instance" DefaultPause="0" LineNumber="27" PauseBeforeExeucution="false" CommandEnabled="true" v_InstanceName="wordInstance" v_WordSaveOnExit="false" />
     </ScriptAction>
   </Commands>
   <Info>
-    <TasktVersion>3.5.0.27</TasktVersion>
+    <TasktVersion>3.5.2.22</TasktVersion>
     <Author />
     <LastRunTime>2021-09-06T11:42:50.3876903+09:00</LastRunTime>
     <RunTimes>1</RunTimes>
+    <Revision>1</Revision>
     <ScriptVersion>0.0.0</ScriptVersion>
     <Description />
   </Info>

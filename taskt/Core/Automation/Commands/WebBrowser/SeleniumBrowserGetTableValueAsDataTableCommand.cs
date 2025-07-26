@@ -8,15 +8,16 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Web Browser Commands")]
+    [Attributes.ClassAttributes.Group("Web Browser")]
     [Attributes.ClassAttributes.SubGruop("Scraping")]
     [Attributes.ClassAttributes.CommandSettings("Get Table Value As DataTable")]
     [Attributes.ClassAttributes.Description("This command allows you to get a Table Values As DataTable.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to get a Table Values As DataTable.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class SeleniumBrowserGetTableValueAsDataTableCommand : ScriptCommand
+    public sealed class SeleniumBrowserGetTableValueAsDataTableCommand : ScriptCommand, ICanHandleDataTable
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(SeleniumBrowserControls), nameof(SeleniumBrowserControls.v_InputInstanceName))]
@@ -73,23 +74,21 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             //(var _, var trgElem) = SeleniumBrowserControls.GetSeleniumBrowserInstanceAndElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), engine);
-            (var _, var trgElem) = SeleniumBrowserControls.GetSeleniumBrowserInstanceAndElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), nameof(v_WaitTime), engine);
+            (var _, var trgElem) = SeleniumBrowserControls.ExpandValueOrUserVariableAsSeleniumBrowserInstanceAndWebElement(this, nameof(v_InstanceName), nameof(v_SeleniumSearchType), nameof(v_SeleniumSearchParameter), nameof(v_ElementIndex), nameof(v_WaitTime), engine);
 
             if (trgElem.TagName.ToLower() != "table")
             {
                 throw new Exception("Element is not Table");
             }
 
-            var attrName = v_AttributeName.ConvertToUserVariable(engine);
+            var attrName = v_AttributeName.ExpandValueOrUserVariable(engine);
 
-            var firstRowMethod = this.GetUISelectionValue(nameof(v_FirstRowMethod), engine);
+            var firstRowMethod = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_FirstRowMethod), engine);
 
-            DataTable newDT = new DataTable();
+            var newDT = new DataTable();
 
             var trs = trgElem.FindElements(By.XPath("child::tr | child::thead/tr | child::tbody/tr | child::tfoot/tr"));
             if (trs.Count > 0)
@@ -141,7 +140,8 @@ namespace taskt.Core.Automation.Commands
                 }
             }
 
-            newDT.StoreInUserVariable(engine, v_DataTableVariableName);
+            //newDT.StoreInUserVariable(engine, v_DataTableVariableName);
+            this.StoreDataTableInUserVariable(newDT, nameof(v_DataTableVariableName), engine);
         }
 
         private void SearchMethodComboBox_SelectionChangeCommitted(object sender, EventArgs e)

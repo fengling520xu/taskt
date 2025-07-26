@@ -5,14 +5,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Data Commands")]
+    [Attributes.ClassAttributes.Group("Data")]
     [Attributes.ClassAttributes.CommandSettings("Get HTML Text By XPath")]
     [Attributes.ClassAttributes.Description("This command processes an HTML source object")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to parse and extract data from a successful **HTTP Request Command**")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_web))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class HTMLGetHTMLTextByXPath : ScriptCommand
+    public sealed class HTMLGetHTMLTextByXPath : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(TextControls), nameof(TextControls.v_Text_MultiLine))]
@@ -48,15 +49,15 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(v_userVariableName.ConvertToUserVariable(sender));
+            doc.LoadHtml(v_userVariableName.ExpandValueOrUserVariable(engine));
 
             var div = doc.DocumentNode.SelectSingleNode(v_xPathQuery);
             string divString = div.InnerText;
 
-            divString.StoreInUserVariable(sender, v_applyToVariableName);
+            divString.StoreInUserVariable(engine, v_applyToVariableName);
         }
     }
 }

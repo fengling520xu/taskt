@@ -4,16 +4,17 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("Application/Script Commands")]
+    [Attributes.ClassAttributes.Group("Application/Script")]
     [Attributes.ClassAttributes.SubGruop("taskt Script File")]
     [Attributes.ClassAttributes.CommandSettings("Stop Current Script File")]
     [Attributes.ClassAttributes.Description("This command stops the current task.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to stop the current running task.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_stop_process))]
     [Attributes.ClassAttributes.EnableAutomateRender(true, true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
 
-    public class StopCurrentScriptFileCommand : ScriptCommand
+    public sealed class StopCurrentScriptFileCommand : ScriptCommand
     {
         public StopCurrentScriptFileCommand()
         {
@@ -23,9 +24,8 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
             engine.IsCancellationPending = true;
         }
     }

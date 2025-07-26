@@ -7,10 +7,8 @@ using System.Text;
 using taskt.Core.Automation.Commands;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 using taskt.UI.CustomControls;
-using static taskt.Core.Automation.Commands.PropertyControls;
 using Markdig;
-using Microsoft.Office.Core;
-using taskt.Core.Automation.Engine;
+using static taskt.Core.Automation.Commands.PropertyControls;
 
 namespace taskt.Core
 {
@@ -52,15 +50,22 @@ namespace taskt.Core
             }
 
             //get all commands
-            var commandClasses = Assembly.GetExecutingAssembly().GetTypes()
-                        .Where(t => t.Namespace == "taskt.Core.Automation.Commands")
-                        .Where(t => t.Name != "ScriptCommand")
-                        .Where(t => t.IsAbstract == false)
-                        .Where(t => t.BaseType.Name == "ScriptCommand")
-                        .ToList();
+            //var commandClasses = Assembly.GetExecutingAssembly().GetTypes()
+            //            .Where(t => t.Namespace == "taskt.Core.Automation.Commands")
+            //            .Where(t => t.Name != "ScriptCommand")
+            //            .Where(t => t.IsAbstract == false)
+            //            .Where(t => t.BaseType.Name == "ScriptCommand")
+            //            .ToList();
+            var commandClasses = Assembly.GetAssembly(typeof(ScriptCommand)).GetTypes()
+                .Where(t =>
+                {
+                    return t.IsSubclassOf(typeof(ScriptCommand)) && !t.IsAbstract;
+                }).ToList();
 
             // load settings
-            var settings = new ApplicationSettings().GetOrCreateApplicationSettings();
+            //var settings = new ApplicationSettings().GetOrCreateApplicationSettings();
+            //var settings = ApplicationSettings.GetOrCreateApplicationSettings();
+            var settings = App.GetSafeDocumentGenerationApplicationSettings();
             settings.ClientSettings.ShowSampleUsageInDescription = false;   // output trick
             settings.ClientSettings.ShowDefaultValueInDescription = false;
 
@@ -122,7 +127,7 @@ namespace taskt.Core
         /// <param name="docsFolderName"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        private static CommandMetaData GenerateMarkdownCommandFile(Type commandClass, ApplicationSettings settings, string docsFolderName, CultureInfo cultureInfo)
+        private static CommandMetaData GenerateMarkdownCommandFile(Type commandClass, SafeApplicationSettings settings, string docsFolderName, CultureInfo cultureInfo)
         {
             ScriptCommand command = (ScriptCommand)Activator.CreateInstance(commandClass);
             var commandName = command.SelectionName;
@@ -172,7 +177,8 @@ namespace taskt.Core
             sb.AppendLine("## Command Parameters");
 
             // get propertyLists
-            List<PropertyInfo> propInfos = commandClass.GetProperties().Where(f => f.Name.StartsWith("v_")).ToList();
+            //List<PropertyInfo> propInfos = commandClass.GetProperties().Where(f => f.Name.StartsWith("v_")).ToList();
+            var propInfos = PropertyControls.GetParameterProperties(command, true);
 
             // create Parameters List
             int maxCount = 0;
@@ -315,9 +321,11 @@ namespace taskt.Core
                     {
                         var searchKey = pInfo.searchKey.Replace("\t", " &amp; ");
                         var desc = pInfo.description;
-                        var sample = settings.EngineSettings.replaceEngineKeyword(pInfo.sampleUsage);
-                        var rmk = settings.EngineSettings.replaceEngineKeyword(pInfo.remarks);
-                        sb.AppendLine("|" + searchKey + "|" + desc + "|" + sample + "|" + rmk + "|");
+                        //var sample = settings.EngineSettings.replaceEngineKeyword(pInfo.sampleUsage);
+                        //var rmk = settings.EngineSettings.replaceEngineKeyword(pInfo.remarks);
+                        var sample = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(pInfo.sampleUsage, settings);
+                        var remark = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(pInfo.remarks, settings);
+                        sb.AppendLine("|" + searchKey + "|" + desc + "|" + sample + "|" + remark + "|");
                     }
                 }
 
@@ -335,7 +343,19 @@ namespace taskt.Core
                     
                     foreach(var s in sampleUsages)
                     {
-                        sb.AppendLine("| " + ConvertMDToHTML(settings.replaceApplicationKeyword(s.sampleUsage)) + " | " + GetSampleUsageMeansText(s, settings) + " |");
+                        //var smp = s.sampleUsage.Replace(WindowControls.INTERNAL_CURRENT_WINDOW_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentWindowName.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_POSITION_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentPosition.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_X_POSITION_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentXPosition.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_Y_POSITION_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentYPosition.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_SIZE_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentSize.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_WIDTH_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentWidth.VariableName, settings))
+                        //    .Replace(WindowControls.INTERNAL_CURRENT_WINDOW_HEIGHT_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Window_CurrentHeight.VariableName, settings))
+                        //    .Replace(ExcelControls.INTERNAL_EXCEL_CURRENT_WORKSHEET_KEYWORD, VariableNameControls.GetWrappedVariableName(Automation.Engine.SystemVariables.Excel_CurrentWorkSheet.VariableName, settings));
+
+                        var smp = s.sampleUsage;
+
+                        //sb.AppendLine("| " + ConvertMDToHTML(settings.replaceApplicationKeyword(smp)) + " | " + GetSampleUsageMeansText(s, settings) + " |");
+                        sb.AppendLine("| " + ConvertMDToHTML(InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(smp, settings)) + " | " + GetSampleUsageMeansText(s, settings) + " |");
                         //sampleUsageTabe += "| " + ConvertMDToHTML(settings.replaceApplicationKeyword(s.sampleUsage)) + " | " + GetSampleUsageMeansText(s, settings) + " |\n";
                     }
                     //sb.AppendLine(ConvertMDToHTML(sampleUsageTabe));
@@ -377,6 +397,10 @@ namespace taskt.Core
 
             //create kebob destination and command file nmae
             var kebobDestination = groupName.Replace(" ", "-").Replace("/", "-").ToLower();
+            if (!kebobDestination.EndsWith("-commands"))
+            {
+                kebobDestination += "-commands";
+            }
             var kebobFileName = commandName.Replace(" ", "-").Replace("/", "-").ToLower() + "-command.md";
 
             //create directory if required
@@ -396,13 +420,14 @@ namespace taskt.Core
             return new CommandMetaData() { Group = groupName, SubGroup = subGroupName, Description = classDescription, Name = commandName, Location = serverPath };
         }
 
-        private static string GetInputSpecification(PropertyInfo propInfo, PropertyInfo virtualProp, ApplicationSettings settings)
+        private static string GetInputSpecification(PropertyInfo propInfo, PropertyInfo virtualProp, SafeApplicationSettings settings)
         {
             var attrInput = GetCustomAttributeWithVirtual<InputSpecification>(propInfo, virtualProp);
 
             if (attrInput != null)
             {
-                var txt = settings.EngineSettings.replaceEngineKeyword(attrInput.inputSpecification);
+                //var txt = settings.EngineSettings.replaceEngineKeyword(attrInput.inputSpecification);
+                var txt = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(attrInput.inputSpecification, settings);
                 if (attrInput.autoGenerate)
                 {
                     if (txt == "")
@@ -462,7 +487,7 @@ namespace taskt.Core
             return ("", "");
         }
 
-        private static string GetSampleUsageText(PropertyInfo propInfo, PropertyInfo virtualPropInfo, ApplicationSettings settings)
+        private static string GetSampleUsageText(PropertyInfo propInfo, PropertyInfo virtualPropInfo, SafeApplicationSettings settings)
         {
             var smp = CommandControls.GetSampleUsageText(propInfo, settings, virtualPropInfo, false);
 
@@ -489,7 +514,7 @@ namespace taskt.Core
             }
         }
 
-        private static string GetSampleUsageMeansText(PropertyDetailSampleUsage smp, ApplicationSettings settings)
+        private static string GetSampleUsageMeansText(PropertyDetailSampleUsage smp, SafeApplicationSettings settings)
         {
             string ret = "";
             switch (smp.valueType)
@@ -502,12 +527,14 @@ namespace taskt.Core
                     break;
 
                 case PropertyDetailSampleUsage.ValueType.VariableValue:
-                    string vName = settings.replaceApplicationKeyword(smp.sampleUsage).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
+                    //string vName = settings.replaceApplicationKeyword(smp.sampleUsage).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
+                    string vName = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(smp.sampleUsage, settings).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
                     ret = "Specify Value of Variable " + vName;
                     break;
 
                 case PropertyDetailSampleUsage.ValueType.VariableName:
-                    string vName2 = settings.replaceApplicationKeyword(smp.sampleUsage).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
+                    //string vName2 = settings.replaceApplicationKeyword(smp.sampleUsage).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
+                    string vName2 = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(smp.sampleUsage, settings).Replace(settings.EngineSettings.VariableStartMarker, "").Replace(settings.EngineSettings.VariableEndMarker, "");
                     ret = "Specify Variable Name " + vName2;
                     break;
             }
@@ -580,9 +607,10 @@ namespace taskt.Core
             return validate;
         }
 
-        private static string GetRemarksText(PropertyInfo propInfo, PropertyInfo virtualPropInfo, ApplicationSettings settings)
+        private static string GetRemarksText(PropertyInfo propInfo, PropertyInfo virtualPropInfo, SafeApplicationSettings settings)
         {
-            string rm = settings.ClientSettings.replaceClientKeyword(GetCustomAttributeWithVirtual<Remarks>(propInfo, virtualPropInfo)?.remarks ?? "");
+            //string rm = settings.ClientSettings.replaceClientKeyword(GetCustomAttributeWithVirtual<Remarks>(propInfo, virtualPropInfo)?.remarks ?? "");
+            string rm = InternalKeywordsControls.ReplaceKeywordsToSystemVariableAndInstanceName(GetCustomAttributeWithVirtual<Remarks>(propInfo, virtualPropInfo)?.remarks ?? "", settings);
 
             // is optional
             var isOpt = GetCustomAttributeWithVirtual<PropertyIsOptional>(propInfo, virtualPropInfo) ?? new PropertyIsOptional();

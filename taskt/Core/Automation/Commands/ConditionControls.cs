@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
-using System.Runtime.CompilerServices;
+using taskt.Core.Script;
 
 namespace taskt.Core.Automation.Commands
 {
@@ -17,7 +17,7 @@ namespace taskt.Core.Automation.Commands
 
             //string actionType = actionType.ConvertToUserVariable(engine);
 
-            switch (actionType.ConvertToUserVariable(engine).ToLower())
+            switch (actionType.ExpandValueOrUserVariable(engine).ToLower())
             {
                 //case "value":
                 case "numeric compare":
@@ -104,7 +104,7 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", engine);
 
-            string operand = param["Operand"].ConvertToUserVariable(engine);
+            string operand = param["Operand"].ExpandValueOrUserVariable(engine);
 
             bool isBoolCompare = false;
             decimal value1 = 0;
@@ -119,8 +119,8 @@ namespace taskt.Core.Automation.Commands
                 default:
                     //value1 = param["Value1"].ConvertToUserVariableAsDecimal("Value1", engine);
                     //value2 = param["Value2"].ConvertToUserVariableAsDecimal("Value2", engine);
-                    value1 = new PropertyConvertTag(param["Value1"], "Value1").ConvertToUserVariableAsDecimal(engine);
-                    value2 = new PropertyConvertTag(param["Value2"], "Value2").ConvertToUserVariableAsDecimal(engine);
+                    value1 = new PropertyConvertTag(param["Value1"], "Value1").ExpandValueOrUserVariableAsDecimal(engine);
+                    value2 = new PropertyConvertTag(param["Value2"], "Value2").ExpandValueOrUserVariableAsDecimal(engine);
                     break;
             }
 
@@ -174,10 +174,10 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", false);
 
-            string operand = param["Operand"].ConvertToUserVariable(engine);
+            string operand = param["Operand"].ExpandValueOrUserVariable(engine);
 
-            DateTime dt1 = param["Value1"].ConvertToUserVariableAsDateTime("Value1", engine);
-            DateTime dt2 = param["Value2"].ConvertToUserVariableAsDateTime("Value2", engine);
+            DateTime dt1 = param["Value1"].ConvertValueToDateTime("Value1", engine);
+            DateTime dt2 = param["Value2"].ConvertValueToDateTime("Value2", engine);
 
             bool ifResult;
             switch (operand.ToLower())
@@ -278,7 +278,7 @@ namespace taskt.Core.Automation.Commands
         private static bool DetermineStatementTruth_ErrorOccur(DataTable actionParameterTable, Engine.AutomationEngineInstance engine, bool inverseResult = false)
         {
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", false);
-            int lineNumber = param["Line Number"].ConvertToUserVariableAsInteger("Line Number", engine);
+            int lineNumber = param["Line Number"].ExpandValueOrUserVariableAsInteger("Line Number", engine);
 
             bool result;
 
@@ -305,7 +305,7 @@ namespace taskt.Core.Automation.Commands
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", engine);
             try
             {
-                IntPtr wHnd = WindowNameControls.FindWindowHandle(param["Window Name"], param["Search Method"], engine);
+                IntPtr wHnd = WindowControls.FindWindowHandle(param["Window Name"], param["Search Method"], engine);
                 return true;
             }
             catch
@@ -316,8 +316,8 @@ namespace taskt.Core.Automation.Commands
         private static bool DetermineStatementTruth_ActiveWindow(DataTable actionParameterTable, Engine.AutomationEngineInstance engine)
         {
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", engine);
-            var searchFunc = WindowNameControls.GetWindowNameCompareMethod(param["Search Method"]);
-            return (searchFunc(WindowNameControls.GetCurrentWindowName(), param["Window Name"]));
+            var searchFunc = WindowControls.GetWindowNameCompareMethod(param["Search Method"]);
+            return (searchFunc(WindowControls.GetCurrentWindowName(), param["Window Name"]));
         }
         private static bool DetermineStatementTruth_File(DataTable actionParameterTable, Engine.AutomationEngineInstance engine)
         {
@@ -363,16 +363,21 @@ namespace taskt.Core.Automation.Commands
             //newElementActionCommand.v_InstanceName = param["WebBrowser Instance Name"];
             //bool elementExists = newElementActionCommand.ElementExists(engine, param["Element Search Method"], param["Element Search Parameter"]);
 
-            var checkWebElement = new SeleniumBrowserCheckWebElementExistsCommand()
+            using (var res = new InnerScriptVariable(engine))
             {
-                v_InstanceName = param["WebBrowser Instance Name"],
-                v_SeleniumSearchType = param["Element Search Method"],
-                v_SeleniumSearchParameter = param["Element Search Parameter"],
-                v_Result = VariableNameControls.GetInnerVariableName(0, engine),
-            };
-            checkWebElement.RunCommand(engine);
+                var checkWebElement = new SeleniumBrowserCheckWebElementExistsCommand()
+                {
+                    v_InstanceName = param["WebBrowser Instance Name"],
+                    v_SeleniumSearchType = param["Element Search Method"],
+                    v_SeleniumSearchParameter = param["Element Search Parameter"],
+                    //v_Result = VariableNameControls.GetInnerVariableName(0, engine),
+                    v_Result = res.VariableName,
+                };
+                checkWebElement.RunCommand(engine);
 
-            return VariableNameControls.GetInnerVariable(0, engine).VariableValue.ToString().ConvertToUserVariableAsBool("Result", engine);
+                //return VariableNameControls.GetInnerVariable(0, engine).VariableValue.ToString().ExpandValueOrUserVariableAsBool("Result", engine);
+                return res.VariableValue.ToString().ExpandValueOrUserVariableAsBool("Result", engine);
+            }
         }
 
         private static bool DetermineStatementTruth_GUIElement(DataTable actionParameterTable, Engine.AutomationEngineInstance engine)
@@ -380,10 +385,11 @@ namespace taskt.Core.Automation.Commands
             var param = DataTableControls.GetFieldValues(actionParameterTable, "Parameter Name", "Parameter Value", engine);
             string windowName = param["Window Name"];
 
-            if (windowName == engine.engineSettings.CurrentWindowKeyword)
+            //if (windowName == engine.engineSettings.CurrentWindowKeyword)
+            if (windowName == VariableNameControls.GetWrappedVariableName(Engine.SystemVariables.Window_CurrentWindowName.VariableName, engine))
             {
                 //windowName = User32.User32Functions.GetActiveWindowTitle();
-                windowName = WindowNameControls.GetActiveWindowTitle();
+                windowName = WindowControls.GetActiveWindowTitle();
             }
 
             var searchTb = new DataTable();
@@ -392,21 +398,40 @@ namespace taskt.Core.Automation.Commands
             searchTb.Columns.Add("ParameterValue");
             searchTb.Rows.Add(true, param["Element Search Method"], param["Element Search Parameter"]);
 
-            var vName = VariableNameControls.GetInnerVariableName(2, engine);
+            //var vName = VariableNameControls.GetInnerVariableName(2, engine);
 
-            var actionTb = new DataTable();
-            actionTb.Columns.Add("Parameter Name");
-            actionTb.Columns.Add("Parameter Value");
-            actionTb.Rows.Add("Apply To Variable", vName);
+            //var actionTb = new DataTable();
+            //actionTb.Columns.Add("Parameter Name");
+            //actionTb.Columns.Add("Parameter Value");
+            //actionTb.Rows.Add("Apply To Variable", vName);
 
-            var checkUI = new UIAutomationUIElementActionCommand();
-            checkUI.v_WindowName = windowName;
-            checkUI.v_UIASearchParameters = searchTb;
-            checkUI.v_AutomationType = "Check UIElement Exists";
-            checkUI.v_UIAActionParameters = actionTb;
-            checkUI.RunCommand(engine);
+            //var checkUI = new UIAutomationUIElementActionCommand();
+            //checkUI.v_WindowName = windowName;
+            //checkUI.v_UIASearchParameters = searchTb;
+            //checkUI.v_AutomationType = "Check UIElement Exists";
+            //checkUI.v_UIAActionParameters = actionTb;
+            //checkUI.RunCommand(engine);
 
-            return vName.ConvertToUserVariableAsBool("result", engine);
+            //return vName.ExpandValueOrUserVariableAsBool("result", engine);
+
+            using (var myName = new InnerScriptVariable(engine))
+            {
+                var actionTb = new DataTable();
+                actionTb.Columns.Add("Parameter Name");
+                actionTb.Columns.Add("Parameter Value");
+                actionTb.Rows.Add("Apply To Variable", myName.VariableName);
+
+                var checkUI = new UIAutomationUIElementActionCommand
+                {
+                    v_WindowName = windowName,
+                    v_UIASearchParameters = searchTb,
+                    v_AutomationType = "Check UIElement Exists",
+                    v_UIAActionParameters = actionTb,
+                };
+                checkUI.RunCommand(engine);
+
+                return myName.VariableValue.ToString().ExpandValueOrUserVariableAsBool("result", engine);
+            }
 
             //UIAutomationUIElementActionCommand newUIACommand = new UIAutomationUIElementActionCommand();
             //newUIACommand.v_WindowName = windowName;
@@ -446,8 +471,8 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParamterTable, "Parameter Name", "Parameter Value", false);
 
-            bool value = param["Variable Name"].ConvertToUserVariableAsBool("Variable Name", engine);
-            string compare = param["Value Is"].ConvertToUserVariable(engine);
+            bool value = param["Variable Name"].ExpandValueOrUserVariableAsBool("Variable Name", engine);
+            string compare = param["Value Is"].ExpandValueOrUserVariable(engine);
 
             switch (compare.ToLower())
             {
@@ -463,9 +488,9 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParamterTable, "Parameter Name", "Parameter Value", false);
 
-            bool value1 = param["Value1"].ConvertToUserVariableAsBool("Variable Name", engine);
-            bool value2 = param["Value2"].ConvertToUserVariableAsBool("Variable Name", engine);
-            string operand = param["Operand"].ConvertToUserVariable(engine);
+            bool value1 = param["Value1"].ExpandValueOrUserVariableAsBool("Variable Name", engine);
+            bool value2 = param["Value2"].ExpandValueOrUserVariableAsBool("Variable Name", engine);
+            string operand = param["Operand"].ExpandValueOrUserVariable(engine);
 
             switch (operand.ToLower())
             {
@@ -490,8 +515,11 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParamterTable, "Parameter Name", "Parameter Value", false);
 
-            var list1 = param["List1"].GetListVariable(engine);
-            var list2 = param["List2"].GetListVariable(engine);
+            //var list1 = param["List1"].ExpandUserVariableAsList(engine);
+            //var list2 = param["List2"].ExpandUserVariableAsList(engine);
+
+            var list1 = EM_CanHandleListExtensionMethods.ExpandUserVariableAsList(param["List1"].GetRawVariable(engine));
+            var list2 = EM_CanHandleListExtensionMethods.ExpandUserVariableAsList(param["List2"].GetRawVariable(engine));
 
             if (list1.Count == list2.Count)
             {
@@ -514,8 +542,11 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParamterTable, "Parameter Name", "Parameter Value", false);
 
-            var dic1 = param["Dictionary1"].GetDictionaryVariable(engine);
-            var dic2 = param["Dictionary2"].GetDictionaryVariable(engine);
+            //var dic1 = param["Dictionary1"].ExpandUserVariableAsDictinary(engine);
+            //var dic2 = param["Dictionary2"].ExpandUserVariableAsDictinary(engine);
+
+            var dic1 = EM_CanHandleDictionary.ExpandUserVariableAsDictionary(param["Dictionary1"].GetRawVariable(engine));
+            var dic2 = EM_CanHandleDictionary.ExpandUserVariableAsDictionary(param["Dictionary2"].GetRawVariable(engine));
 
             if (dic1.Count == dic2.Count)
             {
@@ -543,8 +574,11 @@ namespace taskt.Core.Automation.Commands
         {
             var param = DataTableControls.GetFieldValues(actionParamterTable, "Parameter Name", "Parameter Value", false);
 
-            var dt1 = param["DataTable1"].GetDataTableVariable(engine);
-            var dt2 = param["DataTable2"].GetDataTableVariable(engine);
+            var dt1 = EM_CanHandleDataTable.ExpandUserVariableAsDataTable(param["DataTable1"].GetRawVariable(engine));
+            var dt2 = EM_CanHandleDataTable.ExpandUserVariableAsDataTable(param["DataTable2"].GetRawVariable(engine));
+
+            //var dt1 = param["DataTable1"].ExpandUserVariableAsDataTable(engine);
+            //var dt2 = param["DataTable2"].ExpandUserVariableAsDataTable(engine);
 
             if ((dt1.Rows.Count == dt2.Rows.Count) && (dt1.Columns.Count == dt2.Columns.Count))
             {
@@ -733,7 +767,7 @@ namespace taskt.Core.Automation.Commands
             ifActionParameterBox.Rows[1].Cells[1] = comparisonComboBox;
         }
 
-        public static void RenderWebElement(object sender, DataGridView actionParameterBox, DataTable actionParameters, ApplicationSettings settings)
+        public static void RenderWebElement(object sender, DataGridView actionParameterBox, DataTable actionParameters, SafeApplicationSettings settings)
         {
             actionParameterBox.Visible = true;
 
@@ -757,12 +791,13 @@ namespace taskt.Core.Automation.Commands
             actionParameterBox.Rows[1].Cells[1] = comparisonComboBox;
         }
 
-        public static void RenderGUIElement(object sender, DataGridView actionParameterBox, DataTable actionParameters, ApplicationSettings settings)
+        public static void RenderGUIElement(object sender, DataGridView actionParameterBox, DataTable actionParameters, SafeApplicationSettings settings)
         {
             actionParameterBox.Visible = true;
             if (sender != null)
             {
-                actionParameters.Rows.Add("Window Name", settings.EngineSettings.CurrentWindowKeyword);
+                //actionParameters.Rows.Add("Window Name", settings.EngineSettings.CurrentWindowKeyword);
+                actionParameters.Rows.Add("Window Name", VariableNameControls.GetWrappedVariableName(Engine.SystemVariables.Window_CurrentWindowName.VariableName, settings));
                 actionParameters.Rows.Add("Element Search Method", "");
                 actionParameters.Rows.Add("Element Search Parameter", "");
                 actionParameterBox.DataSource = actionParameters;
@@ -788,7 +823,7 @@ namespace taskt.Core.Automation.Commands
             parameterName.Items.Add("LocalizedControlType");
             parameterName.Items.Add("Name");
             parameterName.Items.Add("NativeWindowHandle");
-            parameterName.Items.Add("ProcessID");
+            parameterName.Items.Add("ProcessId");
 
             //assign cell as a combobox
             actionParameterBox.Rows[1].Cells[1] = parameterName;
@@ -1363,7 +1398,7 @@ namespace taskt.Core.Automation.Commands
                 case "is not numeric":
                     break;
                 default:
-                    int x = actionParametersBox.Rows.Count;
+                    //int x = actionParametersBox.Rows.Count;
                     var cmb = new DataGridViewComboBoxCell();
                     cmb.Items.AddRange(new string[] { "Yes", "No" });
                     actionParametersBox.Rows[1].Cells[1] = cmb;
@@ -1436,7 +1471,7 @@ namespace taskt.Core.Automation.Commands
         /// <returns></returns>
         public static Func<string, Dictionary<string, string>, bool> GetFilterDeterminStatementTruthFunc(string targetTypeName, string filterActionName, Dictionary<string, string> parameters, taskt.Core.Automation.Engine.AutomationEngineInstance engine, ScriptCommand command)
         {
-            string tp = command.GetUISelectionValue(targetTypeName, "Target Type", engine);
+            string tp = command.ExpandValueOrUserVariableAsSelectionItem(targetTypeName, "Target Type", engine);
             switch (tp)
             {
                 case "text":
@@ -1449,7 +1484,7 @@ namespace taskt.Core.Automation.Commands
 
         private static Func<string, Dictionary<string, string>, bool> GetFilterDeterminStatementTruthFunc_Text(string filterActionName, Dictionary<string, string> parameters, taskt.Core.Automation.Engine.AutomationEngineInstance engine, ScriptCommand command)
         {
-            string filterAction = command.ConvertToUserVariable(filterActionName, "Filter Action", engine).ToLower();
+            string filterAction = command.ExpandValueOrUserVariable(filterActionName, "Filter Action", engine).ToLower();
             Func<string, string, bool> checkFunc = null;
             switch (filterAction)
             {
@@ -1549,7 +1584,7 @@ namespace taskt.Core.Automation.Commands
         }
         private static Func<string, Dictionary<string, string>, bool> GetFilterDeterminStatementTruthFunc_Numeric(string filterActionName, Dictionary<string, string> parameters, taskt.Core.Automation.Engine.AutomationEngineInstance engine, ScriptCommand command)
         {
-            string filterAction = command.ConvertToUserVariable(filterActionName, "Filter Action", engine).ToLower();
+            string filterAction = command.ExpandValueOrUserVariable(filterActionName, "Filter Action", engine).ToLower();
 
             Func<string, Dictionary<string, string>, (decimal trgValue, decimal value1, decimal value2)> convFunc;
             switch (filterAction)
@@ -1558,17 +1593,17 @@ namespace taskt.Core.Automation.Commands
                 case "not between":
                     convFunc = (txt, p) =>
                     {
-                        decimal tv = new PropertyConvertTag(txt, "Value").ConvertToUserVariableAsDecimal(engine);
-                        decimal v1 = new PropertyConvertTag(p["Value1"], "Compared Value1").ConvertToUserVariableAsDecimal(engine);
-                        decimal v2 = new PropertyConvertTag(p["Value2"], "Compared Value2").ConvertToUserVariableAsDecimal(engine);
+                        decimal tv = new PropertyConvertTag(txt, "Value").ExpandValueOrUserVariableAsDecimal(engine);
+                        decimal v1 = new PropertyConvertTag(p["Value1"], "Compared Value1").ExpandValueOrUserVariableAsDecimal(engine);
+                        decimal v2 = new PropertyConvertTag(p["Value2"], "Compared Value2").ExpandValueOrUserVariableAsDecimal(engine);
                         return (tv, v1, v2);
                     };
                     break;
                 default:
                     convFunc = (txt, p) =>
                     {
-                        decimal tv = new PropertyConvertTag(txt, "Value").ConvertToUserVariableAsDecimal(engine);
-                        decimal v1 = new PropertyConvertTag(p["Value"], "Compared Value").ConvertToUserVariableAsDecimal(engine);
+                        decimal tv = new PropertyConvertTag(txt, "Value").ExpandValueOrUserVariableAsDecimal(engine);
+                        decimal v1 = new PropertyConvertTag(p["Value"], "Compared Value").ExpandValueOrUserVariableAsDecimal(engine);
                         return (tv, v1, 0);
                     };
                     break;

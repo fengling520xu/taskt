@@ -6,14 +6,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("System Commands")]
+    [Attributes.ClassAttributes.Group("System")]
     [Attributes.ClassAttributes.CommandSettings("Launch Remote Desktop")]
     [Attributes.ClassAttributes.Description("This command allows you to stop a program or a process.")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to close an application by its name such as 'chrome'. Alternatively, you may use the Close Window or Thick App Command instead.")]
     [Attributes.ClassAttributes.ImplementationDescription("This command implements 'Process.CloseMainWindow'.")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_system))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class LaunchRemoteDesktopCommand : ScriptCommand
+    public sealed class LaunchRemoteDesktopCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -45,6 +46,15 @@ namespace taskt.Core.Automation.Commands
         public string v_Password { get; set; }
 
         [XmlAttribute]
+        [PropertyVirtualProperty(nameof(SelectionItemsControls), nameof(SelectionItemsControls.v_YesNoComboBox))]
+        [PropertyDescription("Support CredSSP")]
+        [PropertyFirstValue("Yes")]
+        [PropertyIsOptional(true, "Yes")]
+        [PropertyValidationRule("CredSSP", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "")]
+        public string v_SupportCredSSP { get; set; }
+
+        [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
         [PropertyDescription("Width of the RDP Window")]
         [InputSpecification("Width", true)]
@@ -66,6 +76,21 @@ namespace taskt.Core.Automation.Commands
         [PropertyDisplayText(false, "")]
         public string v_RDPHeight { get; set; }
 
+        [XmlAttribute]
+        [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
+        [PropertyDescription("Keyboard Hook Mode")]
+        [PropertyUISelectionOption("Client Computer")]
+        [PropertyUISelectionOption("Remote Server")]
+        [PropertyUISelectionOption("Remote Server Only When Full-Screen")]
+        [PropertyIsOptional(true, "Remote Server Only When Full-Screen")]
+        [PropertyFirstValue("Remote Server Only When Full-Screen")]
+        [PropertyDetailSampleUsage("Client Computer", "Windows key and its combination shortcuts work only on the client computer")]
+        [PropertyDetailSampleUsage("Remote Server", "Windows key and its combination shortcuts work only on the remote server")]
+        [PropertyDetailSampleUsage("Remote Server Only When Full-Screen", "Windows key and its combination shortcuts work only on the client computer. Remote Desktop cannot be made full screen.")]
+        [PropertyValidationRule("Keyborad Hook Mode", PropertyValidationRule.ValidationRuleFlags.None)]
+        [PropertyDisplayText(false, "")]
+        public string v_KeyboadHookMode { get; set; }
+
         public LaunchRemoteDesktopCommand()
         {
             //this.CommandName = "RemoteDesktopCommand";
@@ -77,29 +102,41 @@ namespace taskt.Core.Automation.Commands
             //this.v_RDPHeight = SystemInformation.PrimaryMonitorSize.Height.ToString();
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            var machineName = v_MachineName.ExpandValueOrUserVariable(engine);
+            var userName = v_UserName.ExpandValueOrUserVariable(engine);
+            var password = v_Password.ExpandValueOrUserVariable(engine);
+            var credSsp = this.ExpandValueOrUserVariableAsYesNo(nameof(v_SupportCredSSP), engine);
 
-            var machineName = v_MachineName.ConvertToUserVariable(sender);
-            var userName = v_UserName.ConvertToUserVariable(sender);
-            var password = v_Password.ConvertToUserVariable(sender);
-
-            if (String.IsNullOrEmpty(v_RDPWidth))
+            if (string.IsNullOrEmpty(v_RDPWidth))
             {
                 v_RDPWidth = SystemInformation.PrimaryMonitorSize.Width.ToString();
             }
-            var width = this.ConvertToUserVariableAsInteger(nameof(v_RDPWidth), engine);
+            var width = this.ExpandValueOrUserVariableAsInteger(nameof(v_RDPWidth), engine);
 
-            if (String.IsNullOrEmpty(v_RDPHeight))
+            if (string.IsNullOrEmpty(v_RDPHeight))
             {
                 v_RDPHeight = SystemInformation.PrimaryMonitorSize.Height.ToString();
             }
-            var height = this.ConvertToUserVariableAsInteger(nameof(v_RDPHeight), engine);
+            var height = this.ExpandValueOrUserVariableAsInteger(nameof(v_RDPHeight), engine);
+
+            int keyboardHook = 2;
+            switch(this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_KeyboadHookMode), engine))
+            {
+                case "client computer":
+                    keyboardHook = 0;
+                    break;
+                case "remote server":
+                    keyboardHook = 1;
+                    break;
+                default:
+                    break;
+            }
 
             var result = engine.tasktEngineUI.Invoke(new Action(() =>
             {
-                engine.tasktEngineUI.LaunchRDPSession(machineName, userName, password, width, height);
+                engine.tasktEngineUI.LaunchRDPSession(machineName, userName, password, credSsp, width, height, keyboardHook);
             }));
         }
     }

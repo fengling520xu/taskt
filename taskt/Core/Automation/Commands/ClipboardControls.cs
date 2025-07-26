@@ -15,6 +15,9 @@ namespace taskt.Core.Automation.Commands
         private static extern bool SetClipboardData(uint uFormat, IntPtr data);
 
         [DllImport("user32.dll")]
+        private static extern bool EmptyClipboard();
+
+        [DllImport("user32.dll")]
         private static extern bool IsClipboardFormatAvailable(uint format);
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -31,14 +34,33 @@ namespace taskt.Core.Automation.Commands
 
         private const uint CF_UNICODETEXT = 13;
 
+        /// <summary>
+        /// set text to clipboard
+        /// </summary>
+        /// <param name="textToSet"></param>
         public static void SetClipboardText(string textToSet)
         {
             OpenClipboard(IntPtr.Zero);
+            EmptyClipboard();
             var ptr = Marshal.StringToHGlobalUni(textToSet);
             SetClipboardData(13, ptr);
             CloseClipboard();
         }
 
+        /// <summary>
+        /// clear clipboard value
+        /// </summary>
+        public static void ClearClipboard()
+        {
+            OpenClipboard(IntPtr.Zero);
+            EmptyClipboard();
+            CloseClipboard();
+        }
+
+        /// <summary>
+        /// get text from clipboard
+        /// </summary>
+        /// <returns></returns>
         public static string GetClipboardText()
         {
             if (!IsClipboardFormatAvailable(CF_UNICODETEXT))

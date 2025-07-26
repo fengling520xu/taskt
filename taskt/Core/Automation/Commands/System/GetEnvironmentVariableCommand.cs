@@ -8,14 +8,15 @@ using taskt.Core.Automation.Attributes.PropertyAttributes;
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("System Commands")]
+    [Attributes.ClassAttributes.Group("System")]
     [Attributes.ClassAttributes.CommandSettings("Get Environment Variable")]
     [Attributes.ClassAttributes.Description("This command allows you to exclusively select a system/environment variable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command to exclusively retrieve a system variable")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_system))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class GetEnvironmentVariableCommand : ScriptCommand
+    public sealed class GetEnvironmentVariableCommand : ScriptCommand
     {
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_ComboBox))]
@@ -45,13 +46,11 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
-
             var variables = Environment.GetEnvironmentVariables();
 
-            var environmentVariable = v_EnvVariableName.ConvertToUserVariable(sender);
+            var environmentVariable = v_EnvVariableName.ExpandValueOrUserVariable(engine);
             var keys = variables.Keys.Cast<string>().ToList();
             if (keys.Contains(environmentVariable))
             {

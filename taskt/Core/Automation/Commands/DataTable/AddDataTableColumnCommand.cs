@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.Data;
+using System.Xml.Serialization;
 using taskt.Core.Automation.Attributes.PropertyAttributes;
 
 namespace taskt.Core.Automation.Commands
 {
     [Serializable]
-    [Attributes.ClassAttributes.Group("DataTable Commands")]
+    [Attributes.ClassAttributes.Group("DataTable")]
     [Attributes.ClassAttributes.SubGruop("Column Action")]
     [Attributes.ClassAttributes.CommandSettings("Add DataTable Column")]
     [Attributes.ClassAttributes.Description("This command allows you to add a column to a DataTable")]
     [Attributes.ClassAttributes.UsesDescription("Use this command when you want to add a column to a DataTable.")]
     [Attributes.ClassAttributes.ImplementationDescription("")]
+    [Attributes.ClassAttributes.CommandIcon(nameof(Properties.Resources.command_spreadsheet))]
     [Attributes.ClassAttributes.EnableAutomateRender(true)]
     [Attributes.ClassAttributes.EnableAutomateDisplayText(true)]
-    public class AddDataTableColumnCommand : ScriptCommand
+    public sealed class AddDataTableColumnCommand : ADataTableBothDataTableCommands
     {
-        [XmlAttribute]
-        [PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_BothDataTableName))]
-        public string v_DataTableName { get; set; }
+        //[XmlAttribute]
+        //[PropertyVirtualProperty(nameof(DataTableControls), nameof(DataTableControls.v_BothDataTableName))]
+        //public string v_DataTable { get; set; }
 
         [XmlAttribute]
         [PropertyVirtualProperty(nameof(GeneralPropertyControls), nameof(GeneralPropertyControls.v_DisallowNewLine_OneLineTextBox))]
@@ -27,6 +28,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyDetailSampleUsage("**{{{vColumn}}}**", PropertyDetailSampleUsage.ValueType.VariableValue, "New Column")]
         [PropertyValidationRule("Column", PropertyValidationRule.ValidationRuleFlags.Empty)]
         [PropertyDisplayText(true, "Column")]
+        [PropertyParameterOrder(6000)]
         public string v_AddColumnName { get; set; }
 
         [XmlAttribute]
@@ -41,6 +43,7 @@ namespace taskt.Core.Automation.Commands
         [PropertyUISelectionOption("Ignore")]
         [PropertyUISelectionOption("Replace")]
         [PropertyIsOptional(true, "Error")]
+        [PropertyParameterOrder(7000)]
         public string v_IfColumnExists { get; set; }
 
         public AddDataTableColumnCommand()
@@ -51,15 +54,14 @@ namespace taskt.Core.Automation.Commands
             //this.CustomRendering = true;
         }
 
-        public override void RunCommand(object sender)
+        public override void RunCommand(Engine.AutomationEngineInstance engine)
         {
-            var engine = (Engine.AutomationEngineInstance)sender;
+            //DataTable myDT = v_DataTable.ExpandUserVariableAsDataTable(engine);
+            var myDT = this.ExpandUserVariableAsDataTable(engine);
 
-            DataTable myDT = v_DataTableName.GetDataTableVariable(engine);
+            string newColName = v_AddColumnName.ExpandValueOrUserVariable(engine);
 
-            string newColName = v_AddColumnName.ConvertToUserVariable(engine);
-
-            string ifColumnExists = this.GetUISelectionValue(nameof(v_IfColumnExists), "If Column Exists", engine);
+            string ifColumnExists = this.ExpandValueOrUserVariableAsSelectionItem(nameof(v_IfColumnExists), "If Column Exists", engine);
 
             for (int i = 0; i < myDT.Columns.Count; i++)
             {

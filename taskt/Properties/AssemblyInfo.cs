@@ -12,7 +12,6 @@
 //See the License for the specific language governing permissions and
 //limitations under the License.
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
@@ -23,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("taskt")]
-[assembly: AssemblyCopyright("Copyright ©2022")]
+[assembly: AssemblyCopyright("Copyright ©2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
